@@ -1,0 +1,86 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/independent_critic",
+  "recorded_utc": "2026-11-28T05:14:19.774246+00:00",
+  "authority": "Latest owner-selected R1 conveyor and R4 core scale; current 36-cell conveyor matrix; register-free bulk self-service rule.",
+  "approval_boundary": "Static illustrated concept only. Native model consistency, motion, state transitions, routing, inventory conservation and runtime integration are not approved.",
+  "runtime_scores": {
+    "motion": null,
+    "inventory_and_cash_conservation": null,
+    "transfer_logic": null,
+    "backpressure_and_resume": null,
+    "full_functionality": null
+  },
+  "no_global_resize_requested": true,
+  "candidate": {
+    "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/12-conveyor-storage-r2.png",
+    "sha256": "489dc33bfbdbdd3ad9a0578512dc762804e11b2c56dcce357cf08ee9ddc270fa",
+    "bytes": 2043294,
+    "dimensions": [
+      1672,
+      941
+    ]
+  },
+  "status": "HOLD_UTILITY_SLEEVE_CONNECTION_EVIDENCE",
+  "score": 9.0,
+  "scope": "Four storage exterior/interior static studies and native utility handoff close-up.",
+  "coverage": {
+    "panels_inspected": 4,
+    "panels_required": 4,
+    "closeups_inspected": [
+      "storage-r2-evidence/utility-sleeves-lift.png"
+    ]
+  },
+  "scores": {
+    "selected_style_and_scale": 10,
+    "protected_house_interfaces": 10,
+    "resource_identity": 10,
+    "visible_intake_hold": 10,
+    "lift_to_mineral_shelf_support": 10,
+    "utility_sleeve_to_transfer_visibility": 8,
+    "layout": 10
+  },
+  "resolved_defects": [
+    "ST-R1-02: generic props replaced by identifiable plank bundles, rectangular blocks and canonical roast meals.",
+    "ST-R1-03: closed utility intake gate and upstream held plank now shown.",
+    "ST-R1-01 partially: internal transfer rail visibly reaches the vertical carriage, and a supported bridge reaches the mineral shelf."
+  ],
+  "passing_observations": [
+    "Four distinct IN/OUT ports retain their protected side/rear placement; window, front sliding doors/apron, rear vent and right fuel hatch remain visible.",
+    "Closed raw-food cabinets remain beneath the prepared-food shelf.",
+    "The rear food cutaway shows separate labelled IN and OUT sleeves with a horizontal shelf-level shuttle, a closed receiving gate and canonical meals.",
+    "External utility IN holds a plank behind a physical striped gate; OUT carries a rectangular block.",
+    "The internal supported rail, vertical carriage and mineral-level shelf bridge are now visibly connected."
+  ],
+  "defects": [
+    {
+      "id": "ST-R2-01",
+      "origin": "ST-R1-01 remaining portion",
+      "matrix_cells": [
+        "S01",
+        "S02",
+        "S05"
+      ],
+      "severity": "missing_required_interface_evidence",
+      "region_xyxy": [
+        25,
+        700,
+        455,
+        900
+      ],
+      "finding": "Both exterior utility sleeves disappear behind the low left wall. The internal horizontal transfer rail begins beside that wall, but no actual view traces each sleeve to its corresponding transfer position. A shared hidden connection must still be inferred. This is a visibility/evidence defect, not a claim that an unseen mechanism is impossible.",
+      "repair": "Add an isolated raised or top cutaway of the low-left cassette area exposing both sleeve paths, their distinct transfer positions, and the connection to the existing local rail/lift. Preserve this sheet\u2019s exterior geometry, scale, props, gates and supported lift/shelf repair."
+    }
+  ],
+  "matrix_statuses": {
+    "S01": "Exterior location and held state pass; local sleeve continuation remains unshown.",
+    "S02": "Separate labelled dispatch sleeve and selected block pass; local sleeve continuation remains unshown.",
+    "S03": "Loaded rear food receiving sleeve at shelf height is visible.",
+    "S04": "Separate loaded rear food dispatch sleeve is visible; request control remains untested.",
+    "S05": "Internal rail/lift/shelf support improved; sleeve-to-rail handoff is the remaining blocker.",
+    "S06": "Local shelf shuttle and separate rear sleeve positions are visible; no motion or no-loop guarantee is inferred."
+  },
+  "evidence_manifest": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/critic/storage-r2-evidence/CROP_MANIFEST.json",
+  "prior_review": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/critic/STORAGE_R1_REVIEW.json",
+  "next_action": "Add the narrowly scoped utility cassette cutaway and retest it alongside this unchanged R2 sheet."
+}

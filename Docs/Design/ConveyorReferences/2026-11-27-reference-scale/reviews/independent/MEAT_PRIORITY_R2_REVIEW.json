@@ -1,0 +1,83 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/independent_critic",
+  "recorded_utc": "2026-11-28T05:04:49.349058+00:00",
+  "candidate": {
+    "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/07-meat-variants-priority-r2.png",
+    "sha256": "137d0bd0105d2325c5fe7910caed99949b570535e91a21f7fbade9c221604df1",
+    "bytes": 1813010,
+    "dimensions": [
+      1536,
+      1024
+    ]
+  },
+  "reference": {
+    "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/source/meat-variants/boards/01-priority-six-SOURCE_IDENTITY_ONLY.png",
+    "sha256": "43a2f185fa7750c535de1cbef575b17c75b9698d0ff385f1ab69e5f00ce1902a",
+    "bytes": 1051074,
+    "dimensions": [
+      1410,
+      1178
+    ]
+  },
+  "status": "PASS_STATIC_VARIANT_IDENTITY_AND_COMPACT_SIZE",
+  "score": 10.0,
+  "scope": "Displayed raw meat variant art only; no spawn, drop, inventory, recipe or runtime activation claim.",
+  "coverage": {
+    "variants_inspected": 6,
+    "variants_required": 6,
+    "all_full_c1_anchors_inspected": true
+  },
+  "variants": [
+    {
+      "source_variant_id": "deer_meat",
+      "display_name": "Stag",
+      "score": 10.0,
+      "finding": "Tapered cut with pale circular cap and sweeping pale seam."
+    },
+    {
+      "source_variant_id": "wild_wolf_meat",
+      "display_name": "Wild wolf",
+      "score": 10.0,
+      "finding": "Long dark-red cut with upper groove and thin lower pale edge."
+    },
+    {
+      "source_variant_id": "boar_meat",
+      "display_name": "Boar",
+      "score": 10.0,
+      "finding": "Curved cut with broad pale rear edge, internal pale line and end bone ring."
+    },
+    {
+      "source_variant_id": "rabbit_meat",
+      "display_name": "Rabbit",
+      "score": 10.0,
+      "finding": "Paired small tapered cuts with pale upper seams."
+    },
+    {
+      "source_variant_id": "wild_bear_meat",
+      "display_name": "Wild bear",
+      "score": 10.0,
+      "finding": "Cream fat cap and three protruding pale bone ends."
+    },
+    {
+      "source_variant_id": "moose_meat",
+      "display_name": "Moose",
+      "score": 10.0,
+      "finding": "Broad cut with raised pale bone ring, back fat cap and characteristic front indentation."
+    }
+  ],
+  "visible_checks": [
+    "Actual full candidate and source board inspected, including every cut and C1 anchor.",
+    "Source-specific silhouette, fat/seam/bone details retained.",
+    "Compact size follows owner-selected core R4; animal-dependent variations permitted.",
+    "All C1 bodies/feet and meat units fully framed; labels readable and ground contact visible."
+  ],
+  "active_defects": [],
+  "not_approved": {
+    "new_spawn_or_drop_table": null,
+    "new_wallet_keys_or_recipes": null,
+    "carried_stacks_or_processor_docks": null,
+    "rear_geometry": null,
+    "native_model_or_runtime": null
+  }
+}

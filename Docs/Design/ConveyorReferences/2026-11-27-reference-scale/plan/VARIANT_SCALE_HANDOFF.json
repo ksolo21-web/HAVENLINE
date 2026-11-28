@@ -1,0 +1,228 @@
+{
+  "schema_version": 1,
+  "created_utc": "2026-11-28T04:52:02.034218+00:00",
+  "authority": "LATEST_OWNER_PREFERENCE.json",
+  "selected_baselines": [
+    {
+      "id": "conveyor-r1",
+      "original": {
+        "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/01-reference-line-r1.png",
+        "sha256": "25d9b7f98f5d9407c240a8f0b242bbba6775d0e7fb60cbc720d526514d309249",
+        "bytes": 2060476,
+        "dimensions": [
+          1536,
+          1024
+        ]
+      }
+    },
+    {
+      "id": "core-r4",
+      "original": {
+        "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/02-core-resource-scale-r4.png",
+        "sha256": "de3e99e6602e18ee5e2d4619e3761964d6ccab2af8a2ee55b17b0ab3fb316da7",
+        "bytes": 1696844,
+        "dimensions": [
+          1536,
+          1024
+        ]
+      }
+    }
+  ],
+  "canonical_family_count": 27,
+  "ordinary_size_baseline": "core-r4",
+  "conveyor_size_baseline": "conveyor-r1",
+  "conveyor_resize_planned": false,
+  "character_1_scale_change_allowed": false,
+  "universal_multiplier": null,
+  "preserve_unit_identity_through_transfers": true,
+  "fish_render_roles": [
+    {
+      "presentation_variant_key": "common",
+      "display_name": "Common",
+      "size_class": "small",
+      "design_role": "Ordinary fish study anchored to selected core R4.",
+      "canonical_resource_id": "fish",
+      "processed_resource_id": "cooked_fish",
+      "species_or_spawn_catalogue_claim": false,
+      "new_wallet_or_recipe": false,
+      "exact_world_dimensions": null,
+      "render_status": "AUTHORED_STUDY_REVIEW_SEPARATELY",
+      "identity_provenance": "New authored presentation study; the selected R1 fish is not retrospectively identified as this species."
+    },
+    {
+      "presentation_variant_key": "perch",
+      "display_name": "Perch",
+      "size_class": "small",
+      "design_role": "Distinct small fish outline and markings; new authored study.",
+      "canonical_resource_id": "fish",
+      "processed_resource_id": "cooked_fish",
+      "species_or_spawn_catalogue_claim": false,
+      "new_wallet_or_recipe": false,
+      "exact_world_dimensions": null,
+      "render_status": "AUTHORED_STUDY_REVIEW_SEPARATELY",
+      "identity_provenance": "New authored presentation study; the selected R1 fish is not retrospectively identified as this species."
+    },
+    {
+      "presentation_variant_key": "trout",
+      "display_name": "Trout",
+      "size_class": "medium",
+      "design_role": "Distinct medium fish study between ordinary and larger presentation contexts.",
+      "canonical_resource_id": "fish",
+      "processed_resource_id": "cooked_fish",
+      "species_or_spawn_catalogue_claim": false,
+      "new_wallet_or_recipe": false,
+      "exact_world_dimensions": null,
+      "render_status": "AUTHORED_STUDY_REVIEW_SEPARATELY",
+      "identity_provenance": "New authored presentation study; the selected R1 fish is not retrospectively identified as this species."
+    },
+    {
+      "presentation_variant_key": "salmon",
+      "display_name": "Salmon",
+      "size_class": "large",
+      "design_role": "Large fish study; demonstrate fit in unchanged selected conveyor family.",
+      "canonical_resource_id": "fish",
+      "processed_resource_id": "cooked_fish",
+      "species_or_spawn_catalogue_claim": false,
+      "new_wallet_or_recipe": false,
+      "exact_world_dimensions": null,
+      "render_status": "AUTHORED_STUDY_REVIEW_SEPARATELY",
+      "identity_provenance": "New authored presentation study; the selected R1 fish is not retrospectively identified as this species."
+    }
+  ],
+  "meat_variants": [
+    {
+      "presentation_variant": "deer_meat",
+      "canonical_resource_id": "meat",
+      "identity_reference_path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/source/meat-variants/sheets/deer_meat.png",
+      "identity_reference_sha256": "db54049e15db3e9a38232781f36e17d02dcc5ced1a6f7bd083af6abbfefc1d78",
+      "visual_identity": "Tapered triangular cut; small pale bone cap and narrow seam.",
+      "current_source_status": "Selected Stag-family source; preserve generic meat balance.",
+      "size_basis": "Owner-selected core R4 ordinary pickup; species-dependent differences explicitly permitted. New candidate must show same unchanged C1/context.",
+      "numeric_multiplier": null,
+      "new_wallet_or_recipe": false,
+      "render_approval": "PENDING_NEW_VARIANT_RENDER"
+    },
+    {
+      "presentation_variant": "wild_wolf_meat",
+      "canonical_resource_id": "meat",
+      "identity_reference_path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/source/meat-variants/sheets/wild_wolf_meat.png",
+      "identity_reference_sha256": "8355dfdd8138108ab0ea9e8780ceb6eae5ce3a55182b1abc9fabfeee8902444a",
+      "visual_identity": "Long lean rectangular cut; shallow lengthwise recess and thin lower seam.",
+      "current_source_status": "Hostile-wolf source; never owned companion.",
+      "size_basis": "Owner-selected core R4 ordinary pickup; species-dependent differences explicitly permitted. New candidate must show same unchanged C1/context.",
+      "numeric_multiplier": null,
+      "new_wallet_or_recipe": false,
+      "render_approval": "PENDING_NEW_VARIANT_RENDER"
+    },
+    {
+      "presentation_variant": "boar_meat",
+      "canonical_resource_id": "meat",
+      "identity_reference_path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/source/meat-variants/sheets/boar_meat.png",
+      "identity_reference_sha256": "6a9d06d3a6553c6ac3ecf4a443f9fc4bf9de5926a5f62f55386991cd03b1f637",
+      "visual_identity": "Asymmetric broad steak; round bone and pale rim.",
+      "current_source_status": "Historical art variant/reserve; new spawn/drop implementation not asserted.",
+      "size_basis": "Owner-selected core R4 ordinary pickup; species-dependent differences explicitly permitted. New candidate must show same unchanged C1/context.",
+      "numeric_multiplier": null,
+      "new_wallet_or_recipe": false,
+      "render_approval": "PENDING_NEW_VARIANT_RENDER"
+    },
+    {
+      "presentation_variant": "rabbit_meat",
+      "canonical_resource_id": "meat",
+      "identity_reference_path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/source/meat-variants/sheets/rabbit_meat.png",
+      "identity_reference_sha256": "38ca37808c4f8e16e090f25c92b1fec7a2fbba5db42e6621152c1e9df796a4e1",
+      "visual_identity": "Paired tapered small portions with narrow seams.",
+      "current_source_status": "Historical art variant/reserve; new spawn/drop implementation not asserted.",
+      "size_basis": "Owner-selected core R4 ordinary pickup; species-dependent differences explicitly permitted. New candidate must show same unchanged C1/context.",
+      "numeric_multiplier": null,
+      "new_wallet_or_recipe": false,
+      "render_approval": "PENDING_NEW_VARIANT_RENDER"
+    },
+    {
+      "presentation_variant": "wild_bear_meat",
+      "canonical_resource_id": "meat",
+      "identity_reference_path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/source/meat-variants/sheets/wild_bear_meat.png",
+      "identity_reference_sha256": "e0aaab670cb14ac858bf0188bcbde965829baaec8d02e982138156d9a3fb669b",
+      "visual_identity": "Blocky rib cut; pale top and three bone ends.",
+      "current_source_status": "Historical art variant/reserve; new spawn/drop implementation not asserted.",
+      "size_basis": "Owner-selected core R4 ordinary pickup; species-dependent differences explicitly permitted. New candidate must show same unchanged C1/context.",
+      "numeric_multiplier": null,
+      "new_wallet_or_recipe": false,
+      "render_approval": "PENDING_NEW_VARIANT_RENDER"
+    },
+    {
+      "presentation_variant": "moose_meat",
+      "canonical_resource_id": "meat",
+      "identity_reference_path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/source/meat-variants/sheets/moose_meat.png",
+      "identity_reference_sha256": "fdacd8301b8ed9dbe2be1c1f08eddb2f30f988931454656873c2cf570df172e8",
+      "visual_identity": "Thick round cut; circular bone and fat cap.",
+      "current_source_status": "Historical art variant/reserve; new spawn/drop implementation not asserted.",
+      "size_basis": "Owner-selected core R4 ordinary pickup; species-dependent differences explicitly permitted. New candidate must show same unchanged C1/context.",
+      "numeric_multiplier": null,
+      "new_wallet_or_recipe": false,
+      "render_approval": "PENDING_NEW_VARIANT_RENDER"
+    },
+    {
+      "presentation_variant": "squirrel_meat",
+      "canonical_resource_id": "meat",
+      "identity_reference_path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/source/meat-variants/sheets/squirrel_meat.png",
+      "identity_reference_sha256": "e5503021e745122f97b5e00c4e4665e924f2e145a987f0aecf6e33471bea8946",
+      "visual_identity": "Two small rounded portions; one pale cap.",
+      "current_source_status": "Historical art variant/reserve; new spawn/drop implementation not asserted.",
+      "size_basis": "Owner-selected core R4 ordinary pickup; species-dependent differences explicitly permitted. New candidate must show same unchanged C1/context.",
+      "numeric_multiplier": null,
+      "new_wallet_or_recipe": false,
+      "render_approval": "PENDING_NEW_VARIANT_RENDER"
+    },
+    {
+      "presentation_variant": "wild_fox_meat",
+      "canonical_resource_id": "meat",
+      "identity_reference_path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/source/meat-variants/sheets/wild_fox_meat.png",
+      "identity_reference_sha256": "6387f2532dfa7568012ffa18c6fc9adb034007ee24bacc08a1cb1221ce065c16",
+      "visual_identity": "Long curved lean cut; narrow pale end seam.",
+      "current_source_status": "Historical art variant/reserve; new spawn/drop implementation not asserted.",
+      "size_basis": "Owner-selected core R4 ordinary pickup; species-dependent differences explicitly permitted. New candidate must show same unchanged C1/context.",
+      "numeric_multiplier": null,
+      "new_wallet_or_recipe": false,
+      "render_approval": "PENDING_NEW_VARIANT_RENDER"
+    },
+    {
+      "presentation_variant": "lynx_meat",
+      "canonical_resource_id": "meat",
+      "identity_reference_path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/source/meat-variants/sheets/lynx_meat.png",
+      "identity_reference_sha256": "8f42dcf699d8194718a0459721ac8935a32f64a803c5620de5b1d9b59eed35c6",
+      "visual_identity": "Paired round medallions with pale edge bands.",
+      "current_source_status": "Historical art variant/reserve; new spawn/drop implementation not asserted.",
+      "size_basis": "Owner-selected core R4 ordinary pickup; species-dependent differences explicitly permitted. New candidate must show same unchanged C1/context.",
+      "numeric_multiplier": null,
+      "new_wallet_or_recipe": false,
+      "render_approval": "PENDING_NEW_VARIANT_RENDER"
+    },
+    {
+      "presentation_variant": "wolverine_meat",
+      "canonical_resource_id": "meat",
+      "identity_reference_path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/source/meat-variants/sheets/wolverine_meat.png",
+      "identity_reference_sha256": "3419cc2f6df2fb8f985b46033735956176358ab475634cb3bca2c816a3f7ad2d",
+      "visual_identity": "Compact irregular two-lobed cut with narrow pale seam.",
+      "current_source_status": "Historical art variant/reserve; new spawn/drop implementation not asserted.",
+      "size_basis": "Owner-selected core R4 ordinary pickup; species-dependent differences explicitly permitted. New candidate must show same unchanged C1/context.",
+      "numeric_multiplier": null,
+      "new_wallet_or_recipe": false,
+      "render_approval": "PENDING_NEW_VARIANT_RENDER"
+    }
+  ],
+  "canonical_routes_unchanged": {
+    "fish": [
+      "fish",
+      "cooked_fish"
+    ],
+    "meat": [
+      "meat",
+      "meal"
+    ]
+  },
+  "new_spawn_drop_recipe_quantity_price_or_wallet_authored": false,
+  "review_scope": "Static new candidates only; native dimensions, all unseen views, cycles and function remain pending.",
+  "current_contract": "../integration/RESOURCE_VARIANT_CONTRACT.json",
+  "updated_utc": "2026-11-28T05:21:24.376359+00:00"
+}

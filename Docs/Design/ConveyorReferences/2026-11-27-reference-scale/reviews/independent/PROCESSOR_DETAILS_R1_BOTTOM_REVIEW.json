@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/independent_critic",
+  "recorded_utc": "2026-11-28T05:43:45.364880+00:00",
+  "approval_boundary": "Static illustrated evidence only; no native model, moving-load clearance, gate cycle, processing logic, inventory or runtime approval.",
+  "runtime_approved": false,
+  "candidate": {
+    "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/22-processor-connection-details-r1.png",
+    "sha256": "cf565f38f14df748339e6f124ff25cd58935a072a069a89ea48ee242ac703d23",
+    "bytes": 2325853,
+    "dimensions": [
+      1536,
+      1024
+    ]
+  },
+  "status": "PASS_BOTTOM_TWO_PANELS_ONLY",
+  "score": 10,
+  "scope": "Bottom-left proposed parked-dock outlet detail (U03) and bottom-right reverse cooker docks (F02). Top industrial panels are explicitly excluded from this reviewer\u2019s approval.",
+  "coverage": {
+    "approved_panels": 2,
+    "assigned_panels": 2,
+    "full_sheet_viewed": true,
+    "native_bottom_closeups_inspected": 2
+  },
+  "scores": {
+    "same_parked_cassette_identity": 10,
+    "block_physically_crossing_outlet": 10,
+    "supported_outlet_plate_and_rollers": 10,
+    "visible_authored_coupling": 10,
+    "reverse_cooker_handedness": 10,
+    "raw_cooked_form_separation": 10,
+    "selected_style": 10
+  },
+  "observations": [
+    "A rectangular block visibly crosses the dark OUT mouth into a supported roller receiver; the dock no longer relies on a label over a blind body.",
+    "The mechanical coupling and original parked vehicle/tower remain distinct; cargo is not fed through tracks or cab.",
+    "Reverse cooker correctly shows raw input on image-right and cooked output on image-left, retaining physical input/output sides and pressure-vessel relationship."
+  ],
+  "defects_in_assigned_panels": [],
+  "matrix_statuses": {
+    "U03": "PASS mandatory static overview/input/outlet evidence when paired with utility14 R3.",
+    "F02": "Additional true reverse connection evidence passes."
+  },
+  "not_approved_by_this_report": [
+    "Top-left smelter full-state panel",
+    "Top-right forge coal detail",
+    "Whole sheet selection before the separate industrial review passes"
+  ],
+  "evidence_manifest": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/critic/processor-details-r1-bottom-evidence/CROP_MANIFEST.json"
+}

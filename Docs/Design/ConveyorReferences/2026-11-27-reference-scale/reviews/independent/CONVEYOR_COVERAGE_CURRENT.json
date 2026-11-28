@@ -1,0 +1,1328 @@
+{
+  "schema_version": 1,
+  "recorded_utc": "2026-11-28T05:44:24.754654+00:00",
+  "status": "PARTIAL_STATIC_CATALOGUE",
+  "scope": "Exact 36-cell static render coverage snapshot. This is not final whole-task, motion, gameplay or publication approval.",
+  "source_matrix": {
+    "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/plan/REQUIRED_CONVEYOR_RENDER_MATRIX.json",
+    "sha256": "952e9443d6d47249f118062022ee3e2c835fd80fa9f6ac98628b6d0d66daa0b4",
+    "bytes": 43997
+  },
+  "required_rows": 36,
+  "counts": {
+    "PASS": 32,
+    "HOLD": 3,
+    "PARTIAL": 1
+  },
+  "all_static_rows_pass": false,
+  "runtime_approved": false,
+  "score_policy": "PASS rows have all mandatory static evidence and exact10 applicable visual gates. Missing/unclear evidence remains HOLD/PARTIAL with null where unscored; no averaging.",
+  "provenance_note": "I01-I06 are attributed to the genuinely separate reviewer resource_inventory, who did not build those root images. This aggregator did not duplicate that pixel review.",
+  "schema_notes": {
+    "status": "PASS, HOLD or PARTIAL for the row only",
+    "score": "Exact scoped score; null for missing/unresolved evidence",
+    "evidence_images": "Original candidate path, SHA256, byte size and dimensions",
+    "review_reports": "Reviewer report path, SHA256 and byte size",
+    "source_sheet_has_other_unresolved_panels": "A scoped row can pass while another panel on its current source sheet awaits repair; the whole revised source must be regressed before final selection."
+  },
+  "rows": [
+    {
+      "id": "T01",
+      "group": "G01",
+      "module_or_interface": "Level straight",
+      "status": "PASS",
+      "score": 10,
+      "mandatory_static_evidence_complete": true,
+      "reviewer": "/root/independent_critic",
+      "remaining_kind": null,
+      "remaining_requirement": null,
+      "evidence_images": [
+        {
+          "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/10-conveyor-transport-kit-r1.png",
+          "sha256": "aae352dac6abcdc782f1862a1476d84e1b0661e29b1d541f6a01a74c1bf3bad2",
+          "bytes": 2179206,
+          "dimensions": [
+            1536,
+            1024
+          ]
+        },
+        {
+          "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/21-conveyor-reverse-side-r2.png",
+          "sha256": "aa97e1491926b751ac27e33ce91b0680c56ff9a87be0ecbe60fd0f3e63e7a26c",
+          "bytes": 2017717,
+          "dimensions": [
+            1536,
+            1024
+          ]
+        }
+      ],
+      "review_reports": [
+        {
+          "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/critic/TRANSPORT_KIT_R1_REVIEW.json",
+          "sha256": "2d7de6ab2c7919fdf8f19855b17e11e573acee950aee391cf6b093fc2966345a",
+          "bytes": 3099
+        },
+        {
+          "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/critic/REVERSE_SIDE_R2_REVIEW.json",
+          "sha256": "2c01f0295c5b301b8a41fdfc9c65e4ea3ace8feaaede6f09328d6043de0c255c",
+          "bytes": 2261
+        }
+      ],
+      "runtime_approved": false
+    },
+    {
+      "id": "T02",
+      "group": "G01",
+      "module_or_interface": "90-degree left corner",
+      "status": "PASS",
+      "score": 10,
+      "mandatory_static_evidence_complete": true,
+      "reviewer": "/root/independent_critic",
+      "remaining_kind": null,
+      "remaining_requirement": null,
+      "evidence_images": [
+        {
+          "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/10-conveyor-transport-kit-r1.png",
+          "sha256": "aae352dac6abcdc782f1862a1476d84e1b0661e29b1d541f6a01a74c1bf3bad2",
+          "bytes": 2179206,
+          "dimensions": [
+            1536,
+            1024
+          ]
+        },
+        {
+          "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/20-conveyor-connected-use-r4.png",
+          "sha256": "133a14327f09d3118a012c3f4fb237ccc294440baf41712202cc095e750bd1c5",
+          "bytes": 1996461,
+          "dimensions": [
+            1536,
+            1024
+          ]
+        }
+      ],
+      "review_reports": [
+        {
+          "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/critic/TRANSPORT_KIT_R1_REVIEW.json",
+          "sha256": "2d7de6ab2c7919fdf8f19855b17e11e573acee950aee391cf6b093fc2966345a",
+          "bytes": 3099
+        },
+        {
+          "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/critic/CONNECTED_USE_R4_REVIEW.json",
+          "sha256": "44694205469abd461fb103cff5233a53e72c6e622f13c1a701980771fb8b8ff2",
+          "bytes": 2670
+        }
+      ],
+      "runtime_approved": false
+    },
+    {
+      "id": "T03",
+      "group": "G01",
+      "module_or_interface": "90-degree right corner",
+      "status": "PASS",
+      "score": 10,
+      "mandatory_static_evidence_complete": true,
+      "reviewer": "/root/independent_critic",
+      "remaining_kind": null,
+      "remaining_requirement": null,
+      "evidence_images": [
+        {
+          "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/10-conveyor-transport-kit-r1.png",
+          "sha256": "aae352dac6abcdc782f1862a1476d84e1b0661e29b1d541f6a01a74c1bf3bad2",
+          "bytes": 2179206,
+          "dimensions": [
+            1536,
+            1024
+          ]
+        },
+        {
+          "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/20-conveyor-connected-use-r4.png",
+          "sha256": "133a14327f09d3118a012c3f4fb237ccc294440baf41712202cc095e750bd1c5",
+          "bytes": 1996461,
+          "dimensions": [
+            1536,
+            1024
+          ]
+        }
+      ],
+      "review_reports": [
+        {
+          "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/critic/TRANSPORT_KIT_R1_REVIEW.json",
+          "sha256": "2d7de6ab2c7919fdf8f19855b17e11e573acee950aee391cf6b093fc2966345a",
+          "bytes": 3099
+        },
+        {
+          "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/critic/CONNECTED_USE_R4_REVIEW.json",
+          "sha256": "44694205469abd461fb103cff5233a53e72c6e622f13c1a701980771fb8b8ff2",
+          "bytes": 2670
+        }
+      ],
+      "runtime_approved": false
+    },
+    {
+      "id": "T04",
+      "group": "G01",
+      "module_or_interface": "Rising height adapter",
+      "status": "PASS",
+      "score": 10,
+      "mandatory_static_evidence_complete": true,
+      "reviewer": "/root/independent_critic",
+      "remaining_kind": null,
+      "remaining_requirement": null,
+      "evidence_images": [
+        {
+          "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/10-conveyor-transport-kit-r1.png",
+          "sha256": "aae352dac6abcdc782f1862a1476d84e1b0661e29b1d541f6a01a74c1bf3bad2",
+          "bytes": 2179206,
+          "dimensions": [
+            1536,
+            1024
+          ]
+        },
+        {
+          "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/21-conveyor-reverse-side-r2.png",
+          "sha256": "aa97e1491926b751ac27e33ce91b0680c56ff9a87be0ecbe60fd0f3e63e7a26c",
+          "bytes": 2017717,
+          "dimensions": [
+            1536,
+            1024
+          ]
+        }
+      ],
+      "review_reports": [
+        {
+          "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/critic/TRANSPORT_KIT_R1_REVIEW.json",
+          "sha256": "2d7de6ab2c7919fdf8f19855b17e11e573acee950aee391cf6b093fc2966345a",
+          "bytes": 3099
+        },
+        {
+          "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/critic/REVERSE_SIDE_R2_REVIEW.json",
+          "sha256": "2c01f0295c5b301b8a41fdfc9c65e4ea3ace8feaaede6f09328d6043de0c255c",
+          "bytes": 2261
+        }
+      ],
+      "runtime_approved": false
+    },
+    {
+      "id": "T05",
+      "group": "G01",
+      "module_or_interface": "Falling height adapter",
+      "status": "PASS",
+      "score": 10,
+      "mandatory_static_evidence_complete": true,
+      "reviewer": "/root/independent_critic",
+      "remaining_kind": null,
+      "remaining_requirement": null,
+      "evidence_images": [
+        {
+          "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/20-conveyor-connected-use-r4.png",
+          "sha256": "133a14327f09d3118a012c3f4fb237ccc294440baf41712202cc095e750bd1c5",
+          "bytes": 1996461,
+          "dimensions": [
+            1536,
+            1024
+          ]
+        },
+        {
+          "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/21-conveyor-reverse-side-r2.png",
+          "sha256": "aa97e1491926b751ac27e33ce91b0680c56ff9a87be0ecbe60fd0f3e63e7a26c",
+          "bytes": 2017717,
+          "dimensions": [
+            1536,
+            1024
+          ]
+        }
+      ],
+      "review_reports": [
+        {
+          "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/critic/CONNECTED_USE_R4_REVIEW.json",
+          "sha256": "44694205469abd461fb103cff5233a53e72c6e622f13c1a701980771fb8b8ff2",
+          "bytes": 2670
+        },
+        {
+          "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/critic/REVERSE_SIDE_R2_REVIEW.json",
+          "sha256": "2c01f0295c5b301b8a41fdfc9c65e4ea3ace8feaaede6f09328d6043de0c255c",
+          "bytes": 2261
+        }
+      ],
+      "runtime_approved": false
+    },
+    {
+      "id": "T06",
+      "group": "G01",
+      "module_or_interface": "End coupler and bridge plate",
+      "status": "PASS",
+      "score": 10,
+      "mandatory_static_evidence_complete": true,
+      "reviewer": "/root/independent_critic",
+      "remaining_kind": null,
+      "remaining_requirement": null,
+      "evidence_images": [
+        {
+          "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/20-conveyor-connected-use-r4.png",
+          "sha256": "133a14327f09d3118a012c3f4fb237ccc294440baf41712202cc095e750bd1c5",
+          "bytes": 1996461,
+          "dimensions": [
+            1536,
+            1024
+          ]
+        }
+      ],
+      "review_reports": [
+        {
+          "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/critic/CONNECTED_USE_R4_REVIEW.json",
+          "sha256": "44694205469abd461fb103cff5233a53e72c6e622f13c1a701980771fb8b8ff2",
+          "bytes": 2670
+        }
+      ],
+      "runtime_approved": false
+    },
+    {
+      "id": "R01",
+      "group": "G02",
+      "module_or_interface": "One-input/two-output diverter",
+      "status": "PASS",
+      "score": 10,
+      "mandatory_static_evidence_complete": true,
+      "reviewer": "/root/independent_critic",
+      "remaining_kind": null,
+      "remaining_requirement": null,
+      "evidence_images": [
+        {
+          "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/11-conveyor-routing-r3.png",
+          "sha256": "10bf33d5fd690d6a78e01e9e1ac1e0c45f39e4ec722bb9e99deb443a6cb616bb",
+          "bytes": 2010383,
+          "dimensions": [
+            1536,
+            1024
+          ]
+        },
+        {
+          "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/20-conveyor-connected-use-r4.png",
+          "sha256": "133a14327f09d3118a012c3f4fb237ccc294440baf41712202cc095e750bd1c5",
+          "bytes": 1996461,
+          "dimensions": [
+            1536,
+            1024
+          ]
+        }
+      ],
+      "review_reports": [
+        {
+          "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/critic/ROUTING_R3_REVIEW.json",
+          "sha256": "71958681e4969cf2da0534842d3ba41a590a5ed5c4b3fc1c18f961009dd9a20e",
+          "bytes": 2381
+        },
+        {
+          "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/critic/CONNECTED_USE_R4_REVIEW.json",
+          "sha256": "44694205469abd461fb103cff5233a53e72c6e622f13c1a701980771fb8b8ff2",
+          "bytes": 2670
+        }
+      ],
+      "runtime_approved": false
+    },
+    {
+      "id": "R02",
+      "group": "G02",
+      "module_or_interface": "Two-input/one-output gated merge",
+      "status": "PASS",
+      "score": 10,
+      "mandatory_static_evidence_complete": true,
+      "reviewer": "/root/independent_critic",
+      "remaining_kind": null,
+      "remaining_requirement": null,
+      "evidence_images": [
+        {
+          "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/11-conveyor-routing-r3.png",
+          "sha256": "10bf33d5fd690d6a78e01e9e1ac1e0c45f39e4ec722bb9e99deb443a6cb616bb",
+          "bytes": 2010383,
+          "dimensions": [
+            1536,
+            1024
+          ]
+        },
+        {
+          "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/21-conveyor-reverse-side-r2.png",
+          "sha256": "aa97e1491926b751ac27e33ce91b0680c56ff9a87be0ecbe60fd0f3e63e7a26c",
+          "bytes": 2017717,
+          "dimensions": [
+            1536,
+            1024
+          ]
+        }
+      ],
+      "review_reports": [
+        {
+          "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/critic/ROUTING_R3_REVIEW.json",
+          "sha256": "71958681e4969cf2da0534842d3ba41a590a5ed5c4b3fc1c18f961009dd9a20e",
+          "bytes": 2381
+        },
+        {
+          "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/critic/REVERSE_SIDE_R2_REVIEW.json",
+          "sha256": "2c01f0295c5b301b8a41fdfc9c65e4ea3ace8feaaede6f09328d6043de0c255c",
+          "bytes": 2261
+        }
+      ],
+      "runtime_approved": false
+    },
+    {
+      "id": "R03",
+      "group": "G02",
+      "module_or_interface": "Finite stock/output buffer and stop gate",
+      "status": "PASS",
+      "score": 10,
+      "mandatory_static_evidence_complete": true,
+      "reviewer": "/root/independent_critic",
+      "remaining_kind": null,
+      "remaining_requirement": null,
+      "evidence_images": [
+        {
+          "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/11-conveyor-routing-r3.png",
+          "sha256": "10bf33d5fd690d6a78e01e9e1ac1e0c45f39e4ec722bb9e99deb443a6cb616bb",
+          "bytes": 2010383,
+          "dimensions": [
+            1536,
+            1024
+          ]
+        }
+      ],
+      "review_reports": [
+        {
+          "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/critic/ROUTING_R3_REVIEW.json",
+          "sha256": "71958681e4969cf2da0534842d3ba41a590a5ed5c4b3fc1c18f961009dd9a20e",
+          "bytes": 2381
+        }
+      ],
+      "runtime_approved": false
+    },
+    {
+      "id": "R04",
+      "group": "G02",
+      "module_or_interface": "Wrong-item hold / bounded reject landing",
+      "status": "PASS",
+      "score": 10,
+      "mandatory_static_evidence_complete": true,
+      "reviewer": "/root/independent_critic",
+      "remaining_kind": null,
+      "remaining_requirement": null,
+      "evidence_images": [
+        {
+          "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/11-conveyor-routing-r3.png",
+          "sha256": "10bf33d5fd690d6a78e01e9e1ac1e0c45f39e4ec722bb9e99deb443a6cb616bb",
+          "bytes": 2010383,
+          "dimensions": [
+            1536,
+            1024
+          ]
+        }
+      ],
+      "review_reports": [
+        {
+          "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/critic/ROUTING_R3_REVIEW.json",
+          "sha256": "71958681e4969cf2da0534842d3ba41a590a5ed5c4b3fc1c18f961009dd9a20e",
+          "bytes": 2381
+        }
+      ],
+      "runtime_approved": false
+    },
+    {
+      "id": "R05",
+      "group": "G02",
+      "module_or_interface": "Grade-separated conveyor crossing",
+      "status": "PASS",
+      "score": 10,
+      "mandatory_static_evidence_complete": true,
+      "reviewer": "/root/independent_critic",
+      "remaining_kind": null,
+      "remaining_requirement": null,
+      "evidence_images": [
+        {
+          "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/19-conveyor-crossing-r2.png",
+          "sha256": "22f6a8099ae786dbbde58d02ab7db83a614d961bd22c3de9f664ac977ecd618f",
+          "bytes": 2069862,
+          "dimensions": [
+            1536,
+            1024
+          ]
+        }
+      ],
+      "review_reports": [
+        {
+          "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/critic/CROSSING_R2_REVIEW.json",
+          "sha256": "ce6d1cd2551add166e7768fdb7beb60a00adb2beeab2cc7b53f75444cfaa7534",
+          "bytes": 2627
+        }
+      ],
+      "runtime_approved": false
+    },
+    {
+      "id": "S01",
+      "group": "G03",
+      "module_or_interface": "Utility storage IN",
+      "status": "PASS",
+      "score": 10,
+      "mandatory_static_evidence_complete": true,
+      "reviewer": "/root/independent_critic",
+      "remaining_kind": null,
+      "remaining_requirement": null,
+      "evidence_images": [
+        {
+          "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/12-conveyor-storage-r2.png",
+          "sha256": "489dc33bfbdbdd3ad9a0578512dc762804e11b2c56dcce357cf08ee9ddc270fa",
+          "bytes": 2043294,
+          "dimensions": [
+            1672,
+            941
+          ]
+        },
+        {
+          "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/12b-utility-cassette-detail-r1.png",
+          "sha256": "e96baba254c57373537579251577a4f5c696aac4949f22c94f7056c6b41f80c0",
+          "bytes": 2029046,
+          "dimensions": [
+            1672,
+            941
+          ]
+        }
+      ],
+      "review_reports": [
+        {
+          "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/critic/STORAGE_COMBINED_FINAL_REVIEW.json",
+          "sha256": "49d9cbbbd3149803c0582c628919030e524bafcbcd32a21d26926f5dd3b7bfae",
+          "bytes": 3886
+        }
+      ],
+      "runtime_approved": false
+    },
+    {
+      "id": "S02",
+      "group": "G03",
+      "module_or_interface": "Utility storage OUT",
+      "status": "PASS",
+      "score": 10,
+      "mandatory_static_evidence_complete": true,
+      "reviewer": "/root/independent_critic",
+      "remaining_kind": null,
+      "remaining_requirement": null,
+      "evidence_images": [
+        {
+          "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/12-conveyor-storage-r2.png",
+          "sha256": "489dc33bfbdbdd3ad9a0578512dc762804e11b2c56dcce357cf08ee9ddc270fa",
+          "bytes": 2043294,
+          "dimensions": [
+            1672,
+            941
+          ]
+        },
+        {
+          "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/12b-utility-cassette-detail-r1.png",
+          "sha256": "e96baba254c57373537579251577a4f5c696aac4949f22c94f7056c6b41f80c0",
+          "bytes": 2029046,
+          "dimensions": [
+            1672,
+            941
+          ]
+        }
+      ],
+      "review_reports": [
+        {
+          "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/critic/STORAGE_COMBINED_FINAL_REVIEW.json",
+          "sha256": "49d9cbbbd3149803c0582c628919030e524bafcbcd32a21d26926f5dd3b7bfae",
+          "bytes": 3886
+        }
+      ],
+      "runtime_approved": false
+    },
+    {
+      "id": "S03",
+      "group": "G03",
+      "module_or_interface": "Prepared-food storage IN",
+      "status": "PASS",
+      "score": 10,
+      "mandatory_static_evidence_complete": true,
+      "reviewer": "/root/independent_critic",
+      "remaining_kind": null,
+      "remaining_requirement": null,
+      "evidence_images": [
+        {
+          "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/12-conveyor-storage-r2.png",
+          "sha256": "489dc33bfbdbdd3ad9a0578512dc762804e11b2c56dcce357cf08ee9ddc270fa",
+          "bytes": 2043294,
+          "dimensions": [
+            1672,
+            941
+          ]
+        },
+        {
+          "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/12b-utility-cassette-detail-r1.png",
+          "sha256": "e96baba254c57373537579251577a4f5c696aac4949f22c94f7056c6b41f80c0",
+          "bytes": 2029046,
+          "dimensions": [
+            1672,
+            941
+          ]
+        }
+      ],
+      "review_reports": [
+        {
+          "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/critic/STORAGE_COMBINED_FINAL_REVIEW.json",
+          "sha256": "49d9cbbbd3149803c0582c628919030e524bafcbcd32a21d26926f5dd3b7bfae",
+          "bytes": 3886
+        }
+      ],
+      "runtime_approved": false
+    },
+    {
+      "id": "S04",
+      "group": "G03",
+      "module_or_interface": "Prepared-food storage OUT",
+      "status": "PASS",
+      "score": 10,
+      "mandatory_static_evidence_complete": true,
+      "reviewer": "/root/independent_critic",
+      "remaining_kind": null,
+      "remaining_requirement": null,
+      "evidence_images": [
+        {
+          "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/12-conveyor-storage-r2.png",
+          "sha256": "489dc33bfbdbdd3ad9a0578512dc762804e11b2c56dcce357cf08ee9ddc270fa",
+          "bytes": 2043294,
+          "dimensions": [
+            1672,
+            941
+          ]
+        },
+        {
+          "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/12b-utility-cassette-detail-r1.png",
+          "sha256": "e96baba254c57373537579251577a4f5c696aac4949f22c94f7056c6b41f80c0",
+          "bytes": 2029046,
+          "dimensions": [
+            1672,
+            941
+          ]
+        }
+      ],
+      "review_reports": [
+        {
+          "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/critic/STORAGE_COMBINED_FINAL_REVIEW.json",
+          "sha256": "49d9cbbbd3149803c0582c628919030e524bafcbcd32a21d26926f5dd3b7bfae",
+          "bytes": 3886
+        }
+      ],
+      "runtime_approved": false
+    },
+    {
+      "id": "S05",
+      "group": "G03",
+      "module_or_interface": "Local utility indexed tray/lift",
+      "status": "PASS",
+      "score": 10,
+      "mandatory_static_evidence_complete": true,
+      "reviewer": "/root/independent_critic",
+      "remaining_kind": null,
+      "remaining_requirement": null,
+      "evidence_images": [
+        {
+          "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/12-conveyor-storage-r2.png",
+          "sha256": "489dc33bfbdbdd3ad9a0578512dc762804e11b2c56dcce357cf08ee9ddc270fa",
+          "bytes": 2043294,
+          "dimensions": [
+            1672,
+            941
+          ]
+        },
+        {
+          "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/12b-utility-cassette-detail-r1.png",
+          "sha256": "e96baba254c57373537579251577a4f5c696aac4949f22c94f7056c6b41f80c0",
+          "bytes": 2029046,
+          "dimensions": [
+            1672,
+            941
+          ]
+        }
+      ],
+      "review_reports": [
+        {
+          "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/critic/STORAGE_COMBINED_FINAL_REVIEW.json",
+          "sha256": "49d9cbbbd3149803c0582c628919030e524bafcbcd32a21d26926f5dd3b7bfae",
+          "bytes": 3886
+        }
+      ],
+      "runtime_approved": false
+    },
+    {
+      "id": "S06",
+      "group": "G03",
+      "module_or_interface": "Local prepared-food tray/shuttle",
+      "status": "PASS",
+      "score": 10,
+      "mandatory_static_evidence_complete": true,
+      "reviewer": "/root/independent_critic",
+      "remaining_kind": null,
+      "remaining_requirement": null,
+      "evidence_images": [
+        {
+          "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/12-conveyor-storage-r2.png",
+          "sha256": "489dc33bfbdbdd3ad9a0578512dc762804e11b2c56dcce357cf08ee9ddc270fa",
+          "bytes": 2043294,
+          "dimensions": [
+            1672,
+            941
+          ]
+        },
+        {
+          "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/12b-utility-cassette-detail-r1.png",
+          "sha256": "e96baba254c57373537579251577a4f5c696aac4949f22c94f7056c6b41f80c0",
+          "bytes": 2029046,
+          "dimensions": [
+            1672,
+            941
+          ]
+        }
+      ],
+      "review_reports": [
+        {
+          "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/critic/STORAGE_COMBINED_FINAL_REVIEW.json",
+          "sha256": "49d9cbbbd3149803c0582c628919030e524bafcbcd32a21d26926f5dd3b7bfae",
+          "bytes": 3886
+        }
+      ],
+      "runtime_approved": false
+    },
+    {
+      "id": "F01",
+      "group": "G04",
+      "module_or_interface": "Shore intake and front discharge",
+      "status": "HOLD",
+      "score": 9.0,
+      "mandatory_static_evidence_complete": false,
+      "reviewer": "/root/independent_critic",
+      "remaining_kind": "repair",
+      "remaining_requirement": "06 rear authored13 remains uncertified. Exact owner01 loaded baseline and native front-discharge/C1 close-up already inspected; no new shoreline environment required.",
+      "evidence_images": [
+        {
+          "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/01-reference-line-r1.png",
+          "sha256": "25d9b7f98f5d9407c240a8f0b242bbba6775d0e7fb60cbc720d526514d309249",
+          "bytes": 2060476,
+          "dimensions": [
+            1536,
+            1024
+          ]
+        },
+        {
+          "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/06-conveyor-views-r6.png",
+          "sha256": "47716c43617828a7120f8f13bc7d0d4a380debe6023b814021df8c33e948ebf2",
+          "bytes": 1908481,
+          "dimensions": [
+            1536,
+            1024
+          ]
+        }
+      ],
+      "review_reports": [
+        {
+          "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/critic/LINE_R1_REVIEW.json",
+          "sha256": "ab0ea4a24a24943d5aa88646cbdd758789c9e747e5af8ebe8ea98ef135a654d2",
+          "bytes": 3662
+        },
+        {
+          "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/critic/CONVEYOR_VIEWS_R6_REVIEW.json",
+          "sha256": "fd9d3eeecef280126929134a012ec8b5369c4003e2931640695c3a188f7704a3",
+          "bytes": 1663
+        }
+      ],
+      "runtime_approved": false,
+      "additional_inspection_evidence": [
+        {
+          "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/critic/f01-baseline-evidence/CROP_MANIFEST.json",
+          "sha256": "79f052f61699e011df22639ded1eb86e77c216bdedd98934967b2551f875ff7b",
+          "bytes": 607
+        }
+      ]
+    },
+    {
+      "id": "F02",
+      "group": "G04",
+      "module_or_interface": "Cooker raw-food input dock",
+      "status": "PASS",
+      "score": 10,
+      "mandatory_static_evidence_complete": true,
+      "reviewer": "/root/independent_critic",
+      "remaining_kind": null,
+      "remaining_requirement": null,
+      "evidence_images": [
+        {
+          "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/13-conveyor-food-machines-r3.png",
+          "sha256": "d4ad735936b1d81b6392eac754fb9f6e1366b66380f1fdfd11d332353535f96f",
+          "bytes": 2000155,
+          "dimensions": [
+            1536,
+            1024
+          ]
+        },
+        {
+          "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/22-processor-connection-details-r1.png",
+          "sha256": "cf565f38f14df748339e6f124ff25cd58935a072a069a89ea48ee242ac703d23",
+          "bytes": 2325853,
+          "dimensions": [
+            1536,
+            1024
+          ]
+        }
+      ],
+      "review_reports": [
+        {
+          "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/critic/FOOD_MACHINES_R3_REVIEW.json",
+          "sha256": "54352e0a42034980763b3f5b69621483061de7d4268edd1f0ff5ed3a3f8b8aea",
+          "bytes": 2147
+        },
+        {
+          "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/critic/PROCESSOR_DETAILS_R1_BOTTOM_REVIEW.json",
+          "sha256": "9a83ae01018f9beaba821a695b25e9b5be790740995fa645a31c5ec574b922f1",
+          "bytes": 2377
+        }
+      ],
+      "runtime_approved": false,
+      "source_sheet_has_other_unresolved_panels": true
+    },
+    {
+      "id": "F03",
+      "group": "G04",
+      "module_or_interface": "Cooker processed-food output dock",
+      "status": "HOLD",
+      "score": 9.0,
+      "mandatory_static_evidence_complete": false,
+      "reviewer": "/root/independent_critic",
+      "remaining_kind": "repair",
+      "remaining_requirement": "FULL input bar remains longitudinal rather than spanning the lane; output restraint is repaired.",
+      "evidence_images": [
+        {
+          "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/13-conveyor-food-machines-r3.png",
+          "sha256": "d4ad735936b1d81b6392eac754fb9f6e1366b66380f1fdfd11d332353535f96f",
+          "bytes": 2000155,
+          "dimensions": [
+            1536,
+            1024
+          ]
+        }
+      ],
+      "review_reports": [
+        {
+          "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/critic/FOOD_MACHINES_R3_REVIEW.json",
+          "sha256": "54352e0a42034980763b3f5b69621483061de7d4268edd1f0ff5ed3a3f8b8aea",
+          "bytes": 2147
+        }
+      ],
+      "runtime_approved": false
+    },
+    {
+      "id": "F04",
+      "group": "G04",
+      "module_or_interface": "Meat-to-meal dock use",
+      "status": "PASS",
+      "score": 10,
+      "mandatory_static_evidence_complete": true,
+      "reviewer": "/root/independent_critic",
+      "remaining_kind": null,
+      "remaining_requirement": null,
+      "evidence_images": [
+        {
+          "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/13-conveyor-food-machines-r3.png",
+          "sha256": "d4ad735936b1d81b6392eac754fb9f6e1366b66380f1fdfd11d332353535f96f",
+          "bytes": 2000155,
+          "dimensions": [
+            1536,
+            1024
+          ]
+        }
+      ],
+      "review_reports": [
+        {
+          "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/critic/FOOD_MACHINES_R3_REVIEW.json",
+          "sha256": "54352e0a42034980763b3f5b69621483061de7d4268edd1f0ff5ed3a3f8b8aea",
+          "bytes": 2147
+        }
+      ],
+      "runtime_approved": false,
+      "source_sheet_has_other_unresolved_panels": true
+    },
+    {
+      "id": "F05",
+      "group": "G04",
+      "module_or_interface": "Wheat processor raw and bread output docks",
+      "status": "PASS",
+      "score": 10,
+      "mandatory_static_evidence_complete": true,
+      "reviewer": "/root/independent_critic",
+      "remaining_kind": null,
+      "remaining_requirement": null,
+      "evidence_images": [
+        {
+          "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/13-conveyor-food-machines-r3.png",
+          "sha256": "d4ad735936b1d81b6392eac754fb9f6e1366b66380f1fdfd11d332353535f96f",
+          "bytes": 2000155,
+          "dimensions": [
+            1536,
+            1024
+          ]
+        }
+      ],
+      "review_reports": [
+        {
+          "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/critic/FOOD_MACHINES_R3_REVIEW.json",
+          "sha256": "54352e0a42034980763b3f5b69621483061de7d4268edd1f0ff5ed3a3f8b8aea",
+          "bytes": 2147
+        }
+      ],
+      "runtime_approved": false,
+      "source_sheet_has_other_unresolved_panels": true
+    },
+    {
+      "id": "U01",
+      "group": "G05",
+      "module_or_interface": "Typed raw utility feeder",
+      "status": "PASS",
+      "score": 10,
+      "mandatory_static_evidence_complete": true,
+      "reviewer": "/root/independent_critic",
+      "remaining_kind": null,
+      "remaining_requirement": null,
+      "evidence_images": [
+        {
+          "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/14-conveyor-utility-machines-r3.png",
+          "sha256": "41ea7a8c64ffa49205fb3c02e6361372101d9c19d76ce338a36c7d4d0968a16f",
+          "bytes": 2300156,
+          "dimensions": [
+            1536,
+            1024
+          ]
+        }
+      ],
+      "review_reports": [
+        {
+          "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/critic/UTILITY_MACHINES_R3_REVIEW.json",
+          "sha256": "2d25ba3682d48012f0e343c473c61ae0a46accbc4750859287bcd75ca584543a",
+          "bytes": 1563
+        }
+      ],
+      "runtime_approved": false
+    },
+    {
+      "id": "U02",
+      "group": "G05",
+      "module_or_interface": "Saw wood input and plank output docks",
+      "status": "PASS",
+      "score": 10,
+      "mandatory_static_evidence_complete": true,
+      "reviewer": "/root/independent_critic",
+      "remaining_kind": null,
+      "remaining_requirement": null,
+      "evidence_images": [
+        {
+          "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/14-conveyor-utility-machines-r3.png",
+          "sha256": "41ea7a8c64ffa49205fb3c02e6361372101d9c19d76ce338a36c7d4d0968a16f",
+          "bytes": 2300156,
+          "dimensions": [
+            1536,
+            1024
+          ]
+        }
+      ],
+      "review_reports": [
+        {
+          "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/critic/UTILITY_MACHINES_R3_REVIEW.json",
+          "sha256": "2d25ba3682d48012f0e343c473c61ae0a46accbc4750859287bcd75ca584543a",
+          "bytes": 1563
+        }
+      ],
+      "runtime_approved": false
+    },
+    {
+      "id": "U03",
+      "group": "G05",
+      "module_or_interface": "Quarry/stone processor input and block output docks",
+      "status": "PASS",
+      "score": 10,
+      "mandatory_static_evidence_complete": true,
+      "reviewer": "/root/independent_critic",
+      "remaining_kind": null,
+      "remaining_requirement": null,
+      "evidence_images": [
+        {
+          "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/14-conveyor-utility-machines-r3.png",
+          "sha256": "41ea7a8c64ffa49205fb3c02e6361372101d9c19d76ce338a36c7d4d0968a16f",
+          "bytes": 2300156,
+          "dimensions": [
+            1536,
+            1024
+          ]
+        },
+        {
+          "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/22-processor-connection-details-r1.png",
+          "sha256": "cf565f38f14df748339e6f124ff25cd58935a072a069a89ea48ee242ac703d23",
+          "bytes": 2325853,
+          "dimensions": [
+            1536,
+            1024
+          ]
+        }
+      ],
+      "review_reports": [
+        {
+          "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/critic/UTILITY_MACHINES_R3_REVIEW.json",
+          "sha256": "2d25ba3682d48012f0e343c473c61ae0a46accbc4750859287bcd75ca584543a",
+          "bytes": 1563
+        },
+        {
+          "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/critic/PROCESSOR_DETAILS_R1_BOTTOM_REVIEW.json",
+          "sha256": "9a83ae01018f9beaba821a695b25e9b5be790740995fa645a31c5ec574b922f1",
+          "bytes": 2377
+        }
+      ],
+      "runtime_approved": false,
+      "source_sheet_has_other_unresolved_panels": true
+    },
+    {
+      "id": "I01",
+      "group": "G06",
+      "module_or_interface": "Coal smelter typed interfaces",
+      "status": "HOLD",
+      "score": 8.8,
+      "mandatory_static_evidence_complete": false,
+      "reviewer": "/root/resource_inventory",
+      "remaining_kind": "repair",
+      "remaining_requirement": "Both supposed input stop plates sit on near side rails parallel to cargo travel; neither spans its ore/coal lane. Actual held-input condition is not demonstrated.",
+      "evidence_images": [
+        {
+          "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/15a-conveyor-metallurgy-r2.png",
+          "sha256": "bb62e0903a5d90f88c2bdcc862883988efc50538c01400c422a59acafa2e36dc",
+          "bytes": 2208374,
+          "dimensions": [
+            1536,
+            1024
+          ]
+        },
+        {
+          "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/22-processor-connection-details-r1.png",
+          "sha256": "cf565f38f14df748339e6f124ff25cd58935a072a069a89ea48ee242ac703d23",
+          "bytes": 2325853,
+          "dimensions": [
+            1536,
+            1024
+          ]
+        }
+      ],
+      "review_reports": [
+        {
+          "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/critic/resource-inventory-industrial-r2/INDUSTRIAL_I01_I06_RETEST.json",
+          "sha256": "d91832f8fec647c24722634694c136bd8b83952882b70f17a72f22ac21b08169",
+          "bytes": 16432
+        }
+      ],
+      "runtime_approved": false,
+      "issue_ids": [
+        "IND-R2-01"
+      ],
+      "source_sheet_has_other_unresolved_panels": true
+    },
+    {
+      "id": "I02",
+      "group": "G06",
+      "module_or_interface": "Metal bench input and alternative outputs",
+      "status": "PASS",
+      "score": 10,
+      "mandatory_static_evidence_complete": true,
+      "reviewer": "/root/resource_inventory",
+      "remaining_kind": null,
+      "remaining_requirement": null,
+      "evidence_images": [
+        {
+          "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/15a-conveyor-metallurgy-r2.png",
+          "sha256": "bb62e0903a5d90f88c2bdcc862883988efc50538c01400c422a59acafa2e36dc",
+          "bytes": 2208374,
+          "dimensions": [
+            1536,
+            1024
+          ]
+        }
+      ],
+      "review_reports": [
+        {
+          "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/critic/resource-inventory-industrial-r2/INDUSTRIAL_I01_I06_RETEST.json",
+          "sha256": "d91832f8fec647c24722634694c136bd8b83952882b70f17a72f22ac21b08169",
+          "bytes": 16432
+        }
+      ],
+      "runtime_approved": false,
+      "issue_ids": []
+    },
+    {
+      "id": "I03",
+      "group": "G06",
+      "module_or_interface": "Steel forge typed interfaces",
+      "status": "PASS",
+      "score": 10,
+      "mandatory_static_evidence_complete": true,
+      "reviewer": "/root/resource_inventory",
+      "remaining_kind": null,
+      "remaining_requirement": null,
+      "evidence_images": [
+        {
+          "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/15a-conveyor-metallurgy-r2.png",
+          "sha256": "bb62e0903a5d90f88c2bdcc862883988efc50538c01400c422a59acafa2e36dc",
+          "bytes": 2208374,
+          "dimensions": [
+            1536,
+            1024
+          ]
+        },
+        {
+          "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/22-processor-connection-details-r1.png",
+          "sha256": "cf565f38f14df748339e6f124ff25cd58935a072a069a89ea48ee242ac703d23",
+          "bytes": 2325853,
+          "dimensions": [
+            1536,
+            1024
+          ]
+        }
+      ],
+      "review_reports": [
+        {
+          "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/critic/resource-inventory-industrial-r2/INDUSTRIAL_I01_I06_RETEST.json",
+          "sha256": "d91832f8fec647c24722634694c136bd8b83952882b70f17a72f22ac21b08169",
+          "bytes": 16432
+        }
+      ],
+      "runtime_approved": false,
+      "issue_ids": [],
+      "source_sheet_has_other_unresolved_panels": true
+    },
+    {
+      "id": "I04",
+      "group": "G06",
+      "module_or_interface": "Industrial assembly multiple-input docks",
+      "status": "PASS",
+      "score": 10,
+      "mandatory_static_evidence_complete": true,
+      "reviewer": "/root/resource_inventory",
+      "remaining_kind": null,
+      "remaining_requirement": null,
+      "evidence_images": [
+        {
+          "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/15b-conveyor-assembly-fuel-r2.png",
+          "sha256": "361bfd0d3bcf1969790de6514790a5ab3d63afccf624bd5fd89a4326029b35e5",
+          "bytes": 2249763,
+          "dimensions": [
+            1536,
+            1024
+          ]
+        }
+      ],
+      "review_reports": [
+        {
+          "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/critic/resource-inventory-industrial-r2/INDUSTRIAL_I01_I06_RETEST.json",
+          "sha256": "d91832f8fec647c24722634694c136bd8b83952882b70f17a72f22ac21b08169",
+          "bytes": 16432
+        }
+      ],
+      "runtime_approved": false,
+      "issue_ids": []
+    },
+    {
+      "id": "I05",
+      "group": "G06",
+      "module_or_interface": "Manual pump crude container handoff",
+      "status": "PASS",
+      "score": 10,
+      "mandatory_static_evidence_complete": true,
+      "reviewer": "/root/resource_inventory",
+      "remaining_kind": null,
+      "remaining_requirement": null,
+      "evidence_images": [
+        {
+          "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/15b-conveyor-assembly-fuel-r2.png",
+          "sha256": "361bfd0d3bcf1969790de6514790a5ab3d63afccf624bd5fd89a4326029b35e5",
+          "bytes": 2249763,
+          "dimensions": [
+            1536,
+            1024
+          ]
+        }
+      ],
+      "review_reports": [
+        {
+          "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/critic/resource-inventory-industrial-r2/INDUSTRIAL_I01_I06_RETEST.json",
+          "sha256": "d91832f8fec647c24722634694c136bd8b83952882b70f17a72f22ac21b08169",
+          "bytes": 16432
+        }
+      ],
+      "runtime_approved": false,
+      "issue_ids": []
+    },
+    {
+      "id": "I06",
+      "group": "G06",
+      "module_or_interface": "Refinery crude/coal inputs and fuel output",
+      "status": "PASS",
+      "score": 10,
+      "mandatory_static_evidence_complete": true,
+      "reviewer": "/root/resource_inventory",
+      "remaining_kind": null,
+      "remaining_requirement": null,
+      "evidence_images": [
+        {
+          "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/15b-conveyor-assembly-fuel-r2.png",
+          "sha256": "361bfd0d3bcf1969790de6514790a5ab3d63afccf624bd5fd89a4326029b35e5",
+          "bytes": 2249763,
+          "dimensions": [
+            1536,
+            1024
+          ]
+        }
+      ],
+      "review_reports": [
+        {
+          "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/critic/resource-inventory-industrial-r2/INDUSTRIAL_I01_I06_RETEST.json",
+          "sha256": "d91832f8fec647c24722634694c136bd8b83952882b70f17a72f22ac21b08169",
+          "bytes": 16432
+        }
+      ],
+      "runtime_approved": false,
+      "issue_ids": []
+    },
+    {
+      "id": "A01",
+      "group": "G07",
+      "module_or_interface": "Reserved two-input food assembler",
+      "status": "PASS",
+      "score": 10,
+      "mandatory_static_evidence_complete": true,
+      "reviewer": "/root/independent_critic",
+      "remaining_kind": null,
+      "remaining_requirement": null,
+      "evidence_images": [
+        {
+          "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/16-dual-input-assembly-r2.png",
+          "sha256": "6aca94552a231d55a4642f1b3343614b69db3f27110fb5839212804d55dfec26",
+          "bytes": 2175339,
+          "dimensions": [
+            1536,
+            1024
+          ]
+        }
+      ],
+      "review_reports": [
+        {
+          "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/critic/RESERVED_ASSEMBLY_R2_REVIEW.json",
+          "sha256": "dfc192dd0d325aec838a00a6b86e7d9fd001595bae929674ee6e4e466c38a0b1",
+          "bytes": 2031
+        }
+      ],
+      "runtime_approved": false
+    },
+    {
+      "id": "C01",
+      "group": "G08",
+      "module_or_interface": "Self-service food counter restock and separate cash",
+      "status": "PASS",
+      "score": 10,
+      "mandatory_static_evidence_complete": true,
+      "reviewer": "/root/independent_critic",
+      "remaining_kind": null,
+      "remaining_requirement": null,
+      "evidence_images": [
+        {
+          "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/17-conveyor-counter-r4.png",
+          "sha256": "10676f8021a20caea31413e13a4463950cfbae583a9dc0fb0aff8e4018d4fccd",
+          "bytes": 1878007,
+          "dimensions": [
+            1536,
+            1024
+          ]
+        }
+      ],
+      "review_reports": [
+        {
+          "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/critic/COUNTER_R4_REVIEW.json",
+          "sha256": "ea8e7aafed0c717c975ca1eaf15bf49b6d0f7260b960507b37949ee5bca627b3",
+          "bytes": 3474
+        }
+      ],
+      "runtime_approved": false
+    },
+    {
+      "id": "C02",
+      "group": "G08",
+      "module_or_interface": "Catalogue-gated material counter dock use",
+      "status": "PASS",
+      "score": 10,
+      "mandatory_static_evidence_complete": true,
+      "reviewer": "/root/independent_critic",
+      "remaining_kind": null,
+      "remaining_requirement": null,
+      "evidence_images": [
+        {
+          "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/17b-material-counter-r2.png",
+          "sha256": "97c959e12f275b4fb5af105e0fdae5b6dcd2b38adeffb55b67480b7f367c7ddf",
+          "bytes": 1858822,
+          "dimensions": [
+            1536,
+            1024
+          ]
+        }
+      ],
+      "review_reports": [
+        {
+          "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/critic/MATERIAL_COUNTER_R2_REVIEW.json",
+          "sha256": "7c69592daa408faef121b9c5c818773cc303791c4ef503322a6b62f01f8c9625",
+          "bytes": 2183
+        }
+      ],
+      "runtime_approved": false
+    },
+    {
+      "id": "N01",
+      "group": "G09",
+      "module_or_interface": "First connected camp route",
+      "status": "PASS",
+      "score": 10,
+      "mandatory_static_evidence_complete": true,
+      "reviewer": "/root/independent_critic",
+      "remaining_kind": null,
+      "remaining_requirement": null,
+      "evidence_images": [
+        {
+          "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/18-connected-camp-r3.png",
+          "sha256": "680c87b714ef952ee744a249f27062fc3d491b9b46c54960b63607da7ec85a1b",
+          "bytes": 2288100,
+          "dimensions": [
+            1536,
+            1024
+          ]
+        }
+      ],
+      "review_reports": [
+        {
+          "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/critic/CAMP_R3_REVIEW.json",
+          "sha256": "500c8cb6f31ea4c1a66c4dab87449527be188f78c827b2a14102f8b532a77b0f",
+          "bytes": 2751
+        }
+      ],
+      "runtime_approved": false,
+      "scope_note": "Proposed meat-to-meal camp; not fish-sales activation and not implemented automation."
+    },
+    {
+      "id": "N02",
+      "group": "G09",
+      "module_or_interface": "Expanded compatible machine-to-storage/counter network",
+      "status": "PARTIAL",
+      "score": null,
+      "mandatory_static_evidence_complete": false,
+      "reviewer": "/root/independent_critic",
+      "remaining_kind": "missing_connected_view_and_dependencies",
+      "remaining_requirement": "Readable connected network overview or traceable focused typed routes into compatible storage/counter destinations, with industrial connection inset and clear worker aisles. Isolated processor-stock studies alone do not establish this network. Industrial and quarry interface repairs are also pending.",
+      "evidence_images": [],
+      "review_reports": [],
+      "runtime_approved": false
+    }
+  ]
+}

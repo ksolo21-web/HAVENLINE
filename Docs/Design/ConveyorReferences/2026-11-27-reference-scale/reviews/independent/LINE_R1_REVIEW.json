@@ -1,0 +1,57 @@
+{
+  "reviewer": "/root/independent_critic",
+  "recorded_utc": "2026-11-28T04:45:24.911868+00:00",
+  "scope": "Actual displayed static raster only. No native model, unseen angle, animation, runtime, throughput, or full original gameplay conformity approval.",
+  "owner_authority": "Latest owner explicitly selected uploaded 33179.png (conveyor R1) and 33180.png (core R4), approved their sizes, and allowed fish sizes/types and animal-dependent meat variation. Exact selected originals remain unchanged.",
+  "candidate": {
+    "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/01-reference-line-r1.png",
+    "sha256": "25d9b7f98f5d9407c240a8f0b242bbba6775d0e7fb60cbc720d526514d309249",
+    "bytes": 2060476,
+    "dimensions": [
+      1536,
+      1024
+    ]
+  },
+  "status": "PASS_SELECTED_VISIBLE_STATIC_SCOPE_WITH_OWNER_SIZE_ADAPTATION",
+  "static_visible_score": 10.0,
+  "full_unadapted_video_match_score": null,
+  "runtime_function_score": null,
+  "view_coverage": "One complete in-context view; closeups of intake, roller/plate joins, output goods and C1; no rear/360 review.",
+  "references_inspected": [
+    "A16 full native frame and reference crop",
+    "A40 alternate native crop",
+    "C1-cardinal.png",
+    "fish.png",
+    "uploaded 33179.png"
+  ],
+  "visible_passes": [
+    "Orange/yellow twin intake, gray surfaces, dark transverse rollers and blue processing/output body are recognizable as the selected connected assembly.",
+    "Roller exit, gray transfer plate and output bed visibly connect without an open gap.",
+    "Approved C1 and blue-gray/orange-finned raw-fish identities are recognizable; one character only.",
+    "Complete front output and both inlet ends remain inside the frame; goods have visible support.",
+    "Owner-selected relative size is preserved; no new resize required."
+  ],
+  "historical_pre_owner_findings": {
+    "status": "PREVIOUS_SCALE_HOLD_SUPERSEDED_BY_EXPLICIT_OWNER_SELECTION",
+    "assessment_recorded_after_owner_selection": true,
+    "old_unadapted_scale_gate_score": 8.5,
+    "source_actor_height_px": 150,
+    "candidate_actor_height_px": 302,
+    "source_roller_entry_to_output_midpoint_segment_px": 684.478,
+    "candidate_segment_px": 892.243,
+    "source_actor_over_segment": 0.2191,
+    "candidate_actor_over_segment": 0.3385,
+    "interpretation": "Candidate actor/line projected ratio is about 1.54 times the source example. This was a valid discrepancy under the original strict size request; it is now an explicitly accepted owner adaptation, not an active resize mandate.",
+    "evidence": "line-r1-evidence/SCALE_LANDMARKS.json",
+    "uncertainty": "Manual visible landmarks, approximately +/-5px per edge; screen projection and pose only, not world dimensions.",
+    "raw_fish_note": "Elongated approved blue fish must be compared by long axis, not height alone against the rounder video fish. Do not infer a universal enlargement factor."
+  },
+  "remaining_scope_limits": [
+    "Continuous reference/candidate motion not reviewed by this critic.",
+    "No blocked/full/resume state, physical transfer cycle or ownership ledger validated.",
+    "No rear, underside or additional camera geometry consistency certified.",
+    "Fine inlet rib/coiling details and the adapted resource/actor identities are not certified as pixel-identical original-video geometry."
+  ],
+  "active_repairs_for_this_selected_static_size": [],
+  "future_review_rule": "Use this exact R1 as the appearance/relative-scale reference for new conveyor views. Raise new actual geometry defects without undoing the owner-selected proportions."
+}

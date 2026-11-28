@@ -1,0 +1,349 @@
+{
+  "schema_version": 1,
+  "created_utc": "2026-11-28T04:23:56.988087+00:00",
+  "scope": "Conveyor reference and resource presentation revision",
+  "requested_goal": "100% observable conveyor look, size and functionality match with the latest approved owner adaptations; larger reference-consistent resource presentation.",
+  "interpretation": "A review score is not a measured percentage. Exact-10 approval means every mandatory comparison has complete inspected evidence and zero known unapproved deviations.",
+  "requirements": [
+    {
+      "id": "R01",
+      "scope": "reference",
+      "name": "Original A/B identity",
+      "status": "PASS_DOCUMENTARY",
+      "mandatory": true,
+      "acceptance": "Both original video byte lengths and SHA-256 match the locked sources; preserve untouched files.",
+      "required_evidence": [
+        "ORIGINAL_VIDEO_RECOVERY.json",
+        "SOURCE_AUDIT.json:videos"
+      ]
+    },
+    {
+      "id": "R02",
+      "scope": "identity",
+      "name": "27 resource identities",
+      "status": "PASS_DOCUMENTARY",
+      "mandatory": true,
+      "acceptance": "Keep the exact 27 canonical IDs, input/output mapping and art identity links; no new economy, currency or renamed saved ID.",
+      "required_evidence": [
+        "RESOURCE_SCALE_IMPACT.json:families"
+      ]
+    },
+    {
+      "id": "R03",
+      "scope": "visual",
+      "name": "Character 1 and landscape anchor",
+      "status": "PENDING",
+      "mandatory": true,
+      "acceptance": "Freeze unchanged Character 1 geometry/rig/scale. Recompose landscape at readable shorter-edge scale; do not shrink the character or zoom out to disguise oversized props.",
+      "required_evidence": [
+        "matched normal-gameplay renders",
+        "Character 1 hash/transform receipt"
+      ]
+    },
+    {
+      "id": "R04",
+      "scope": "visual",
+      "name": "Measured reference proportions",
+      "status": "PENDING",
+      "mandatory": true,
+      "acceptance": "Use exact owner-selected R1/R4 images as the controlling static size baselines. Measure candidate/native implementation consistently without inventing a universal multiplier or replacing the owner choice with earlier footage ratios.",
+      "required_evidence": [
+        "REFERENCE_MEASUREMENT_LEDGER.json",
+        "source/candidate comparison captures"
+      ]
+    },
+    {
+      "id": "R05",
+      "scope": "visual",
+      "name": "Conveyor appearance",
+      "status": "OWNER_SELECTED_ONE_STATIC_VIEW_ADDITIONAL_EVIDENCE_PENDING",
+      "mandatory": true,
+      "acceptance": "Additional conveyor views preserve selected R1 appearance and its accepted adaptations. Compare against source for observable detail without reopening the owner-selected size by default.",
+      "required_evidence": [
+        "A intake and conveyor comparison",
+        "normal view and meaningful front/side/rear closeups"
+      ]
+    },
+    {
+      "id": "R06",
+      "scope": "visual",
+      "name": "Conveyor dimensions and interfaces",
+      "status": "PENDING",
+      "mandatory": true,
+      "acceptance": "Reference-matched usable width, deck/rail height, roller pitch, turning envelope and port junctions; enlarged items remain supported through straight, corner, incline, merge and dock states.",
+      "required_evidence": [
+        "measured module sheet",
+        "loaded route and port closeups"
+      ]
+    },
+    {
+      "id": "R07",
+      "scope": "visual",
+      "name": "27-family scale disposition",
+      "status": "PENDING",
+      "mandatory": true,
+      "acceptance": "Every family receives an explicit measured or authored scale disposition across applicable contexts. No silent exception and no inherited approval for an affected context.",
+      "required_evidence": [
+        "RESOURCE_SCALE_IMPACT.json with 27 reviewed entries",
+        "in-context scale renders"
+      ]
+    },
+    {
+      "id": "R08",
+      "scope": "visual",
+      "name": "Cash and meat priority",
+      "status": "OWNER_SELECTED_CORE_STATIC_VIEW_ADDITIONAL_CONTEXTS_PENDING",
+      "mandatory": true,
+      "acceptance": "Retain owner-selected R4 ordinary cash/meat size and identity; larger piles use additional units. Animal-specific cuts may vary in size. Inspect additional applicable contexts without changing amounts or IDs.",
+      "required_evidence": [
+        "A cash/B meat comparisons",
+        "unchanged denomination/custody proof"
+      ]
+    },
+    {
+      "id": "R09",
+      "scope": "visual",
+      "name": "Storage and machine fit",
+      "status": "PENDING",
+      "mandatory": true,
+      "acceptance": "Check existing cooker, saw, quarry, fish/wheat interfaces and the six approved industrial concepts against enlarged applicable inputs/outputs. Doors, lips, shelves, nozzles, reach and service space remain coherent.",
+      "required_evidence": [
+        "input/output and filled-state renders",
+        "six-machine interface disposition"
+      ]
+    },
+    {
+      "id": "R10",
+      "scope": "visual",
+      "name": "Register-free stock and cash",
+      "status": "PENDING",
+      "mandatory": true,
+      "acceptance": "Keep the later self-service counter and separate stock/cash areas. Retire obsolete register-bearing art requirements; preserve bulk restock/collection and autonomous customer pickup.",
+      "required_evidence": [
+        "revised counter/camp views",
+        "Build 14 behavior comparison"
+      ]
+    },
+    {
+      "id": "R11",
+      "scope": "motion",
+      "name": "Transfer size continuity",
+      "status": "PENDING_RUNTIME",
+      "mandatory": true,
+      "acceptance": "Watch entire source-to-carry, carry-to-machine/storage, belt-to-machine and counter/customer/cash transfers. A prop does not pop, clip, silently shrink or change identity at handoff.",
+      "required_evidence": [
+        "uninterrupted transfer clips",
+        "source/destination measured transforms"
+      ]
+    },
+    {
+      "id": "R12",
+      "scope": "motion",
+      "name": "Loaded carrying and people",
+      "status": "PENDING_RUNTIME",
+      "mandatory": true,
+      "acceptance": "Watch full loaded cycles using the selected ordinary size and explicit variants; preserve mixed loads and unlimited logical inventory. Inspect hands, knees, toes, posture and clipping. Stack presentation follows approved context rather than an obsolete unit-size target.",
+      "required_evidence": [
+        "full-cycle normal camera and closeups",
+        "mixed-load/large-balance check"
+      ]
+    },
+    {
+      "id": "R13",
+      "scope": "function",
+      "name": "Whole economic loop",
+      "status": "PENDING_RUNTIME",
+      "mandatory": true,
+      "acceptance": "Show continuous real acquisition, transit, processing, stock, self-service sale, cash collection and deposit for approved routes. Each visible event corresponds to the durable typed ledger.",
+      "required_evidence": [
+        "reference and candidate played full loops",
+        "event/ledger reconciliation"
+      ]
+    },
+    {
+      "id": "R14",
+      "scope": "function",
+      "name": "Reservation and backpressure",
+      "status": "PENDING_RUNTIME",
+      "mandatory": true,
+      "acceptance": "Full destination, blocked port, incompatible item, shared merge and busy machine hold safely and resume. No deletion, duplicate output, double reservation, runaway recirculation or invented infinite buffer.",
+      "required_evidence": [
+        "normal/full/blocked/wrong-type/resume clips",
+        "quantity conservation assertions"
+      ]
+    },
+    {
+      "id": "R15",
+      "scope": "function",
+      "name": "Manual/helper/automation compatibility",
+      "status": "PENDING_RUNTIME",
+      "mandatory": true,
+      "acceptance": "Existing manual and survivor flows still work before and after each approved automation unlock. Concurrent participants cannot collect or consume the same goods/cash twice; no free new route or recipe.",
+      "required_evidence": [
+        "unlock sequence and concurrent handoff clips",
+        "existing paid-conveyor/market regressions"
+      ]
+    },
+    {
+      "id": "R16",
+      "scope": "function",
+      "name": "Working and failure states",
+      "status": "PENDING_RUNTIME",
+      "mandatory": true,
+      "acceptance": "Actual idle, working, no-input, full-output, jammed/damaged and recovered states use the same enlarged geometry. Watch complete movement and process cycles, not labeled still panels.",
+      "required_evidence": [
+        "state/transition playback",
+        "recovery output accounting"
+      ]
+    },
+    {
+      "id": "R17",
+      "scope": "function",
+      "name": "Persistence and denomination",
+      "status": "PENDING_RUNTIME",
+      "mandatory": true,
+      "acceptance": "Partial transit, save failure, reload and interruption preserve exact goods and money custody. One raw bundle remains the authored ten displayed units; quantities, prices, recipes and unlocks remain unchanged by art scaling.",
+      "required_evidence": [
+        "conveyor cash retry/persistence tests",
+        "before/after ledger and save evidence"
+      ]
+    },
+    {
+      "id": "R18",
+      "scope": "integration",
+      "name": "Clear circulation",
+      "status": "PENDING_RUNTIME",
+      "mandatory": true,
+      "acceptance": "Both bidirectional gates, central heater approach, storage front doors/aisle, counter service and machine access remain traversable with live enlarged loads and busy routes.",
+      "required_evidence": [
+        "loaded navigation playback",
+        "surface conveyor layout and collision checks"
+      ]
+    },
+    {
+      "id": "R19",
+      "scope": "integration",
+      "name": "Complete candidate provenance",
+      "status": "PENDING_RUNTIME",
+      "mandatory": true,
+      "acceptance": "Resolve gameplay owner/live head, use a complete checkout with native assets, record exact source and candidate commits. Art/planning branch or absent native dependencies cannot stand in for a running revision.",
+      "required_evidence": [
+        "owner/live-head/candidate receipt",
+        "build and asset availability check"
+      ]
+    },
+    {
+      "id": "R20",
+      "scope": "review",
+      "name": "Independent reference acceptance",
+      "status": "PENDING",
+      "mandatory": true,
+      "acceptance": "Separate critic reviews actual frozen images and full claimed motion/function evidence. Exact 10 in every applicable mandatory reference dimension, all checks passed, zero known unapproved deviations; no averaging or score-as-percent claim.",
+      "required_evidence": [
+        "independent raw report and evidence hashes",
+        "closed defect/retest record"
+      ]
+    }
+  ],
+  "milestones": [
+    {
+      "id": "M1",
+      "name": "Freeze recovered originals and current authority",
+      "dependencies": [],
+      "status": "DOCUMENTARY_AUDIT_COMPLETE",
+      "outputs": [
+        "SOURCE_AUDIT.json",
+        "SOURCE_MANIFEST.json"
+      ],
+      "next_action": "Parent completes actual reference playback and annotates the observable conveyor/action windows."
+    },
+    {
+      "id": "M2",
+      "name": "Preserve owner-selected static size and derive implementation measurements",
+      "dependencies": [
+        "M1"
+      ],
+      "status": "TWO_STATIC_BASELINES_OWNER_SELECTED_NATIVE_DIMENSIONS_PENDING",
+      "outputs": [
+        "reference/candidate measurement ledger",
+        "money/meat/intake comparison"
+      ],
+      "next_action": "Bind new renders to exact R1/R4. Do not resume historical resizing; measure only to implement or compare the selected appearance."
+    },
+    {
+      "id": "M3",
+      "name": "Finish additional conveyor and variant render coverage",
+      "dependencies": [
+        "M2"
+      ],
+      "status": "IN_PROGRESS_BY_ROOT",
+      "outputs": [
+        "conveyor reference match",
+        "27 resource dispositions",
+        "interface fit views"
+      ],
+      "next_action": "Render more views/resources and distinct fish/species-meat variants against the selected baselines."
+    },
+    {
+      "id": "M4",
+      "name": "Integrate shared presentation rules with gameplay owner",
+      "dependencies": [
+        "M2",
+        "M3"
+      ],
+      "status": "NOT_PERFORMED_READ_ONLY_PLAN",
+      "outputs": [
+        "complete pinned candidate",
+        "shared per-context physical-size rules"
+      ],
+      "next_action": "Resolve actual owner/head and update the full dependency set; keep the ledger and recipes unchanged."
+    },
+    {
+      "id": "M5",
+      "name": "Prove continuous function and loaded interfaces",
+      "dependencies": [
+        "M4"
+      ],
+      "status": "PENDING_RUNTIME",
+      "outputs": [
+        "full-loop and state playback",
+        "targeted existing regression evidence"
+      ],
+      "next_action": "Capture real loaded route, transfer, counter and interruption cycles with conservation checks."
+    },
+    {
+      "id": "M6",
+      "name": "Independent critic, fix and retest",
+      "dependencies": [
+        "M3",
+        "M5"
+      ],
+      "status": "PENDING",
+      "outputs": [
+        "scoped independent exact-10 report",
+        "closed defect evidence"
+      ],
+      "next_action": "Review both original footage and exact final candidate, fix only observed failures, retest affected evidence."
+    },
+    {
+      "id": "M7",
+      "name": "Freeze approved revision and honest scope",
+      "dependencies": [
+        "M6"
+      ],
+      "status": "PENDING",
+      "outputs": [
+        "candidate/evidence manifest",
+        "updated acceptance/checkpoint"
+      ],
+      "next_action": "Publish only verified claims; retain old static exports and distinguish art approval, functional integration and whole-game release."
+    }
+  ],
+  "documentary_checks_passed": 2,
+  "mandatory_checks_total": 20,
+  "revision_approved": false,
+  "separate_whole_game_release_gates": "The locked phone/tablet/foldable, native-resolution, sustained-frame-pacing, thermal and completed-game-load requirements remain separate. This plan and static renders do not certify those gates.",
+  "updated_utc": "2026-11-28T04:52:02.034218+00:00",
+  "current_authority": "LATEST_OWNER_PREFERENCE.json",
+  "current_goal": "Preserve owner-selected conveyor R1 and core R4; finish more conveyor/resource renders with variable fish and animal-dependent meat. Complete motion/function evidence remains separate."
+}

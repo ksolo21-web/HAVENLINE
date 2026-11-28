@@ -1,0 +1,276 @@
+{
+  "schema_version": 1,
+  "reviewed_utc": "2026-11-28T04:49:11.783269+00:00",
+  "reviewer": "/root/processing_plan",
+  "builder": "/root/resource_inventory",
+  "scope": "Independent source identity coverage/custody only for ten preserved animal-meat art variants. No new scale, native asset, spawn/drop, recipe or runtime approval.",
+  "verdict": "PASS_MEAT_SOURCE_IDENTITY_COVERAGE_ONLY",
+  "score": 10.0,
+  "mandatory_checks_all_pass": true,
+  "manifest": {
+    "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/source/meat-variants/MEAT_IDENTITY_BOARD_MANIFEST.json",
+    "sha256": "bf0e564783b541b1184dd5cab93b46620e7ec031404b10b7022d317df0bd8258"
+  },
+  "checks": {
+    "ten_exact_keys_once": true,
+    "six_four_partition": true,
+    "display_keys_exact_once": true,
+    "ten_original_hashes_and_rois": true,
+    "ten_board_placements": true,
+    "manifest_unchanged": true,
+    "two_actual_boards_visually_complete": true,
+    "no_new_wallet_or_size_claim": true
+  },
+  "boards": [
+    {
+      "id": "01-priority-six",
+      "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/source/meat-variants/boards/01-priority-six-SOURCE_IDENTITY_ONLY.png",
+      "sha256": "43a2f185fa7750c535de1cbef575b17c75b9698d0ff385f1ab69e5f00ce1902a",
+      "keys": [
+        "deer_meat",
+        "wild_wolf_meat",
+        "boar_meat",
+        "rabbit_meat",
+        "wild_bear_meat",
+        "moose_meat"
+      ],
+      "actual_image_visually_inspected": true
+    },
+    {
+      "id": "02-remaining-four",
+      "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/source/meat-variants/boards/02-remaining-four-SOURCE_IDENTITY_ONLY.png",
+      "sha256": "0f92b24793d3c295218d73b5c433bb01f394994ad18a8ca33054a6c761e2f095",
+      "keys": [
+        "squirrel_meat",
+        "wild_fox_meat",
+        "lynx_meat",
+        "wolverine_meat"
+      ],
+      "actual_image_visually_inspected": true
+    }
+  ],
+  "identities": [
+    {
+      "key": "deer_meat",
+      "canonical_resource_family": "meat",
+      "source_repository_path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviewed-concepts/01-deer-meat.png",
+      "source_sha256": "db54049e15db3e9a38232781f36e17d02dcc5ced1a6f7bd083af6abbfefc1d78",
+      "checks": {
+        "source_sha256": true,
+        "source_git_blob": true,
+        "source_bytes_dimensions": true,
+        "crop_sha256": true,
+        "crop_dimensions": true,
+        "native_source_roi": true,
+        "source_only_category": true,
+        "no_resampling": true
+      }
+    },
+    {
+      "key": "wild_wolf_meat",
+      "canonical_resource_family": "meat",
+      "source_repository_path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviewed-concepts/07-wild-wolf-meat.png",
+      "source_sha256": "8355dfdd8138108ab0ea9e8780ceb6eae5ce3a55182b1abc9fabfeee8902444a",
+      "checks": {
+        "source_sha256": true,
+        "source_git_blob": true,
+        "source_bytes_dimensions": true,
+        "crop_sha256": true,
+        "crop_dimensions": true,
+        "native_source_roi": true,
+        "source_only_category": true,
+        "no_resampling": true
+      }
+    },
+    {
+      "key": "boar_meat",
+      "canonical_resource_family": "meat",
+      "source_repository_path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviewed-concepts/02-boar-meat.png",
+      "source_sha256": "6a9d06d3a6553c6ac3ecf4a443f9fc4bf9de5926a5f62f55386991cd03b1f637",
+      "checks": {
+        "source_sha256": true,
+        "source_git_blob": true,
+        "source_bytes_dimensions": true,
+        "crop_sha256": true,
+        "crop_dimensions": true,
+        "native_source_roi": true,
+        "source_only_category": true,
+        "no_resampling": true
+      }
+    },
+    {
+      "key": "rabbit_meat",
+      "canonical_resource_family": "meat",
+      "source_repository_path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviewed-concepts/03-rabbit-meat.png",
+      "source_sha256": "38ca37808c4f8e16e090f25c92b1fec7a2fbba5db42e6621152c1e9df796a4e1",
+      "checks": {
+        "source_sha256": true,
+        "source_git_blob": true,
+        "source_bytes_dimensions": true,
+        "crop_sha256": true,
+        "crop_dimensions": true,
+        "native_source_roi": true,
+        "source_only_category": true,
+        "no_resampling": true
+      }
+    },
+    {
+      "key": "wild_bear_meat",
+      "canonical_resource_family": "meat",
+      "source_repository_path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviewed-concepts/06-wild-bear-meat.png",
+      "source_sha256": "e0aaab670cb14ac858bf0188bcbde965829baaec8d02e982138156d9a3fb669b",
+      "checks": {
+        "source_sha256": true,
+        "source_git_blob": true,
+        "source_bytes_dimensions": true,
+        "crop_sha256": true,
+        "crop_dimensions": true,
+        "native_source_roi": true,
+        "source_only_category": true,
+        "no_resampling": true
+      }
+    },
+    {
+      "key": "moose_meat",
+      "canonical_resource_family": "meat",
+      "source_repository_path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviewed-concepts/04-moose-meat.png",
+      "source_sha256": "fdacd8301b8ed9dbe2be1c1f08eddb2f30f988931454656873c2cf570df172e8",
+      "checks": {
+        "source_sha256": true,
+        "source_git_blob": true,
+        "source_bytes_dimensions": true,
+        "crop_sha256": true,
+        "crop_dimensions": true,
+        "native_source_roi": true,
+        "source_only_category": true,
+        "no_resampling": true
+      }
+    },
+    {
+      "key": "squirrel_meat",
+      "canonical_resource_family": "meat",
+      "source_repository_path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviewed-concepts/05-squirrel-meat.png",
+      "source_sha256": "e5503021e745122f97b5e00c4e4665e924f2e145a987f0aecf6e33471bea8946",
+      "checks": {
+        "source_sha256": true,
+        "source_git_blob": true,
+        "source_bytes_dimensions": true,
+        "crop_sha256": true,
+        "crop_dimensions": true,
+        "native_source_roi": true,
+        "source_only_category": true,
+        "no_resampling": true
+      }
+    },
+    {
+      "key": "wild_fox_meat",
+      "canonical_resource_family": "meat",
+      "source_repository_path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviewed-concepts/08-wild-fox-meat.png",
+      "source_sha256": "6387f2532dfa7568012ffa18c6fc9adb034007ee24bacc08a1cb1221ce065c16",
+      "checks": {
+        "source_sha256": true,
+        "source_git_blob": true,
+        "source_bytes_dimensions": true,
+        "crop_sha256": true,
+        "crop_dimensions": true,
+        "native_source_roi": true,
+        "source_only_category": true,
+        "no_resampling": true
+      }
+    },
+    {
+      "key": "lynx_meat",
+      "canonical_resource_family": "meat",
+      "source_repository_path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviewed-concepts/09-lynx-meat.png",
+      "source_sha256": "8f42dcf699d8194718a0459721ac8935a32f64a803c5620de5b1d9b59eed35c6",
+      "checks": {
+        "source_sha256": true,
+        "source_git_blob": true,
+        "source_bytes_dimensions": true,
+        "crop_sha256": true,
+        "crop_dimensions": true,
+        "native_source_roi": true,
+        "source_only_category": true,
+        "no_resampling": true
+      }
+    },
+    {
+      "key": "wolverine_meat",
+      "canonical_resource_family": "meat",
+      "source_repository_path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviewed-concepts/10-wolverine-meat.png",
+      "source_sha256": "3419cc2f6df2fb8f985b46033735956176358ab475634cb3bca2c816a3f7ad2d",
+      "checks": {
+        "source_sha256": true,
+        "source_git_blob": true,
+        "source_bytes_dimensions": true,
+        "crop_sha256": true,
+        "crop_dimensions": true,
+        "native_source_roi": true,
+        "source_only_category": true,
+        "no_resampling": true
+      }
+    }
+  ],
+  "placements": [
+    {
+      "key": "deer_meat",
+      "board": "01-priority-six",
+      "native_board_pixels_match": true
+    },
+    {
+      "key": "wild_wolf_meat",
+      "board": "01-priority-six",
+      "native_board_pixels_match": true
+    },
+    {
+      "key": "boar_meat",
+      "board": "01-priority-six",
+      "native_board_pixels_match": true
+    },
+    {
+      "key": "rabbit_meat",
+      "board": "01-priority-six",
+      "native_board_pixels_match": true
+    },
+    {
+      "key": "wild_bear_meat",
+      "board": "01-priority-six",
+      "native_board_pixels_match": true
+    },
+    {
+      "key": "moose_meat",
+      "board": "01-priority-six",
+      "native_board_pixels_match": true
+    },
+    {
+      "key": "squirrel_meat",
+      "board": "02-remaining-four",
+      "native_board_pixels_match": true
+    },
+    {
+      "key": "wild_fox_meat",
+      "board": "02-remaining-four",
+      "native_board_pixels_match": true
+    },
+    {
+      "key": "lynx_meat",
+      "board": "02-remaining-four",
+      "native_board_pixels_match": true
+    },
+    {
+      "key": "wolverine_meat",
+      "board": "02-remaining-four",
+      "native_board_pixels_match": true
+    }
+  ],
+  "visual_findings": [
+    "All ten named meat cuts are visibly complete and distinct; labels match the two requested 6/4 groups.",
+    "Both contacts explicitly state source identity only and no current spawn, drop, recipe or physical-size claim.",
+    "Original source panel borders and lettering remain visible at the crop edges, but no cut is obscured."
+  ],
+  "critical_defects": [],
+  "required_repairs": [],
+  "canonical_family_count_unchanged": 27,
+  "canonical_meat_wallet": "meat",
+  "species_variant_names_are_not_new_saved_inventory_ids": true
+}

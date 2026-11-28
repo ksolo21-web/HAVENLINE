@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/independent_critic",
+  "recorded_utc": "2026-11-28T04:54:11.394703+00:00",
+  "candidate": {
+    "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/06-conveyor-views-r2.png",
+    "sha256": "b4404b7cd575ba6d52e1737cb5d2e24295866fa70df874b5188a16ba83e3c9d1",
+    "bytes": 2091312,
+    "dimensions": [
+      1536,
+      1024
+    ]
+  },
+  "status": "HOLD_ROLLER_REPAIR_NOT_ESTABLISHED",
+  "score": 8.5,
+  "scope": "Four displayed authored camera studies only; selected conveyor R1 size remains approved and unchanged.",
+  "retests": [
+    "Full four-panel R2 sheet inspected",
+    "Left and right native roller crops inspected at 3x nearest-neighbor magnification",
+    "Compared with R1 defect and selected R1 appearance"
+  ],
+  "evidence": "conveyor-views-r2-evidence/CROP_MANIFEST.json",
+  "defects": [
+    {
+      "id": "CV-R1-01",
+      "status": "PERSISTS",
+      "severity": "blocking_static_consistency",
+      "locations": {
+        "left_xyxy": [
+          260,
+          700,
+          410,
+          805
+        ],
+        "right_xyxy": [
+          1090,
+          700,
+          1260,
+          805
+        ]
+      },
+      "finding": "Side views still show about 6\u20137 broad roller forms with narrow surface/edge stripes. Added stripes do not visibly establish a separate continuous set of 13 narrow cylinders. Fish obscure the central portion, preventing complete verification.",
+      "exact_count_certified": null,
+      "authored_target": 13,
+      "target_provenance": "Explicit new authored consistency target, not a measured exact original-video count.",
+      "minimal_repair": "Remove raw fish from the inspection study and raise both side cameras enough to expose the full empty bed. Show 13 separate narrow transverse cylinders with consistent diameter and spacing in all four views. Preserve selected line footprint, housings, incline, transfer plate, output, C1 and approved scale.",
+      "retest": "Actual full views plus clear empty-bed closeups; count visible distinct cylinders and compare pitch under the camera projections."
+    }
+  ],
+  "other_visible_geometry": "No new intake, plate, output, framing or size repair identified.",
+  "scale_repair_requested": false,
+  "untested": {
+    "physical_single_mesh": null,
+    "unseen_original_video_faces": null,
+    "continuous_motion": null,
+    "full_blocked_resume_states": null,
+    "runtime_functionality": null
+  },
+  "next_action": "Prepare and inspect the empty-bed camera revision; retain R1/R2 failures and evidence."
+}

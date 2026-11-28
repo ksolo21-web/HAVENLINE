@@ -1,0 +1,79 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/independent_critic",
+  "recorded_utc": "2026-11-28T05:34:16.984314+00:00",
+  "authority": "Exact owner-selected R1 conveyor and R4 core resources; current 36-cell matrix.",
+  "approval_boundary": "Static illustrated concept only. No native mesh, motion, collision, routing/processing execution or inventory/cash conservation approval.",
+  "runtime_scores": {
+    "motion": null,
+    "collision": null,
+    "routing_and_processing": null,
+    "inventory_conservation": null,
+    "full_functionality": null
+  },
+  "candidate": {
+    "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/14-conveyor-utility-machines-r2.png",
+    "sha256": "98db5e5f7cfb3367be06dde503be15b7fd78bd2eb751af86a6ab42280f6d2720",
+    "bytes": 2410703,
+    "dimensions": [
+      1536,
+      1024
+    ]
+  },
+  "status": "HOLD_INACTIVE_WOOD_SCALE_AND_OUTLET_VIEW",
+  "score": 9.0,
+  "scope": "Four utility-machine connected concepts U01\u2013U03.",
+  "coverage": {
+    "full_panels_inspected": 4,
+    "native_cassette_closeup_inspected": true
+  },
+  "resolved_defects": [
+    "UTILITY-R1-01: conveyor supports now use enclosed orange/blue housings.",
+    "UTILITY-R1-02: selected hopper gates visibly open; non-selected class stays closed.",
+    "UTILITY-R1-04 partially: active wood units now match compact core R4.",
+    "UTILITY-R1-03 partially: explicit proposed parked processing cassette preserves vehicle/tower, with visible mechanical coupling and a dark raw-stone aperture at its left edge."
+  ],
+  "defects": [
+    {
+      "id": "UTILITY-R2-01",
+      "matrix_cell": "U01",
+      "severity": "resource_unit_consistency",
+      "region_xyxy": [
+        62,
+        627,
+        282,
+        880
+      ],
+      "finding": "The inactive TIMBER bin in MINERALS SELECTED retains one large bound bundle while active wood units elsewhere were reduced. Its bin-relative size/stock identity does not match the compact copies in the selected timber state. No world-space ratio is inferred from this close-up.",
+      "repair": "Replace the inactive stock with compact unit copies consistent with the active timber state; use multiple copies for volume."
+    },
+    {
+      "id": "UTILITY-R2-02",
+      "matrix_cell": "U03",
+      "severity": "missing_required_outlet_closeup",
+      "region_xyxy": [
+        906,
+        270,
+        1405,
+        442
+      ],
+      "finding": "The proposed cassette is now a distinct processor interface, but its block outlet is hidden/unclear behind the body and C1 in this overview. Required loaded inlet/outlet close-ups are not both supplied.",
+      "repair": "Add a compact reverse or outlet detail of the same cassette with a block visibly crossing the actual OUT aperture, and make the raw inlet connection traceable. Preserve the vehicle/tower, cassette and coupling; do not invent cab/track sockets."
+    }
+  ],
+  "scores": {
+    "selected_support_style": 10,
+    "selected_gate_states": 10,
+    "active_resource_scale": 10,
+    "inactive_stock_unit_consistency": 8.5,
+    "typed_outlet_visibility": null,
+    "machine_identity_preservation": 10,
+    "layout": 10
+  },
+  "matrix_statuses": {
+    "U01": "HOLD only for inactive timber unit consistency; selected gates and style repaired.",
+    "U02": "PASS for displayed timber receiving/plank discharge and wrong-class throat stop, after support/active wood fixes.",
+    "U03": "PARTIAL: authored parked cassette, input opening and coupling visible; required loaded outlet/reverse detail missing."
+  },
+  "authored_boundary": "The parked processing cassette is a new proposed interface study, not asserted to exist in the source footage or native asset; it is not a new canonical inventory resource."
+}

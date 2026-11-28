@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/independent_critic",
+  "recorded_utc": "2026-11-28T05:20:43.894742+00:00",
+  "approval_boundary": "Static illustrated concepts only. No native mesh, continuous motion, collisions, inventory conservation, recipe execution or runtime conformity approval.",
+  "runtime_scores": {
+    "motion": null,
+    "collision_and_clearance": null,
+    "processing_logic": null,
+    "inventory_conservation": null,
+    "full_functionality": null
+  },
+  "authority": "Latest exact owner-selected conveyor R1 and core R4; current 36-cell matrix. The authored 13-cylinder target applies only to the additional 06 fishing-line view study, not the original footage or all conveyor modules.",
+  "candidate": {
+    "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/19-conveyor-crossing-r1.png",
+    "sha256": "5396ba4b4b865068dd15ec59777ce2541cd52a2935e283704cfe76a2dfd5d486",
+    "bytes": 2171021,
+    "dimensions": [
+      1536,
+      1024
+    ]
+  },
+  "status": "HOLD_LOWER_LOAD_ORIENTATION_IN_SIDE_VIEW",
+  "score": 9.0,
+  "scope": "R05 authored grade-separated crossing, four static views.",
+  "coverage": {
+    "panels_inspected": 4,
+    "panels_required": 4
+  },
+  "passing_observations": [
+    "Two continuous independent conveyor routes are separated in height; upper rises and falls are supported by orange housings.",
+    "A flat upper bridge spans the straight lower route without a support occupying the carrying lane.",
+    "The visible lower fish has air above its fin; the illustrated load size is in the approved large-fish range rather than an undersized placeholder.",
+    "The outside walkway remains clear around the machinery and toward the open camp gate.",
+    "No exact 13-cylinder requirement applies to this crossing."
+  ],
+  "defects": [
+    {
+      "id": "CROSS-R1-01",
+      "matrix_cell": "R05",
+      "severity": "blocking_multiview_load_orientation",
+      "region_xyxy": [
+        295,
+        783,
+        475,
+        850
+      ],
+      "finding": "In SIDE CLEARANCE the lower salmon is broadside along the upper route axis. The lower conveyor is perpendicular and the oblique views depict its loads lengthwise along that lower route; the side panel rotates the load relative to its carrying lane.",
+      "repair": "Rotate only the lower side-view fish to face along its perpendicular lower lane, keeping its actual large size and visible fin-to-underside clearance. Do not shrink it to fit."
+    }
+  ],
+  "source_prompt": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/prompts/19-conveyor-crossing-r1.txt",
+  "matrix_statuses": {
+    "R05": "HOLD pending correction and retest of lower load orientation; static geometry otherwise legible."
+  },
+  "next_action": "Inspect R2 side clearance and regress the other panels after the constrained edit."
+}

@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "created_utc": "2026-11-28T04:23:56.988087+00:00",
+  "requirement_count": 7,
+  "requirements": [
+    {
+      "id": "IP01",
+      "requirement": "Preserve the exact owner-selected conveyor R1 appearance, geometry and depicted resource scale, including accepted reference adaptations. Additional views must show the same assembly; do not resize it by default.",
+      "references": [
+        "A@16",
+        "A@40"
+      ],
+      "status": "OWNER_SELECTED_STATIC_BASELINE_MORE_VIEWS_PENDING"
+    },
+    {
+      "id": "IP02",
+      "requirement": "Use the latest register-free self-service counter with separate bulk merchandise and cash piles. The later owner instruction overrides registers visible in the footage or older conveyor art.",
+      "references": [
+        "latest owner counter rule",
+        "F13",
+        "F14"
+      ],
+      "status": "PENDING_RENDER_AND_COMPARISON"
+    },
+    {
+      "id": "IP03",
+      "requirement": "Use unchanged Character 1 as the relative scale anchor in context; preserve its identity, geometry, rig and scale. An isolated turnaround or enlarged page crop cannot prove a physical item-size change.",
+      "references": [
+        "reference video lock",
+        "latest owner revision"
+      ],
+      "status": "PENDING_RENDER_AND_COMPARISON"
+    },
+    {
+      "id": "IP04",
+      "requirement": "Preserve the exact owner-selected core R4 ordinary cash/meat/wood/fish size. Larger piles use more visible units. Variable fish types/sizes and animal-dependent meat are authorized; no earlier universal multiplier remains controlling.",
+      "references": [
+        "A@20",
+        "A@40",
+        "A@43",
+        "B@4",
+        "B@8"
+      ],
+      "status": "OWNER_SELECTED_CORE_STATIC_BASELINE_VARIANTS_PENDING"
+    },
+    {
+      "id": "IP05",
+      "requirement": "Propagate the selected ordinary presentation baseline to new applicable family renders, with distinct fish/species-meat variations and clearly fitting ports/trays/shelves; preserve the chosen R1 conveyor.",
+      "references": [
+        "RESOURCE_SCALE_IMPACT.json:27 families"
+      ],
+      "status": "PENDING_RENDER_AND_COMPARISON"
+    },
+    {
+      "id": "IP06",
+      "requirement": "Retain 27 canonical families and recognizable identity through each applicable transfer. fish/meat variant labels are presentation references, not new wallets, recipes or routing eligibility.",
+      "references": [
+        "canonical 27-family mapping",
+        "F01\u2013F18"
+      ],
+      "status": "PENDING_RENDER_AND_COMPARISON"
+    },
+    {
+      "id": "IP07",
+      "requirement": "Label every generated board as static concept/reference evidence. Conveyor movement, throughput, full transitions and functionality remain unapproved until actual candidate playback and ledger verification pass.",
+      "references": [
+        "reference acceptance policy",
+        "ACCEPTANCE_MATRIX.json:R11\u2013R20"
+      ],
+      "status": "PENDING_RUNTIME_PROOF"
+    }
+  ],
+  "reference_numeric_scale_target": null,
+  "source_identity_boards_are_new_scale_approval": false,
+  "current_authority": "LATEST_OWNER_PREFERENCE.json",
+  "updated_utc": "2026-11-28T04:52:02.034218+00:00"
+}

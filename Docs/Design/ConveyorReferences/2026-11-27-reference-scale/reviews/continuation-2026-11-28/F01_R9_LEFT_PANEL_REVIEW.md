@@ -1,0 +1,3 @@
+# F01 R9 isolated left-panel review
+
+**PASS — 10/10 for this panel only.** The full panel and native/3x bed close-up show thirteen separately rounded cylinders and twelve genuine valleys. First cylinder sits beside the intake; final cylinder is distinct before the silver plate. Machine proportions, Character 1 relative scale, framing, casing, silver plate and output lane match the supplied source panel. No known blocking static defect remains in this isolated panel. Reintegrating the panel creates a changed full sheet and requires fresh whole-sheet review; F01 is not closed by this panel report. Runtime remains unproved.

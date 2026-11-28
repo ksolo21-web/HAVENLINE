@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/independent_critic",
+  "recorded_utc": "2026-11-28T05:02:08.529248+00:00",
+  "candidate": {
+    "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/10-conveyor-transport-kit-r1.png",
+    "sha256": "aae352dac6abcdc782f1862a1476d84e1b0661e29b1d541f6a01a74c1bf3bad2",
+    "bytes": 2179206,
+    "dimensions": [
+      1536,
+      1024
+    ]
+  },
+  "status": "PASS_SIX_DISPLAYED_STANDALONE_MODULE_VIEWS",
+  "score": 10.0,
+  "scope": "Static straight, corner and height-adapter geometry in opposing views; illustrated loads only. Does not close every G01 matrix use/connection obligation.",
+  "coverage": {
+    "full_panels_inspected": 6,
+    "required_panels": 6,
+    "endpoint_closeups_inspected": 6
+  },
+  "evidence": "transport-kit-r1-evidence/transfer-end-closeups.png and CROP_MANIFEST.json",
+  "per_module": [
+    {
+      "module": "straight",
+      "views": [
+        "front",
+        "rear"
+      ],
+      "score": 10.0,
+      "finding": "Continuous supported bed, stable side housing and matched open gray end plates."
+    },
+    {
+      "module": "90-degree corner",
+      "views": [
+        "front",
+        "rear"
+      ],
+      "score": 10.0,
+      "finding": "Continuous supported fan/arc, stable inner/outer rails, no open internal transfer gap; two ends remain exposed."
+    },
+    {
+      "module": "height adapter",
+      "views": [
+        "front",
+        "rear"
+      ],
+      "score": 10.0,
+      "finding": "Supported low-to-high transition with open lower/upper gray plates and consistent ramp housing."
+    }
+  ],
+  "identity_and_scale": "Selected R1 orange/yellow/dark-roller family retained; C1 remains substantial beside modules; illustrated compact wood/block loads fit inside carrying surfaces. No global resize requested.",
+  "end_plate_finding": "The gray bridge tops are carrying surfaces; their visible vertical fascia falls below the top rather than forming an upright barrier across the path.",
+  "active_defects": [],
+  "matrix_coverage_limits": {
+    "T01": "Standalone level geometry and illustrated wood-load view covered; maximum accepted-load envelope not certified.",
+    "T02_T03": "Corner family geometry covered; separate directional/handed use and largest-item swept clearance are not proved by opposite cameras alone.",
+    "T04": "Height geometry and a resting wood load covered; labelled rising use/transfer continuity not certified.",
+    "T05": "Separate descending use with receiving stop/landing remains required.",
+    "T06": "Open standalone end-plate geometry covered; an actually joined two-module coupler/bridge closeup remains required."
+  },
+  "untested": {
+    "runtime_movement": null,
+    "physical_single_mesh_equivalence": null,
+    "largest_accepted_load_dynamic_clearance": null,
+    "rising_falling_load_restraint": null,
+    "all_conveyor_completion": null
+  },
+  "next_action": "Preserve these passing standalone panels and add the mapped directional/use/joined-interface contexts in the wider conveyor set."
+}

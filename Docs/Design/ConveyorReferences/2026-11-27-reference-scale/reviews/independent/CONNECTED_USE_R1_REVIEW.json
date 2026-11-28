@@ -1,0 +1,106 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/independent_critic",
+  "recorded_utc": "2026-11-28T05:12:33.651158+00:00",
+  "authority": "Latest owner-selected conveyor R1 and core R4; current 36-cell matrix; register-free self-service rule. No prior static score is inherited for new evidence.",
+  "approval_boundary": "Static illustrated concepts only. No native mesh, continuous motion, collision, inventory, routing logic or runtime conformity approval.",
+  "runtime_scores": {
+    "motion": null,
+    "routing_logic": null,
+    "collision_and_clearance": null,
+    "backpressure_and_resume": null,
+    "inventory_ownership": null,
+    "full_functionality": null
+  },
+  "no_global_resize_requested": true,
+  "candidate": {
+    "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/20-conveyor-connected-use-r1.png",
+    "sha256": "2bc225f64332bb709226b45b15ca38b61c7df8d82a65a4d1470fb291343b79cb",
+    "bytes": 2141442,
+    "dimensions": [
+      1536,
+      1024
+    ]
+  },
+  "status": "HOLD_DIVERTER_POSE_BRANCH_CONNECTION_AND_RESOURCE_FORM",
+  "score": 8.0,
+  "scope": "Six connected-use static studies: left/right loaded turns, descending landing, joined coupler, right diverter and branch-full hold.",
+  "coverage": {
+    "panels_inspected": 6,
+    "panels_required": 6,
+    "meaningful_native_closeups_inspected": [
+      "blocked-branch-native.png",
+      "right-diverter-native.png"
+    ]
+  },
+  "scores": {
+    "selected_style_and_scale": 10,
+    "top_row_visible_transport_geometry": 10,
+    "joined_coupler_visible_support": 10,
+    "diverter_state_evidence": 8,
+    "branch_buffer_connection": 7,
+    "bottom_row_resource_form": 7,
+    "layout_and_readability": 10
+  },
+  "passing_observations": [
+    "The two turn panels provide distinct left and right placements, continuous roller arcs and a depicted large raw fish within each carrying lane at the shown pose.",
+    "The descending panel labels the higher IN and lower OUT, shows a supported transition into a level landing and a receiving stop.",
+    "The joined-coupler panel shows two physically joined modules and a side support close-up with a bridge spanning the joint.",
+    "The branch-full panel has a physical upstream cross-lane stop holding an additional fish, a closed non-selected branch gate, finite loaded downstream stock and a terminal stop.",
+    "C1 and the owner-approved size family remain stable; top raw-fish transport fit tests are valid raw transport examples and should not be recolored."
+  ],
+  "defects": [
+    {
+      "id": "USE-R1-01",
+      "matrix_cell": "R01",
+      "severity": "blocking_connection_geometry",
+      "region_xyxy": [
+        1250,
+        620,
+        1515,
+        750
+      ],
+      "finding": "In BRANCH FULL, the full buffer attaches beside the right diverter branch, while the signed OUT end remains at its rear tip. The transport axis changes without a visible corner or continuous end-to-end connector.",
+      "repair": "Attach a supported buffer collinearly to the actual right OUT mating face, or insert a clearly visible supported curved connector. Keep terminal and upstream stops."
+    },
+    {
+      "id": "USE-R1-02",
+      "matrix_cell": "R01",
+      "severity": "missing_opposite_selector_pose",
+      "region_xyxy": [
+        [
+          675,
+          700,
+          830,
+          800
+        ],
+        [
+          1140,
+          710,
+          1275,
+          805
+        ]
+      ],
+      "finding": "The DIVERTER RIGHT central selector retains the same visible orientation as routing R2\u2019s generic diverter. A closed left branch gate alone does not establish the required opposite selector pose or a clear rightward channel. The blocked-branch panel repeats this pose.",
+      "repair": "Mirror/rotate the central guide toward the left side of its pivot so the rightward path is clearly open; use the same right-selected guide pose in BRANCH FULL."
+    },
+    {
+      "id": "USE-R1-03",
+      "matrix_cell": "R01",
+      "severity": "blocking_resource_identity",
+      "finding": "Only the two bottom diverter panels use blue raw fish as the prepared-food routing example.",
+      "repair": "Use canonical golden striped cooked_fish in the two bottom diverter panels only. Preserve top-row raw-fish fit tests."
+    }
+  ],
+  "matrix_statuses": {
+    "T01": "Additional large-load examples shown; straight opposing views remain supplied by the separate transport kit.",
+    "T02": "Loaded left-turn placement, entry bridge and exit visible. The pictured pose fits; no dynamic swept-volume claim.",
+    "T03": "Loaded right-turn placement, entry bridge and exit visible. The pictured pose fits; no dynamic swept-volume claim.",
+    "T04": "Not a newly demonstrated rising use state; separate transport coverage applies.",
+    "T05": "Loaded descending arrangement, supported lower landing and receiving stop are visible; no motion or anti-slip simulation claim.",
+    "T06": "Joined close-up and side support view are both present and coherent.",
+    "R01": "HOLD: selector-pose distinction, outlet connection and prepared-food token require repair."
+  },
+  "evidence_manifest": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/critic/connected-use-r1-evidence/CROP_MANIFEST.json",
+  "next_action": "Repair the two bottom routing panels only; preserve top transport examples and joined-coupler views, then retest actual output."
+}

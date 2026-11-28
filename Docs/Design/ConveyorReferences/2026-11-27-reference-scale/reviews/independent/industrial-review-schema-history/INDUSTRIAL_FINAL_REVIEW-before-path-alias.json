@@ -1,0 +1,412 @@
+{
+  "schema_version": 3,
+  "created_utc": "2026-11-28T05:48:20.834126+00:00",
+  "reviewer": "/root/resource_inventory",
+  "builder": "/root",
+  "review_type": "INDEPENDENT_ACTUAL_PIXEL_RETEST",
+  "independence": "Reviewer did not create, modify, select or approve the candidate art. It recovered unchanged canonical source contacts and created inspection-only crops.",
+  "scope": "Static I01\u2013I06 connection-study identity, approved compact visual scale, typed interfaces, required depicted use states and manual access. 22 review is restricted to its upper two panels; its lower U03/cooker panels belong to the separate main critic.",
+  "verdict": "PASS_ALL_SIX_STATIC_CONNECTION_CASES",
+  "score": 10,
+  "score_is_not_an_average": true,
+  "passed_required_modules": 6,
+  "required_modules": 6,
+  "all_mandatory_checks_pass": true,
+  "policy": {
+    "path": "Docs/Production/REFERENCE_ACCEPTANCE_POLICY.json",
+    "source_commit": "2fc474bbbb03d9a242b216d33e8588e028de4ce5",
+    "local_copy": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/critic/resource-inventory-industrial-r2/REFERENCE_ACCEPTANCE_POLICY.json",
+    "sha256": "c34c0cbe5b6d473be40ee5f0f0e08aab8f6ff42f97cfe2e7c93b2694e4dbaf43",
+    "policy_id": "havenline-reference-acceptance-2026-11-27"
+  },
+  "thresholds": {
+    "applicable_reference_style_gates": "Exact unrounded 10 required for applicable C1/C2/C3/C4/C5/C11 reference/style gates.",
+    "additional_reference_dimensions_minimum": 9.9,
+    "other_dimensions_minimum": 9.5,
+    "all_mandatory_evidence_required": true,
+    "averaging_forbidden": true,
+    "known_unapproved_deviations_allowed": false,
+    "scores_are_percent_similarity": false
+  },
+  "previous_review_metadata_correction": {
+    "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/critic/resource-inventory-industrial-r1/INDUSTRIAL_I01_I06_REVIEW.json",
+    "sha256": "062642d01f303e45c1f56fb9673080cc60691d9699aa3d92aa703c49401d4641",
+    "preserved_unchanged": true,
+    "correction": "R1 generic >9.0 threshold text was weaker than current repository policy. This retest applies the exact current policy bound above. R1 was honestly HOLD, so this correction does not promote its unchanged art or erase any rejection."
+  },
+  "candidate_commit": null,
+  "candidate_commit_status": "Exact final image bytes are locally bound by SHA256, byte count and Git blob identity. No new art publication commit exists in this local review. Final static-art I01\u2013I06 coverage passes; repository integration, runtime and task-shipping approval remain outside scope.",
+  "reviewed_candidates": [
+    {
+      "id": "15a",
+      "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/15a-conveyor-metallurgy-r2.png",
+      "bytes": 2208374,
+      "sha256": "bb62e0903a5d90f88c2bdcc862883988efc50538c01400c422a59acafa2e36dc",
+      "git_blob_sha1": "ab46066a5d3cea0a7ebc79768bbcc8fcb0887edc",
+      "dimensions": [
+        1536,
+        1024
+      ]
+    },
+    {
+      "id": "15b",
+      "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/15b-conveyor-assembly-fuel-r2.png",
+      "bytes": 2249763,
+      "sha256": "361bfd0d3bcf1969790de6514790a5ab3d63afccf624bd5fd89a4326029b35e5",
+      "git_blob_sha1": "363adeeaf58c7db1a44baa390f71996a89b25611",
+      "dimensions": [
+        1536,
+        1024
+      ]
+    },
+    {
+      "created_utc": "2026-11-28T05:46:59.406404+00:00",
+      "candidate_path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/22-processor-connection-details-r2.png",
+      "bytes": 2207191,
+      "sha256": "1b20047870b19196fec9964ed73bce128366e88ddf27c936f6f855b9e1262297",
+      "git_blob_sha1": "ea25c3a25d35ae220e02a65cde2bf88977e29f27",
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "review_scope": "Top two panels I01/I03 only. Main critic separately owns lower two panels.",
+      "crops": [
+        {
+          "name": "22-r2-smelter-ore-gate",
+          "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/critic/resource-inventory-industrial-final/evidence/22-r2-smelter-ore-gate.png",
+          "crop_xyxy": [
+            51,
+            155,
+            348,
+            308
+          ],
+          "sha256": "27d7016afc71ad01c92866e5c3f6f7822549f95daba66dc7708cc33fee0ca648",
+          "bytes": 74789,
+          "operation": "Native crop only, no retouch or resizing"
+        },
+        {
+          "name": "22-r2-smelter-coal-gate",
+          "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/critic/resource-inventory-industrial-final/evidence/22-r2-smelter-coal-gate.png",
+          "crop_xyxy": [
+            49,
+            303,
+            334,
+            480
+          ],
+          "sha256": "212df69a56db652b7f51c0bae9cbb8a96cadbed64320b983f8884ad5ffadc87a",
+          "bytes": 84131,
+          "operation": "Native crop only, no retouch or resizing"
+        },
+        {
+          "name": "22-r2-smelter-output-restraint",
+          "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/critic/resource-inventory-industrial-final/evidence/22-r2-smelter-output-restraint.png",
+          "crop_xyxy": [
+            459,
+            303,
+            719,
+            493
+          ],
+          "sha256": "be9dd3292018a89263c3c1dec1a54a951123ca74e228f70e1150e4ef3f20d1a5",
+          "bytes": 80397,
+          "operation": "Native crop only, no retouch or resizing"
+        },
+        {
+          "name": "22-r2-forge-coal-route",
+          "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/critic/resource-inventory-industrial-final/evidence/22-r2-forge-coal-route.png",
+          "crop_xyxy": [
+            775,
+            125,
+            1263,
+            502
+          ],
+          "sha256": "780982ad692b94ac153da962a716d27d3f5bcef492c904c468beef680b6dcd0d",
+          "bytes": 249997,
+          "operation": "Native crop only, no retouch or resizing"
+        }
+      ]
+    }
+  ],
+  "canonical_references": [
+    {
+      "id": "processed",
+      "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/selected/04-processed-resources.png",
+      "bytes": 1862096,
+      "sha256": "7f500471166c172a3d849cc2be4956b700418b2e66d42af678976817fb5f1cc8",
+      "dimensions": [
+        1254,
+        1254
+      ]
+    },
+    {
+      "id": "assemblies",
+      "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/selected/05-assemblies-and-valuables.png",
+      "bytes": 1813334,
+      "sha256": "b03b8badcc393d4dc5f2498cea222e631f659ddb96724036c90f04f57872e530",
+      "dimensions": [
+        1536,
+        1024
+      ]
+    },
+    {
+      "id": "raw",
+      "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/selected/03-raw-resources.png",
+      "bytes": 1847980,
+      "sha256": "827cab0dbe3911ae754e56471393a136b4e946b77eb1bf126dfc096139214414",
+      "dimensions": [
+        1024,
+        1536
+      ]
+    },
+    {
+      "id": "machines",
+      "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/source/machine-identities/boards/02-industrial-six-SOURCE_IDENTITY_ONLY.png",
+      "bytes": 1100869,
+      "sha256": "8fc32567c6188cbb24c89cd98156194e8c0bc491872e4a627d3791eaabb02712",
+      "dimensions": [
+        1322,
+        1164
+      ]
+    }
+  ],
+  "matrix_file": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/plan/REQUIRED_CONVEYOR_RENDER_MATRIX.json",
+  "matrix_sha256": "952e9443d6d47249f118062022ee3e2c835fd80fa9f6ac98628b6d0d66daa0b4",
+  "full_sheets_actually_viewed": [
+    "15a-r2",
+    "15b-r2",
+    "22-r2"
+  ],
+  "native_closeups_actually_viewed": [
+    "15a-iron-continuity",
+    "15a-sheet-mode-empty-parts",
+    "15b-manual-drive-staging",
+    "15b-manual-mobility-staging",
+    "15b-pump-detachable-drum",
+    "15b-refinery-retained-cans",
+    "22-r2-smelter-ore-gate",
+    "22-r2-smelter-coal-gate",
+    "22-r2-smelter-output-restraint",
+    "22-r2-forge-coal-route"
+  ],
+  "module_checks": [
+    {
+      "id": "I01",
+      "status": "PASS_STATIC_SCOPE_WITH_SUPPLEMENT",
+      "score": 10,
+      "candidate_ids": [
+        "15a-r2",
+        "22-r2-top-left"
+      ],
+      "all_mandatory_checks_pass": true,
+      "passed": [
+        "Selected squat smelter, separate ore chute and low coal drawer, opposite iron output and clear manual apron preserved.",
+        "Selected dark rectangular iron_bars remains consistent through cooling tray and outgoing lane.",
+        "Full output is visibly occupied and physically retained behind a raised transverse end restraint, with full signal.",
+        "Both ore and coal input gates now span the useful lane width at right angles to travel, joining the two rim supports. Raw material waits upstream; receiver/hopper contents beyond the gates remain preloaded contents, not an alternate open bypass.",
+        "No continuous unobstructed cargo lane around either closed gate is visible in full sheet or native close-ups."
+      ],
+      "failed": [],
+      "evidence": [
+        "15a-iron-continuity",
+        "22-r2-smelter-ore-gate",
+        "22-r2-smelter-coal-gate",
+        "22-r2-smelter-output-restraint"
+      ],
+      "issue_ids": []
+    },
+    {
+      "id": "I02",
+      "status": "PASS_STATIC_SCOPE",
+      "score": 10,
+      "candidate_ids": [
+        "15a-r2"
+      ],
+      "all_mandatory_checks_pass": true,
+      "passed": [
+        "Same canonical metal bench and dark iron inbound rack in both modes.",
+        "Sheet mode contains only sheets in the active output; inactive parts tray is visibly empty of loose gear/bracket props.",
+        "Parts mode has the separate parts bin and an empty sheet discharge lane.",
+        "Handwheel and manual-side apron remain accessible."
+      ],
+      "failed": [],
+      "evidence": [
+        "full15a-r2",
+        "15a-sheet-mode-empty-parts"
+      ],
+      "issue_ids": []
+    },
+    {
+      "id": "I03",
+      "status": "PASS_STATIC_SCOPE_WITH_SUPPLEMENT",
+      "score": 10,
+      "candidate_ids": [
+        "15a-r2",
+        "22-r2-top-right"
+      ],
+      "all_mandatory_checks_pass": true,
+      "passed": [
+        "Canonical squat forge, selected dark iron_bars input and blue steel output retained.",
+        "Normal view preserves separate approaches and front operator apron.",
+        "22 top-right exposes low coal bed directly joined to its supported enclosed rising transfer housing, ending at the separate rear coal hopper. The iron cradle remains a different route.",
+        "Final22 R2 full-sheet and native coal-route regression inspection confirms the supported riser and separate iron lane remain clear after the smelter-only gate repair."
+      ],
+      "failed": [],
+      "evidence": [
+        "full15a-r2",
+        "22-r2-forge-coal-route"
+      ],
+      "issue_ids": []
+    },
+    {
+      "id": "I04",
+      "status": "PASS_STATIC_SCOPE",
+      "score": 10,
+      "candidate_ids": [
+        "15b-r2"
+      ],
+      "all_mandatory_checks_pass": true,
+      "passed": [
+        "Drive and mobility jobs remain separate with three distinct finite receiving/staging trays each.",
+        "Steel and mechanical parts stay common; sheets are the drive third input and planks the mobility third input.",
+        "C1 visibly hand-carries the third material from accessible staging; the explicitly authorized manual transfer is legible and does not pretend the trays connect through a cabinet wall.",
+        "Drive is compact selected blue/orange gearbox; mobility is the correct compact axle-like blue/orange assembly on wooden base, with no rubber caterpillar track.",
+        "Output cradle and hoist/handwheel area remain clear."
+      ],
+      "failed": [],
+      "evidence": [
+        "15b-manual-drive-staging",
+        "15b-manual-mobility-staging"
+      ],
+      "issue_ids": []
+    },
+    {
+      "id": "I05",
+      "status": "PASS_STATIC_SCOPE",
+      "score": 10,
+      "candidate_ids": [
+        "15b-r2"
+      ],
+      "all_mandatory_checks_pass": true,
+      "passed": [
+        "Canonical manual oil-pump structure and sealed collection coupling preserved.",
+        "Detachable crude drum is now compact relative to C1 and retains selected black/gray, yellow-band droplet identity.",
+        "Full/held collection signal, closed coupling detail, explicit manual pickup and clear walking access are shown.",
+        "No open liquid on rollers, new automated route, empty-drum stock or vehicle-fuel claim."
+      ],
+      "failed": [],
+      "evidence": [
+        "full15b-r2",
+        "15b-pump-detachable-drum"
+      ],
+      "issue_ids": []
+    },
+    {
+      "id": "I06",
+      "status": "PASS_STATIC_SCOPE",
+      "score": 10,
+      "candidate_ids": [
+        "15b-r2"
+      ],
+      "all_mandatory_checks_pass": true,
+      "passed": [
+        "Canonical refinery, separate sealed compact crude drum and coal drawer retained.",
+        "Distinct orange clean-fuel cans occupy finite two-can collection area.",
+        "Actual raised transverse retaining rail now holds both cans; closed valve inset and full signal are visible.",
+        "Manual collection space remains accessible."
+      ],
+      "failed": [],
+      "evidence": [
+        "full15b-r2",
+        "15b-refinery-retained-cans"
+      ],
+      "issue_ids": []
+    }
+  ],
+  "dimension_checks": {
+    "canonical_machine_resource_identity": {
+      "score": 10,
+      "status": "PASS"
+    },
+    "approved_visual_language": {
+      "score": 10,
+      "status": "PASS"
+    },
+    "compact_portable_resource_scale_visual_comparison": {
+      "score": 10,
+      "status": "PASS_STATIC_VISUAL_ONLY"
+    },
+    "cross_view_and_mode_consistency": {
+      "score": 10,
+      "status": "PASS_IN_INSPECTED_SCOPE"
+    },
+    "framing_and_manual_access": {
+      "score": 10,
+      "status": "PASS"
+    },
+    "typed_transfer_and_hold_readability": {
+      "score": 10,
+      "status": "PASS_ALL_REQUIRED_STATIC_CASES"
+    },
+    "mandatory_view_state_coverage": {
+      "score": 10,
+      "status": "PASS_ALL_REQUIRED_STATIC_CASES"
+    },
+    "runtime_or_motion": {
+      "score": null,
+      "status": "NOT_IN_STATIC_REVIEW_SCOPE"
+    }
+  },
+  "resolved_r1_issue_ids": [
+    "IND-R1-01",
+    "IND-R1-02",
+    "IND-R1-03",
+    "IND-R1-04",
+    "IND-R1-05",
+    "IND-R1-06",
+    "IND-R1-07",
+    "IND-R1-08"
+  ],
+  "partially_resolved_r1_issue_ids": [],
+  "issues": [],
+  "author_approved_scope_note": "Parent explicitly authorized manual finite receiving trays beside the assembly bench, visible C1 handoff and clear aisle. This satisfies I04 staging and is not an automatic conveyor-through-bench requirement.",
+  "measurement_limit": "Compact scale is compared visually to frozen selected same-ground resource sheets. No calibrated world size, mechanical tolerance, collision, roller motion, processing cycle or functional runtime behavior is inferred from these raster drawings.",
+  "evidence_manifests": [
+    {
+      "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/critic/resource-inventory-industrial-r2/EVIDENCE_MANIFEST.json",
+      "sha256": "fcdd94ec6f1853df9963e8a4029e5f676c57847752d08e203dfc945bcb43fb32"
+    },
+    {
+      "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/critic/resource-inventory-industrial-r2/SUPPLEMENT_22_R1_EVIDENCE.json",
+      "sha256": "cac606270b01a8e7fcc58dc51bee794ac217c1339dae8b7f078d25df65a0d637"
+    }
+  ],
+  "runtime_approval": false,
+  "selection_changed": false,
+  "candidate_files_edited": false,
+  "next_action": "Parent may select/publish these exact approved static-art candidates and bind the eventual commit. Main critic separately completes22 lower-panel review. Runtime implementation, movement cycles, numerical tolerances and gameplay integration require their own evidence.",
+  "resolved_r2_issue_ids": [
+    "IND-R2-01"
+  ],
+  "review_history": [
+    {
+      "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/critic/resource-inventory-industrial-r2/INDUSTRIAL_I01_I06_RETEST.json",
+      "sha256": "d91832f8fec647c24722634694c136bd8b83952882b70f17a72f22ac21b08169",
+      "status": "HOLD preserved unchanged; superseded only for the exact repaired22 R2 top-left state."
+    }
+  ],
+  "final_evidence_manifest": {
+    "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/critic/resource-inventory-industrial-final/SUPPLEMENT_22_R2_EVIDENCE.json",
+    "sha256": "7d143beeccb5229cb1998ad26a0718e81e7fe59b8289334270650db29eda5e33"
+  },
+  "score_scope": "Exact10 means all stated static I01\u2013I06 comparisons and required depicted states passed with no known unapproved deviations in the inspected final evidence. It is not measured percentage fidelity and does not approve temporal or native gameplay behavior.",
+  "gate_detail_finding": "Ore and coal stop plates are now transverse rather than parallel side signs. Each reaches the opposite rim and visibly interrupts its lane. Waiting stock remains upstream; already-filled receiver areas remain beyond the stop. This is a readable static held state, not proof of a working interlock.",
+  "regression_checks": {
+    "15a_r2_unchanged_hash": true,
+    "15b_r2_unchanged_hash": true,
+    "canonical_reference_hashes_unchanged": true,
+    "22_r2_whole_frame_viewed": true,
+    "22_r2_forge_coal_route_native_crop_viewed": true,
+    "22_r2_smelter_output_restraint_native_crop_viewed": true,
+    "22_lower_panels_review_owner": "/root/independent_critic",
+    "22_lower_panels_approved_by_this_report": false
+  }
+}

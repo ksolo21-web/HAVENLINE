@@ -1,0 +1,88 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/independent_critic",
+  "recorded_utc": "2026-11-28T05:08:19.915849+00:00",
+  "candidate": {
+    "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/12-conveyor-storage-r1.png",
+    "sha256": "936d6c4db928b3f00e02d276fe441762ab560246de21e0fcb91893e0adb9c3ac",
+    "bytes": 2079342,
+    "dimensions": [
+      1672,
+      941
+    ]
+  },
+  "status": "HOLD_LOCAL_TRANSFER_CONTINUITY_RESOURCE_IDENTITIES_AND_STATE_EVIDENCE",
+  "score": 8.0,
+  "scope": "Four displayed storage exterior/cutaway concepts; static only.",
+  "actual_inspection": [
+    "Full R1 storage sheet",
+    "Native utility cutaway crop",
+    "Historical selected storage R5 sheet for preserved geometry and prior authored mechanism distinction",
+    "Current canonical resource identity boards and latest passing scale sheets"
+  ],
+  "passing_geometry": [
+    "Two low utility ports below the left window.",
+    "Two rear prepared-food ports at shelf height below the retained round vent.",
+    "Front sliding doors and apron remain clear; original right fuel hatch retained.",
+    "Food shelf remains above closed raw-food cabinets; no front aisle converted into a belt.",
+    "Exterior approaches have supporting frames and end plates; current R1 conveyor color family retained."
+  ],
+  "defects": [
+    {
+      "id": "ST-R1-01",
+      "matrix_cells": [
+        "S01",
+        "S02",
+        "S05"
+      ],
+      "severity": "missing_or_ambiguous_visible_transfer_continuity",
+      "region_xyxy": [
+        24,
+        668,
+        590,
+        899
+      ],
+      "finding": "External utility sleeves and the two internal trays are shown, but the path across the wall is not visibly traceable to the corresponding internal tray. The fixed vertical lift has a separated handoff to the rack; no supported lateral transfer bridge or indexed shelf landing is shown.",
+      "repair": "Use a local cutaway/closeup or bounded edit that exposes the sleeve-to-tray supports and a supported short lateral bridge/transfer position between lift and selected shelf. Preserve facade, four ports and floor access. Do not hide the connection behind an inferred tunnel or unsupported gap.",
+      "claim_limit": "This is missing visual interface evidence, not a claim that every conceivable unseen mechanism is impossible."
+    },
+    {
+      "id": "ST-R1-02",
+      "matrix_cells": [
+        "S02",
+        "S03",
+        "S04",
+        "S05",
+        "S06"
+      ],
+      "severity": "resource_identity_drift",
+      "regions": [
+        "Utility OUT and mineral shelf",
+        "Prepared-food IN/OUT and food shelf"
+      ],
+      "finding": "Generic small gray cube piles and generic orange tray morsels replace identifiable approved mineral/processed-food tokens. These were historical illustration conventions; they are not the current resource identity proof.",
+      "repair": "Keep the existing carrier trays if needed, but put recognizable approved wood/mineral/block and food units in them, with type labels where necessary and no shrink-to-fit. Preserve raw/processed distinctions and individual variant size through each handoff."
+    },
+    {
+      "id": "ST-R1-03",
+      "matrix_cells": [
+        "S01"
+      ],
+      "severity": "missing_required_state",
+      "finding": "The required utility receiving-full/held state is not shown; the normal two wood bundles alone do not prove a visibly held inlet.",
+      "repair": "Add a finite full receiving tray with its upstream stop visibly closed, in a state inset or additional sheet.",
+      "runtime_claim": false
+    }
+  ],
+  "food_shuttle_note": "The shelf-height rail and local carriage are visible. Clear approved goods and request/held state evidence are still needed for the mapped scope; an illustration does not prove scheduling or no-loop control.",
+  "preserve_historical_reviews": true,
+  "no_house_redesign_or_global_resize_requested": true,
+  "untested": {
+    "native_mesh": null,
+    "lift_motion": null,
+    "shuttle_motion": null,
+    "inventory_and_dispatch_logic": null,
+    "full_runtime_functionality": null
+  },
+  "next_action": "Target internal handoff visibility, canonical contents and the missing receiving-held inset; retest all affected panels."
+}

@@ -1,0 +1,150 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/processing_plan",
+  "recorded_utc": "2026-11-28T05:08:08.067Z",
+  "scope": "Independent source-identity, full crop visibility, and native board custody only. No scale, connection, mesh or runtime approval.",
+  "manifest": {
+    "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/source/machine-identities/MACHINE_IDENTITY_BOARD_MANIFEST.json",
+    "sha256": "340460cab6fc2bb57d2903a63d8a82deab84760ebc57b18df37c090e40a34201"
+  },
+  "expected_keys": [
+    "saw_bench",
+    "quarry_drill",
+    "wheat_food_processor",
+    "camp_cooker",
+    "coal_smelter",
+    "hand_metal_bench",
+    "steel_forge",
+    "assembly_bench",
+    "manual_oil_pump",
+    "coal_refinery"
+  ],
+  "counts": {
+    "source_identities": 10,
+    "source_sha256_verified": 10,
+    "source_git_blob_and_commit_tree_verified": 10,
+    "native_crop_pixel_matches": 10,
+    "native_board_placement_matches": 10,
+    "actual_boards_viewed": 2,
+    "board_hashes_dimensions_verified": 2
+  },
+  "checks": {
+    "manifest_sha256": "340460cab6fc2bb57d2903a63d8a82deab84760ebc57b18df37c090e40a34201",
+    "items": [
+      {
+        "id": "saw_bench",
+        "sha": true,
+        "blob": true,
+        "crop": true,
+        "board": true,
+        "tree_available": true,
+        "tree_matches": true
+      },
+      {
+        "id": "quarry_drill",
+        "sha": true,
+        "blob": true,
+        "crop": true,
+        "board": true,
+        "tree_available": true,
+        "tree_matches": true
+      },
+      {
+        "id": "wheat_food_processor",
+        "sha": true,
+        "blob": true,
+        "crop": true,
+        "board": true,
+        "tree_available": true,
+        "tree_matches": true
+      },
+      {
+        "id": "camp_cooker",
+        "sha": true,
+        "blob": true,
+        "crop": true,
+        "board": true,
+        "tree_available": true,
+        "tree_matches": true
+      },
+      {
+        "id": "coal_smelter",
+        "sha": true,
+        "blob": true,
+        "crop": true,
+        "board": true,
+        "tree_available": true,
+        "tree_matches": true
+      },
+      {
+        "id": "hand_metal_bench",
+        "sha": true,
+        "blob": true,
+        "crop": true,
+        "board": true,
+        "tree_available": true,
+        "tree_matches": true
+      },
+      {
+        "id": "steel_forge",
+        "sha": true,
+        "blob": true,
+        "crop": true,
+        "board": true,
+        "tree_available": true,
+        "tree_matches": true
+      },
+      {
+        "id": "assembly_bench",
+        "sha": true,
+        "blob": true,
+        "crop": true,
+        "board": true,
+        "tree_available": true,
+        "tree_matches": true
+      },
+      {
+        "id": "manual_oil_pump",
+        "sha": true,
+        "blob": true,
+        "crop": true,
+        "board": true,
+        "tree_available": true,
+        "tree_matches": true
+      },
+      {
+        "id": "coal_refinery",
+        "sha": true,
+        "blob": true,
+        "crop": true,
+        "board": true,
+        "tree_available": true,
+        "tree_matches": true
+      }
+    ],
+    "boards": [
+      {
+        "name": "01-existing-four-SOURCE_IDENTITY_ONLY.png",
+        "hash": true,
+        "dimensions": true
+      },
+      {
+        "name": "02-industrial-six-SOURCE_IDENTITY_ONLY.png",
+        "hash": true,
+        "dimensions": true
+      }
+    ]
+  },
+  "visual_findings": [
+    "All ten labeled identities have complete visible source crop silhouettes; no machine part is cut off.",
+    "Quarry is a tracked blue/orange drilling vehicle with wooden derrick; no source conveyor socket is depicted.",
+    "Wheat processor retains rounded blue shell, paired bread-like top forms and source trays; this source image does not establish runtime behavior.",
+    "Six industrial machines remain the selected source silhouettes. New connection rendering must preserve them."
+  ],
+  "score": 10,
+  "verdict": "PASS_IDENTITY_REFERENCE_SCOPE_ONLY",
+  "all_mandatory_scope_checks_passed": true,
+  "art_source_modified": false,
+  "new_connection_or_scale_approved": false,
+  "runtime_approved": false
+}

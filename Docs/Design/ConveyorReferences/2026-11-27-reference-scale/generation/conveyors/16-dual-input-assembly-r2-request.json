@@ -1,0 +1,25 @@
+{
+  "id": "16-dual-input-assembly-r2",
+  "status": "PREPARED_NOT_GENERATED",
+  "created_utc": "2026-11-28T05:27:14.859056+00:00",
+  "tool": "image_gen__imagegen",
+  "exact_arguments": {
+    "prompt": "Correct ONLY four small port-label letters in the attached 1536x1024 four-panel reserved dual-input assembly sheet. Preserve the successful hardware, neutral trays, gates, transfer/hold states, C1, lighting, scale, layout, titles and RESERVED \u2022 RECIPE UNFROZEN footer exactly.\n\nThe left-column JOINED INPUTS and WAITING FOR B panels face the INPUT end. Their A on image-left and B on image-right are already correct. DO NOT change any labels or anything else in those two panels.\n\nThe right-column READY TRANSFER and OUTPUT FULL panels view the same machine from the OPPOSITE OUTPUT END. Their physical A/B sides must therefore reverse on screen. In EACH of these two RIGHT panels, change the letter on the image-left rear magazine from A to B, and change the letter on the image-right rear magazine from B to A. This means exactly four letter replacements total, all inside existing blue badge frames. Rear image-left reads B; rear image-right reads A. Keep the actual magazines, ingredients/test trays, docks and gates where they are; do not swap or redesign the hardware. Keep OUT unchanged in every panel.\n\nNo other edits. Do not modify the two front-facing left panels, remove the reserved recipe boundary, introduce food, add labels, change the carrier occupancy or alter the output-full stop. This repairs the independently identified physical input-identity consistency across opposite camera views.\n",
+    "referenced_image_paths": [
+      "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/16-dual-input-assembly-r1.png"
+    ],
+    "transparent_background": false
+  },
+  "prompt_file": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/prompts/16-dual-input-assembly-r2.txt",
+  "prompt_sha256": "00439b369b7e73c9f2da9bc533c2492951f94b170a6271e8151ffd29c2121964",
+  "references": [
+    {
+      "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/16-dual-input-assembly-r1.png",
+      "bytes": 2260768,
+      "sha256": "a950ea294c6a5ffddac4df29df69cd5b2029efe945ebfc4f416811f701c8623d"
+    }
+  ],
+  "intended_output": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/16-dual-input-assembly-r2.png",
+  "scope": "Independent-critic repair: four rear-facing A/B label letters only; recipe remains reserved/unfrozen.",
+  "independent_review": "PENDING"
+}

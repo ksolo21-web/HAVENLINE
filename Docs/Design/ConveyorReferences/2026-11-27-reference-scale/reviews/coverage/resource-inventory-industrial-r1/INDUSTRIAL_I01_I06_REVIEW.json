@@ -1,0 +1,357 @@
+{
+  "schema_version": 1,
+  "created_utc": "2026-11-28T05:25:54.957576+00:00",
+  "reviewer": "/root/resource_inventory",
+  "builder": "/root",
+  "review_type": "INDEPENDENT_ACTUAL_PIXEL_CRITIQUE",
+  "independence": "This reviewer did not create, edit or select either candidate. It recovered canonical reference contacts only.",
+  "scope": "Static render I01\u2013I06 source identity, selected compact scale, typed connection clarity, mode/state and access evidence. No native mesh, animation, runtime, recipe changes, economy or implementation approval.",
+  "verdict": "HOLD_REPAIR_REQUIRED",
+  "score": 7.5,
+  "score_is_not_an_average": true,
+  "pass_threshold": "Strictly >9.0 and every mandatory check passed; target10. Missing/unclear required evidence blocks approval.",
+  "candidate_scores": {
+    "15a": {
+      "score": 7.8,
+      "status": "HOLD"
+    },
+    "15b": {
+      "score": 7.5,
+      "status": "HOLD"
+    }
+  },
+  "all_mandatory_checks_pass": false,
+  "reviewed_candidates": [
+    {
+      "id": "15a",
+      "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/15a-conveyor-metallurgy-r1.png",
+      "bytes": 2237255,
+      "sha256": "624a2dc59ea366ab7c271c878e1704085a62928ff356270af29fd6faad2470a6",
+      "dimensions": [
+        1536,
+        1024
+      ]
+    },
+    {
+      "id": "15b",
+      "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/15b-conveyor-assembly-fuel-r1.png",
+      "bytes": 2263217,
+      "sha256": "877ba3126776c8664545dd3cb66ea538a6af0ddc91a071fdfcdb9fbf83a22086",
+      "dimensions": [
+        1536,
+        1024
+      ]
+    }
+  ],
+  "canonical_references": [
+    {
+      "id": "processed",
+      "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/selected/04-processed-resources.png",
+      "bytes": 1862096,
+      "sha256": "7f500471166c172a3d849cc2be4956b700418b2e66d42af678976817fb5f1cc8",
+      "dimensions": [
+        1254,
+        1254
+      ]
+    },
+    {
+      "id": "assemblies",
+      "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/selected/05-assemblies-and-valuables.png",
+      "bytes": 1813334,
+      "sha256": "b03b8badcc393d4dc5f2498cea222e631f659ddb96724036c90f04f57872e530",
+      "dimensions": [
+        1536,
+        1024
+      ]
+    },
+    {
+      "id": "raw",
+      "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/selected/03-raw-resources.png",
+      "bytes": 1847980,
+      "sha256": "827cab0dbe3911ae754e56471393a136b4e946b77eb1bf126dfc096139214414",
+      "dimensions": [
+        1024,
+        1536
+      ]
+    },
+    {
+      "id": "machines",
+      "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/source/machine-identities/boards/02-industrial-six-SOURCE_IDENTITY_ONLY.png",
+      "bytes": 1100869,
+      "sha256": "8fc32567c6188cbb24c89cd98156194e8c0bc491872e4a627d3791eaabb02712",
+      "dimensions": [
+        1322,
+        1164
+      ]
+    }
+  ],
+  "matrix_file": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/plan/REQUIRED_CONVEYOR_RENDER_MATRIX.json",
+  "matrix_sha256": "952e9443d6d47249f118062022ee3e2c835fd80fa9f6ac98628b6d0d66daa0b4",
+  "full_sheets_actually_viewed": [
+    "15a",
+    "15b",
+    "processed",
+    "assemblies",
+    "raw",
+    "machines"
+  ],
+  "native_closeups_actually_viewed": [
+    "15a-smelter-iron-identity",
+    "15b-mobility-wrong-output",
+    "15b-three-infeed-interfaces",
+    "15a-sheet-inactive-parts",
+    "15a-forge-coal-interface",
+    "15b-refinery-full-terminal"
+  ],
+  "positive_findings": [
+    "All six machine families are recognizable against the selected industrial identity sources.",
+    "The orange/yellow closed low conveyor bodies, dark rollers, silver plates and blue bases remain consistent with the approved kit.",
+    "C1 identity, peach staging and complete machine framing are readable.",
+    "The two metal-bench recipes and two assembly jobs are separately labelled rather than conflated.",
+    "Crude and clean-fuel silhouettes remain distinct, and the oil pump is explicitly manual pickup."
+  ],
+  "module_checks": [
+    {
+      "id": "I01",
+      "score": 7.8,
+      "status": "HOLD",
+      "passed": [
+        "selected squat smelter identity",
+        "separate ore and low coal approaches",
+        "opposite cooling/output tray",
+        "visible manual-side apron"
+      ],
+      "failed": [
+        "correct outgoing iron identity",
+        "mandatory full-output-held view"
+      ],
+      "issue_ids": [
+        "IND-R1-01",
+        "IND-R1-02"
+      ]
+    },
+    {
+      "id": "I02",
+      "score": 8.0,
+      "status": "HOLD",
+      "passed": [
+        "same canonical roller/press bench in both modes",
+        "same iron inbound interface",
+        "separate sheet and parts outlets",
+        "parts-mode sheet chute empty"
+      ],
+      "failed": [
+        "canonical iron-bar stock",
+        "sheet-mode inactive parts tray empty"
+      ],
+      "issue_ids": [
+        "IND-R1-01",
+        "IND-R1-03"
+      ]
+    },
+    {
+      "id": "I03",
+      "score": 7.8,
+      "status": "HOLD",
+      "passed": [
+        "squat canonical forge silhouette",
+        "correct blue steel output",
+        "iron and coal approaches shown separately",
+        "front operator apron remains visible"
+      ],
+      "failed": [
+        "canonical iron-bar input",
+        "physically clear coal-hopper join"
+      ],
+      "issue_ids": [
+        "IND-R1-01",
+        "IND-R1-04"
+      ]
+    },
+    {
+      "id": "I04",
+      "score": 7.2,
+      "status": "HOLD",
+      "passed": [
+        "canonical assembly bench/hoist identity",
+        "separate drive and mobility jobs",
+        "three named inbound materials in each job",
+        "sheet versus plank third-material choice",
+        "broad output cradle"
+      ],
+      "failed": [
+        "canonical mobility identity",
+        "clear receiving/staging handoffs",
+        "compact selected output scale evidence"
+      ],
+      "issue_ids": [
+        "IND-R1-05",
+        "IND-R1-06",
+        "IND-R1-07"
+      ]
+    },
+    {
+      "id": "I05",
+      "score": 8.7,
+      "status": "HOLD",
+      "passed": [
+        "canonical pump structure",
+        "sealed coupling close-up",
+        "full/held collection drum",
+        "manual pickup explicitly named",
+        "no open liquid on rollers",
+        "no invented route or vehicle-fuel requirement",
+        "walking access around collector"
+      ],
+      "failed": [
+        "detachable crude-unit selected size match"
+      ],
+      "issue_ids": [
+        "IND-R1-07"
+      ]
+    },
+    {
+      "id": "I06",
+      "score": 8.1,
+      "status": "HOLD",
+      "passed": [
+        "canonical refinery body",
+        "separate sealed crude and coal inputs",
+        "distinct orange clean-fuel cans",
+        "finite two-can staging illustrated",
+        "closed valve close-up",
+        "manual-side space"
+      ],
+      "failed": [
+        "physical terminal restraint for full/held output",
+        "detachable crude-unit selected size match"
+      ],
+      "issue_ids": [
+        "IND-R1-07",
+        "IND-R1-08"
+      ]
+    }
+  ],
+  "issues": [
+    {
+      "id": "IND-R1-01",
+      "severity": "BLOCKING",
+      "matrix_ids": [
+        "I01",
+        "I02",
+        "I03"
+      ],
+      "candidate": "15a",
+      "finding": "Iron resource identity is inconsistent. The smelter cooling tray holds dark rectangular bars, while the adjoining belt changes them into short bright trapezoidal ingots. All IRON-labelled infeed belts repeat the bright ingot form. Selected04 iron_bars is the dark elongated rectangular bar; steel is the separate blue trapezoidal ingot.",
+      "evidence": [
+        "15a-smelter-iron-identity",
+        "locked-iron-identity"
+      ],
+      "repair": "Use unchanged selected iron_bars silhouette/color at every iron input/output and on the smelter cooling tray. Preserve blue steel ingots only for steel. Do not change recipes."
+    },
+    {
+      "id": "IND-R1-02",
+      "severity": "BLOCKING",
+      "matrix_ids": [
+        "I01"
+      ],
+      "candidate": "15a",
+      "finding": "No smelter full-output held state is present. The only smelter panel shows ordinary input/output stock, so the mandatory full-output behavior cannot be inferred.",
+      "evidence": [
+        "full15a"
+      ],
+      "repair": "Add an explicit smelter full-output view: cooling/output capacity visibly occupied, restrained discharge, feed approaches held and manual control apron clear. Retain the successful normal ore/coal/discharge view; a separate additional view is preferable to compressing an unreadable fifth panel."
+    },
+    {
+      "id": "IND-R1-03",
+      "severity": "BLOCKING",
+      "matrix_ids": [
+        "I02"
+      ],
+      "candidate": "15a",
+      "finding": "SHEETS mode retains a loose gear and bracket in the parts output tray under the press. Together with discharged sheets, it reads as both recipes producing concurrently. The source props are not exempt from the one-selected-output requirement.",
+      "evidence": [
+        "15a-sheet-inactive-parts"
+      ],
+      "repair": "Empty loose contents from the inactive parts output tray in SHEETS mode; retain the permanent press/dies/housing. PARTS mode may keep its parts output and empty sheet chute. Use the same iron input in both."
+    },
+    {
+      "id": "IND-R1-04",
+      "severity": "BLOCKING",
+      "matrix_ids": [
+        "I03"
+      ],
+      "candidate": "15a",
+      "finding": "The forge coal conveyor ends against the stone foundation beneath the iron-bar cradle; the supplied image does not reveal a separate coal receiving opening/hopper at that join. A label naming COAL does not establish a typed physical handoff.",
+      "evidence": [
+        "15a-forge-coal-interface"
+      ],
+      "repair": "Route the coal approach to the forge's real separate coal hopper with a visible supported height transition and open receiving throat. Keep the iron-bar cradle and steel cooling rack separate; show another angle/inset if the rear hopper would otherwise remain hidden."
+    },
+    {
+      "id": "IND-R1-05",
+      "severity": "BLOCKING",
+      "matrix_ids": [
+        "I04"
+      ],
+      "candidate": "15b",
+      "finding": "MOBILITY ASSEMBLY is a black caterpillar track with orange wheels. Selected05 mobility/traction_kit is a compact blue/orange axle-like assembly on a small wooden base. The candidate introduces an incompatible rubber/track identity.",
+      "evidence": [
+        "15b-mobility-wrong-output",
+        "locked-mobility-identity"
+      ],
+      "repair": "Replace only the output with the exact selected axle-like mobility assembly. Preserve separate drive versus mobility input jobs; do not add rubber, wheels, electronics or a full vehicle."
+    },
+    {
+      "id": "IND-R1-06",
+      "severity": "BLOCKING",
+      "matrix_ids": [
+        "I04"
+      ],
+      "candidate": "15b",
+      "finding": "The three infeed staging modules are distinct, but their terminations do not clearly resolve into three receiving staging locations. The lowest sheet/plank approach meets the bench foot/base area; the other two terminate at storage-rack levels. No supported transfer from those docks to the working assembly staging positions is demonstrated.",
+      "evidence": [
+        "15b-three-infeed-interfaces"
+      ],
+      "repair": "Align each conveyor with an explicit steel, parts, and selected third-material receiving tray using supported transitions. If a dock is a manual pickup staging area, show that handoff and clear access honestly rather than depicting a belt ending in a cabinet wall or base as automatic feed. Keep the handwheel/hoist control apron free."
+    },
+    {
+      "id": "IND-R1-07",
+      "severity": "BLOCKING",
+      "matrix_ids": [
+        "I04",
+        "I05",
+        "I06"
+      ],
+      "candidate": "15b",
+      "finding": "The detachable crude drum reads materially larger relative to C1 than the compact selected03 crude unit. The drive output also reads larger than selected05's compact human-relative assembly. These are screen-space visual discrepancies, not measured world dimensions; current camera evidence cannot certify the locked size match. Fixed machine tanks/reservoirs may remain machine parts, but a detachable resource drum should not silently become a new bulk resource.",
+      "evidence": [
+        "15b-pump-crude-scale",
+        "locked-crude-scale",
+        "full15b",
+        "locked-assemblies-full"
+      ],
+      "repair": "Rebind detachable resource sizes to the selected resource sheets: crude drum roughly 0.30\u20130.32 of C1 height; drive/mobility maximum silhouette roughly 0.30\u20130.32 of C1 height. Refit receiving cradles/couplings accordingly while leaving the fixed machine structure and C1 unchanged. Use a same-ground scale crop for final verification; do not claim physical runtime dimensions."
+    },
+    {
+      "id": "IND-R1-08",
+      "severity": "BLOCKING",
+      "matrix_ids": [
+        "I06"
+      ],
+      "candidate": "15b",
+      "finding": "The refinery has two fuel cans and a FULL signal, plus a closed valve inset, but the outgoing roller tray still ends in an open horizontal silver end plate. No physical end restraint or latched finite pickup cradle is visible to hold those cans.",
+      "evidence": [
+        "15b-refinery-full-terminal"
+      ],
+      "repair": "Add an actual raised terminal stop/latched retaining cradle at the collection end, keep the output valve visibly closed, and show both cans safely retained without overlap. Preserve distinct crude-drum and clean-fuel-can silhouettes, finite staging and manual collection access."
+    }
+  ],
+  "measurement_limit": "No calibrated 3D/world dimensions are inferred from these raster projections. Relative size concerns are visual comparisons to same-ground locked resource sheets and must be retested in the repaired views.",
+  "evidence_manifest": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/critic/resource-inventory-industrial-r1/EVIDENCE_MANIFEST.json",
+  "evidence_manifest_sha256": "8cb07838fd43853ef3a0c13a6987fae9ead63d7dc0c7c53166ec7ab1f4604b7e",
+  "runtime_approval": false,
+  "selection_changed": false,
+  "candidate_files_edited": false,
+  "next_action": "Builder repairs the eight consolidated issues, preserves R1 and original selected references, then returns exact revised candidate bytes for this separate critic to retest."
+}

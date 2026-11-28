@@ -1,0 +1,240 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/independent_critic",
+  "session": "Havenline conveyor continuation 2026-11-28",
+  "recorded_utc": "2026-11-28T06:09:58.397292+00:00",
+  "independent": true,
+  "independence": "Reviewer did not generate or modify candidate images; only inspection crops were created.",
+  "candidate_files_edited": false,
+  "scope_boundary": "Static illustrated reference sheets only; no native model, gameplay, motion, collision, throughput or inventory approval.",
+  "runtime_approved": false,
+  "policy": {
+    "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Production/REFERENCE_ACCEPTANCE_POLICY.json",
+    "sha256": "c34c0cbe5b6d473be40ee5f0f0e08aab8f6ff42f97cfe2e7c93b2694e4dbaf43",
+    "bytes": 12510
+  },
+  "numeric_gate": {
+    "reference_minimum": 9.9,
+    "existing_exact_10_retained": true,
+    "averaging_forbidden": true,
+    "all_mandatory_evidence_required": true
+  },
+  "owner_baselines": [
+    {
+      "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/01-reference-line-r1.png",
+      "sha256": "25d9b7f98f5d9407c240a8f0b242bbba6775d0e7fb60cbc720d526514d309249",
+      "bytes": 2060476,
+      "dimensions": [
+        1536,
+        1024
+      ]
+    },
+    {
+      "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/02-core-resource-scale-r4.png",
+      "sha256": "de3e99e6602e18ee5e2d4619e3761964d6ccab2af8a2ee55b17b0ab3fb316da7",
+      "bytes": 1696844,
+      "dimensions": [
+        1536,
+        1024
+      ]
+    }
+  ],
+  "candidate": {
+    "path": "/workspace/scratch/9a64cbeeb049/conveyor-continuation/reviews/fishing-final-evidence/four-view-document-r1.png",
+    "sha256": "8037cff31bec7b6e94b719b681422143bd619530b9095b6ef5dcce2e314d7b64",
+    "bytes": 1423832,
+    "dimensions": [
+      1536,
+      1200
+    ]
+  },
+  "matrix_cell": "F01",
+  "status": "HOLD_DOCUMENT_TYPOGRAPHY_ARTWORK_PASSES",
+  "score": 8.5,
+  "all_mandatory_checks_pass": false,
+  "coverage": {
+    "full_document_inspected": true,
+    "all_four_beds_inspected": true,
+    "native_and_3x_crops_inspected": true,
+    "independent_144dpi_pdf_render_inspected": true,
+    "immutable_source_hashes_verified": true
+  },
+  "scores": {
+    "hardware_identity_and_style": 10,
+    "selected_overall_line_scale": 10,
+    "front_count": 10,
+    "rear_count": 10,
+    "left_count": 10,
+    "right_count": 10,
+    "framing_and_character": 10,
+    "document_typography": 8.5
+  },
+  "authored_target": 13,
+  "source_video_exact_count": null,
+  "owner_baseline_exact_count": null,
+  "physical_body_counts": {
+    "front_three_quarter": 13,
+    "rear_three_quarter": 13,
+    "left_side": 13,
+    "right_side": 13
+  },
+  "defects": [
+    {
+      "id": "F01-DOC-R1-01",
+      "severity": "blocking_document_presentation",
+      "finding": "PDF header and footer text have broken glyph spacing and overlapping characters, confirmed in independent 144dpi render. Artwork panels themselves pass.",
+      "repair": "Use plain Helvetica or verified embedded font with normal tracking for header/footer; leave image composition and sources unchanged."
+    }
+  ],
+  "evidence": [
+    {
+      "path": "/workspace/scratch/9a64cbeeb049/conveyor-continuation/reviews/fishing-final-evidence/footer-144dpi.png",
+      "sha256": "94cf77d2379cba92674536d39c2e2023041bc88f074b8f7b08da60a3c1d47702",
+      "bytes": 58823,
+      "dimensions": [
+        3072,
+        200
+      ]
+    },
+    {
+      "path": "/workspace/scratch/9a64cbeeb049/conveyor-continuation/reviews/fishing-final-evidence/footer-3x.png",
+      "sha256": "80f6f7b51ba104803aabae64b6d62426762daca518bec1fa899751f9d73a0e33",
+      "bytes": 37972,
+      "dimensions": [
+        4608,
+        300
+      ]
+    },
+    {
+      "path": "/workspace/scratch/9a64cbeeb049/conveyor-continuation/reviews/fishing-final-evidence/footer-native.png",
+      "sha256": "52a39b7f3dfe36d1a3bcfd55166192c6bb139e3160d5856f7420398aaadab848",
+      "bytes": 25177,
+      "dimensions": [
+        1536,
+        100
+      ]
+    },
+    {
+      "path": "/workspace/scratch/9a64cbeeb049/conveyor-continuation/reviews/fishing-final-evidence/four-view-document-r1.png",
+      "sha256": "8037cff31bec7b6e94b719b681422143bd619530b9095b6ef5dcce2e314d7b64",
+      "bytes": 1423832,
+      "dimensions": [
+        1536,
+        1200
+      ]
+    },
+    {
+      "path": "/workspace/scratch/9a64cbeeb049/conveyor-continuation/reviews/fishing-final-evidence/four-view-page-144dpi.png",
+      "sha256": "7df224d05655d3ce651170abb41dc8e2036cbfe948948627c810682e21897d3b",
+      "bytes": 3988095,
+      "dimensions": [
+        3072,
+        2400
+      ]
+    },
+    {
+      "path": "/workspace/scratch/9a64cbeeb049/conveyor-continuation/reviews/fishing-final-evidence/front-3x.png",
+      "sha256": "48be8791001cf986d9db998daefac47e2d80b0ae1ffe2e431b90ad006b8d7f58",
+      "bytes": 91388,
+      "dimensions": [
+        687,
+        540
+      ]
+    },
+    {
+      "path": "/workspace/scratch/9a64cbeeb049/conveyor-continuation/reviews/fishing-final-evidence/front-native.png",
+      "sha256": "b80206c0d1871b2c652db14c0bad2f541f52f1f2764741b524d1b88210528b95",
+      "bytes": 62359,
+      "dimensions": [
+        229,
+        180
+      ]
+    },
+    {
+      "path": "/workspace/scratch/9a64cbeeb049/conveyor-continuation/reviews/fishing-final-evidence/header-144dpi.png",
+      "sha256": "0b04fbd2d5d6beaae2c8700884c2f5b19323b588f8517a2fa8b18728d531f676",
+      "bytes": 12542,
+      "dimensions": [
+        1800,
+        153
+      ]
+    },
+    {
+      "path": "/workspace/scratch/9a64cbeeb049/conveyor-continuation/reviews/fishing-final-evidence/header-3x.png",
+      "sha256": "2381336d3b13686bc2a1643d1b20f4ac9eca8c63fc1d58cb4e2cc454f42bb131",
+      "bytes": 22196,
+      "dimensions": [
+        4608,
+        231
+      ]
+    },
+    {
+      "path": "/workspace/scratch/9a64cbeeb049/conveyor-continuation/reviews/fishing-final-evidence/header-native.png",
+      "sha256": "168d522532c9c54d0a24ef95dfd98b41e5434c1e78f67043de5c3406976f5cf0",
+      "bytes": 13916,
+      "dimensions": [
+        1536,
+        77
+      ]
+    },
+    {
+      "path": "/workspace/scratch/9a64cbeeb049/conveyor-continuation/reviews/fishing-final-evidence/left-3x.png",
+      "sha256": "b06d4a41d1fbea9f1bef94d78c6440e35db60f370e6d300d91ae080cf44c3f16",
+      "bytes": 36781,
+      "dimensions": [
+        522,
+        282
+      ]
+    },
+    {
+      "path": "/workspace/scratch/9a64cbeeb049/conveyor-continuation/reviews/fishing-final-evidence/left-native.png",
+      "sha256": "79ed73ce371486024ebdcc0b5a2045d5d5669b70687709553ac9fdbe29ea7153",
+      "bytes": 24009,
+      "dimensions": [
+        174,
+        94
+      ]
+    },
+    {
+      "path": "/workspace/scratch/9a64cbeeb049/conveyor-continuation/reviews/fishing-final-evidence/rear-3x.png",
+      "sha256": "a5f27e0debb0ef3a35c3b798318bd4403c4c022ab7780df8d7b49de6058a69f8",
+      "bytes": 90393,
+      "dimensions": [
+        696,
+        519
+      ]
+    },
+    {
+      "path": "/workspace/scratch/9a64cbeeb049/conveyor-continuation/reviews/fishing-final-evidence/rear-native.png",
+      "sha256": "95a4cad1135e8302e0346adb244c54ef7753be808fa03cd05fa3086f3f35c752",
+      "bytes": 61603,
+      "dimensions": [
+        232,
+        173
+      ]
+    },
+    {
+      "path": "/workspace/scratch/9a64cbeeb049/conveyor-continuation/reviews/fishing-final-evidence/right-3x.png",
+      "sha256": "cb5fb54b9cb9dbfde349c31a51b738acf166914e2d0c5eaee7c5ea83179574ca",
+      "bytes": 36710,
+      "dimensions": [
+        573,
+        285
+      ]
+    },
+    {
+      "path": "/workspace/scratch/9a64cbeeb049/conveyor-continuation/reviews/fishing-final-evidence/right-native.png",
+      "sha256": "cf4df66a5310443ca8dc7937c2a12c40d7a07475d29c126b8342cb47828f6551",
+      "bytes": 23873,
+      "dimensions": [
+        191,
+        95
+      ]
+    }
+  ],
+  "pdf": {
+    "path": "/workspace/scratch/9a64cbeeb049/conveyor-continuation/reviews/fishing-final-evidence/four-view-document-r1.pdf",
+    "sha256": "be2ab5c0a1ff7a79202104cdeb49de03281721b9bf4c37a792c71fa0a52478ba",
+    "bytes": 5158906
+  }
+}

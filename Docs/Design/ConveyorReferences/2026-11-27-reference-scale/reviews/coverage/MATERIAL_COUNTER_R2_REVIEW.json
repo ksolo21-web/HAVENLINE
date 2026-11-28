@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/independent_critic",
+  "recorded_utc": "2026-11-28T05:27:10.654797+00:00",
+  "authority": "Exact owner-selected conveyor R1 and core R4; current required 36-cell matrix; register-free bulk self-service contract.",
+  "approval_boundary": "Static illustrated concepts only. No native mesh, motion cycle, collision, item/cash conservation, routing/processing implementation or runtime conformity approval.",
+  "runtime_scores": {
+    "motion": null,
+    "collision": null,
+    "inventory_and_cash_conservation": null,
+    "routing_and_processing": null,
+    "full_functionality": null
+  },
+  "no_global_resize_requested": true,
+  "candidate": {
+    "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/17b-material-counter-r2.png",
+    "sha256": "97c959e12f275b4fb5af105e0fdae5b6dcd2b38adeffb55b67480b7f367c7ddf",
+    "bytes": 1858822,
+    "dimensions": [
+      1536,
+      1024
+    ]
+  },
+  "status": "PASS_STATIC_C02",
+  "score": 10,
+  "scope": "Four material-counter static use states: eligible planks/blocks, bulk carry, wrong raw-wood hold and full-block hold.",
+  "coverage": {
+    "panels_inspected": 4,
+    "panels_required": 4
+  },
+  "scores": {
+    "selected_style_and_compact_units": 10,
+    "eligible_forms_and_type_labels": 10,
+    "separate_cash": 10,
+    "bulk_carry_and_supported_stock": 10,
+    "selected_wrong_form_upstream_hold": 10,
+    "full_receiver_upstream_hold": 10,
+    "layout": 10
+  },
+  "mandatory_static_checks": {
+    "planks_and_blocks_are_distinct_current_eligible_examples": true,
+    "no_food_or_fuel_mix": true,
+    "cash_is_separate": true,
+    "ready_gate_clear": true,
+    "raw_wood_held_physically_upstream_of_planks_gate": true,
+    "full_block_held_physically_upstream": true,
+    "finite_supported_stock": true,
+    "no_register_or_fixed_clerk": true
+  },
+  "defects": [],
+  "matrix_statuses": {
+    "C02": "PASS for required allowed-material stock and ineligible-form hold."
+  },
+  "scope_boundary": "The sheet uses existing eligible forms. It does not activate new material sales or prove bulk transaction behavior."
+}

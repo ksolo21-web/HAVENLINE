@@ -1,0 +1,117 @@
+{
+  "schema_version": 1,
+  "created_utc": "2026-11-28T06:03:30.934976+00:00",
+  "task": "Continue Havenline conveyor and resource sizing renders",
+  "owner": "/root",
+  "planner_auditor": "/root/conveyor_scope_audit",
+  "stage": "EXISTING_R8_AND_R5_NEED_FRESH_INDEPENDENT_REVIEW",
+  "baseline": {
+    "conveyor": "attempts/01-reference-line-r1.png",
+    "conveyor_sha256": "25d9b7f98f5d9407c240a8f0b242bbba6775d0e7fb60cbc720d526514d309249",
+    "ordinary_resources": "attempts/02-core-resource-scale-r4.png",
+    "ordinary_resources_sha256": "de3e99e6602e18ee5e2d4619e3761964d6ccab2af8a2ee55b17b0ab3fb316da7",
+    "character_scale_change": false,
+    "universal_multiplier": null,
+    "approved_world_dimensions": null
+  },
+  "prior_verified_progress": {
+    "canonical_resource_identities": {
+      "passed": 27,
+      "required": 27,
+      "scope": "Single-unit static scale/identity"
+    },
+    "fish_types": {
+      "passed": 4,
+      "required": 4,
+      "raw_cooked_depictions": 8
+    },
+    "meat_variants": {
+      "passed": 10,
+      "required": 10
+    },
+    "conveyor_static_cells": {
+      "passed": 34,
+      "required": 36,
+      "hold": 1,
+      "partial": 1
+    },
+    "selected_png_hashes": {
+      "passed": 24,
+      "required": 24
+    }
+  },
+  "pending_static_cells": [
+    {
+      "id": "F01",
+      "status": "HOLD",
+      "latest_review": "CONVEYOR_VIEWS_R7B_REVIEW.json",
+      "newer_unreviewed": "attempts/06-conveyor-views-r8.png",
+      "next_action": "Review R8. If still defective, perform prepared R9 isolated-left-panel repair and reintegrate, then review full sheet.",
+      "remaining_detail": "Left view must share consistent authored cylinder geometry with other views. Count13 is authored consistency, not certified original-video count."
+    },
+    {
+      "id": "N02",
+      "status": "PARTIAL",
+      "latest_review": "NETWORK_R2_REVIEW.json",
+      "newer_unreviewed": "attempts/23-expanded-network-r5.png",
+      "next_action": "Review R5 against actual receiving mouths, counter input end, rear iron rack and preserved clear aisles. Repair only observed remaining defects."
+    }
+  ],
+  "acceptance_checks": [
+    {
+      "id": "A1",
+      "requirement": "Preserve exact selected R1/R4 and fixed C1 scale; no arbitrary rescaling",
+      "status": "PASS_EXISTING_BASELINE_HASHES"
+    },
+    {
+      "id": "A2",
+      "requirement": "All 27 canonical single-unit studies retained",
+      "status": "PASS_PRIOR_STATIC_REVIEW"
+    },
+    {
+      "id": "A3",
+      "requirement": "Four fish types with raw/cooked pairs plus ten animal meat variants retained",
+      "status": "PASS_PRIOR_STATIC_REVIEW"
+    },
+    {
+      "id": "A4",
+      "requirement": "All36 conveyor rows independently pass every mandatory static requirement",
+      "status": "PENDING_F01_N02"
+    },
+    {
+      "id": "A5",
+      "requirement": "Changed candidates inspected as actual full sheets and meaningful closeups by separate critic",
+      "status": "PENDING"
+    },
+    {
+      "id": "A6",
+      "requirement": "Every selected PNG has exact owner or independent approval binding; all rejected attempts preserved",
+      "status": "PASS24_EXISTING_RECHECK_AFTER_EDITS"
+    },
+    {
+      "id": "A7",
+      "requirement": "Gallery and package hashes rebuilt after final mutation",
+      "status": "PENDING"
+    },
+    {
+      "id": "A8",
+      "requirement": "Preserve base tree and publish all package evidence on isolated art branch, then verify path and blob custody",
+      "status": "PENDING_NO_REMOTE_CONVEYOR_REF"
+    },
+    {
+      "id": "A9",
+      "requirement": "Do not imply native asset, motion, runtime functionality or exact world sizing approval from static sheets",
+      "status": "REQUIRED_REPORTING_BOUNDARY"
+    }
+  ],
+  "dependencies": [
+    "Root owns image fixes and package integration",
+    "Separate critic owns candidate approvals and final36-row snapshot",
+    "Root owns GitHub publication; this agent performs no mutation outside new checkpoint files"
+  ],
+  "runtime_approved": false,
+  "whole_task_approved": false,
+  "next_action": "Fresh critic review of existing R8 and R5 before more generation",
+  "publication_audit": "REMOTE_PUBLICATION_AUDIT.json",
+  "blob_inventory": "PUBLICATION_BLOB_REUSE_SNAPSHOT.json"
+}

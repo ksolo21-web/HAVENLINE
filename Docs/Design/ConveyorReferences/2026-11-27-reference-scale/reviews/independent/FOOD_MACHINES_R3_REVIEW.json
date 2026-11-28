@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/independent_critic",
+  "recorded_utc": "2026-11-28T05:43:45.364880+00:00",
+  "approval_boundary": "Static illustrated evidence only; no native model, moving-load clearance, gate cycle, processing logic, inventory or runtime approval.",
+  "runtime_approved": false,
+  "candidate": {
+    "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/13-conveyor-food-machines-r3.png",
+    "sha256": "d4ad735936b1d81b6392eac754fb9f6e1366b66380f1fdfd11d332353535f96f",
+    "bytes": 2000155,
+    "dimensions": [
+      1536,
+      1024
+    ]
+  },
+  "status": "HOLD_INPUT_BAR_PARALLEL_TO_TRAVEL",
+  "score": 9.0,
+  "scope": "Four food-machine static concepts; retest of F03 full-state stops.",
+  "coverage": {
+    "full_panels_inspected": 4,
+    "native_throat_closeup_inspected": true
+  },
+  "resolved_defects": [
+    "FOOD-R2-02: far output terminal bar is transverse and now visibly retains full stock."
+  ],
+  "defects": [
+    {
+      "id": "FOOD-R3-01",
+      "matrix_cell": "F03",
+      "severity": "blocking_gate_orientation",
+      "region_xyxy": [
+        860,
+        245,
+        1065,
+        365
+      ],
+      "finding": "The new input bar runs from the feeder end toward the cooker, parallel to the lane. It is a longitudinal rail above/beside the waiting fish, not a transverse stop across their travel path.",
+      "repair": "Retain the successful output restraint. Put one throat gate endpoint on the near edge and the other on the far edge immediately before the cooker mouth; in this projection the span slopes up-right across the width, rather than down-right along travel. Keep both fish upstream."
+    }
+  ],
+  "matrix_statuses": {
+    "F02": "PASS displayed raw connection; reverse view supplied separately in details22.",
+    "F03": "HOLD only for transverse throat stop.",
+    "F04": "PASS displayed meat/meal concept.",
+    "F05": "PASS displayed wheat/bread concept."
+  },
+  "evidence_manifest": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/critic/food-machines-r3-evidence/CROP_MANIFEST.json"
+}

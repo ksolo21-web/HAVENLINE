@@ -1,0 +1,1344 @@
+{
+  "schema_version": 1,
+  "created_utc": "2026-11-28T04:23:56.988087+00:00",
+  "family_count": 27,
+  "canonical_mapping_source": "art-pinned:Docs/Design/ResourceTurnarounds/2026-11-27-completion/RESOURCE_MACHINE_MAP.json",
+  "character_1_scale_change_allowed": false,
+  "numeric_global_multiplier": null,
+  "economy_id_recipe_quantity_price_unlock_changes_authorized_by_this_plan": false,
+  "measurement_fields": [
+    "source hash, requested seek/exact decoded PTS when known, frame and unobscured gameplay rectangle",
+    "approved unchanged Character 1 asset/hash/scale and candidate camera settings",
+    "same-depth actor head/torso/standing-height anchors and projection uncertainty",
+    "item footprint length/width, apparent height/thickness, gap between successive carriers",
+    "belt usable width, outer width, deck height, rail height, roller pitch and intake/output proportions",
+    "item-to-belt, item-to-actor and item-to-short-gameplay-edge ratios, with multiple samples and uncertainty",
+    "single-item versus stack extent/count/spacing; logical amount recorded separately",
+    "candidate rendered measurements using the same comparison method and explicit approved adaptations"
+  ],
+  "families": [
+    {
+      "id": "wood",
+      "display_name": "Wood",
+      "kind": "raw",
+      "canonical_art_path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviewed-concepts/01-wood.png",
+      "canonical_status": "live_build14",
+      "source_or_process_unchanged": "Registered trees and timber sources.",
+      "inputs_unchanged": [],
+      "uses_unchanged": [
+        "planks",
+        "bootstrap producers",
+        "furnace recovery"
+      ],
+      "priority": "P1",
+      "direct_observed_frame_refs": [
+        "B@4",
+        "B@8"
+      ],
+      "reference_relation": "Observable family/shape in inspected footage; Havenline identity stays authoritative. This is qualitative evidence, not a numeric dimension.",
+      "observed_current_code_values": [
+        {
+          "context": "factory default maximum X/Z footprint width",
+          "value": 0.53,
+          "source_fact": "F01",
+          "units": "existing engine units; not reference target"
+        },
+        {
+          "context": "raw carry maximum X/Z footprint width",
+          "value": 0.42,
+          "source_fact": "F02",
+          "units": "existing engine units; not reference target"
+        },
+        {
+          "context": "raw storage per-slot footprint widths",
+          "value": [
+            1.52
+          ],
+          "source_fact": "F04",
+          "units": "existing engine units; before any outer storage_unit_scale"
+        },
+        {
+          "context": "conveyor factory width",
+          "value": 0.45,
+          "source_fact": "F05",
+          "units": "existing engine units; not reference target"
+        }
+      ],
+      "observed_code_value_limit": "Values are pinned source settings. They do not prove final onscreen dimensions, account for every parent transform, or set a new target.",
+      "existing_runtime_contexts_to_retest": [
+        "ground pickup",
+        "player raw carry",
+        "raw storage",
+        "raw transfer",
+        "vehicle cargo",
+        "paid conveyor",
+        "processor input"
+      ],
+      "authored_contexts_to_check": [],
+      "specific_interface_checks": [
+        "ground pickup",
+        "raw carry",
+        "saw input",
+        "raw storage",
+        "typed raw conveyor"
+      ],
+      "scale_intent": "Match the selected ordinary/context size baseline while retaining distinct silhouette, material, accounting identity and fitting every applicable receiving interface.",
+      "numeric_target": null,
+      "target_status": "OWNER_SELECTED_CORE_STATIC_BASELINE_NATIVE_DIMENSIONS_PENDING",
+      "conveyor_eligibility": "Current raw lane",
+      "identity_preserved": true,
+      "review_status": "OWNER_SELECTED_STATIC_CORE_VARIANT_SCOPE_ONLY",
+      "latest_size_authority": "Exact selected core R4 for ordinary pickups; exact selected R1 for its depicted conveyor context; authored variable fish/species meat allowed."
+    },
+    {
+      "id": "stone",
+      "display_name": "Stone",
+      "kind": "raw",
+      "canonical_art_path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviewed-concepts/02-stone.png",
+      "canonical_status": "live_build14",
+      "source_or_process_unchanged": "Registered stone deposits.",
+      "inputs_unchanged": [],
+      "uses_unchanged": [
+        "blocks",
+        "bootstrap producers",
+        "recovery construction"
+      ],
+      "priority": "P1",
+      "direct_observed_frame_refs": [],
+      "reference_relation": "No exact item-size target established from the six inspected frames; preserve approved authored identity and derive a documented proportion from the shared scale rule.",
+      "observed_current_code_values": [
+        {
+          "context": "factory default maximum X/Z footprint width",
+          "value": 0.4,
+          "source_fact": "F01",
+          "units": "existing engine units; not reference target"
+        },
+        {
+          "context": "raw carry maximum X/Z footprint width",
+          "value": 0.32,
+          "source_fact": "F02",
+          "units": "existing engine units; not reference target"
+        },
+        {
+          "context": "raw storage per-slot footprint widths",
+          "value": [
+            1.06,
+            0.73
+          ],
+          "source_fact": "F04",
+          "units": "existing engine units; before any outer storage_unit_scale"
+        },
+        {
+          "context": "conveyor factory width",
+          "value": 0.45,
+          "source_fact": "F05",
+          "units": "existing engine units; not reference target"
+        }
+      ],
+      "observed_code_value_limit": "Values are pinned source settings. They do not prove final onscreen dimensions, account for every parent transform, or set a new target.",
+      "existing_runtime_contexts_to_retest": [
+        "ground pickup",
+        "player raw carry",
+        "raw storage",
+        "raw transfer",
+        "vehicle cargo",
+        "paid conveyor",
+        "processor input"
+      ],
+      "authored_contexts_to_check": [],
+      "specific_interface_checks": [
+        "ground pickup",
+        "raw carry",
+        "quarry input",
+        "raw storage",
+        "typed raw conveyor"
+      ],
+      "scale_intent": "Match the selected ordinary/context size baseline while retaining distinct silhouette, material, accounting identity and fitting every applicable receiving interface.",
+      "numeric_target": null,
+      "target_status": "PENDING_NEW_RENDER_AGAINST_SELECTED_BASELINES",
+      "conveyor_eligibility": "Current raw lane",
+      "identity_preserved": true,
+      "review_status": "PENDING_NEW_RENDER",
+      "latest_size_authority": "Exact selected core R4 for ordinary pickups; exact selected R1 for its depicted conveyor context; authored variable fish/species meat allowed."
+    },
+    {
+      "id": "metal",
+      "display_name": "Iron ore",
+      "kind": "raw",
+      "canonical_art_path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviewed-concepts/05-metal-ore.png",
+      "canonical_status": "live_build14_id_new_display_requires_catalog_migration",
+      "source_or_process_unchanged": "Registered ore mining.",
+      "inputs_unchanged": [],
+      "uses_unchanged": [
+        "iron_bars",
+        "retained legacy raw bills"
+      ],
+      "priority": "P1",
+      "direct_observed_frame_refs": [],
+      "reference_relation": "No exact item-size target established from the six inspected frames; preserve approved authored identity and derive a documented proportion from the shared scale rule.",
+      "observed_current_code_values": [
+        {
+          "context": "factory default maximum X/Z footprint width",
+          "value": 0.42,
+          "source_fact": "F01",
+          "units": "existing engine units; not reference target"
+        },
+        {
+          "context": "raw carry maximum X/Z footprint width",
+          "value": 0.2,
+          "source_fact": "F02",
+          "units": "existing engine units; not reference target"
+        },
+        {
+          "context": "raw storage per-slot footprint widths",
+          "value": [
+            0.87,
+            0.72
+          ],
+          "source_fact": "F04",
+          "units": "existing engine units; before any outer storage_unit_scale"
+        }
+      ],
+      "observed_code_value_limit": "Values are pinned source settings. They do not prove final onscreen dimensions, account for every parent transform, or set a new target.",
+      "existing_runtime_contexts_to_retest": [
+        "ground pickup",
+        "player raw carry",
+        "raw storage",
+        "raw transfer",
+        "vehicle cargo"
+      ],
+      "authored_contexts_to_check": [],
+      "specific_interface_checks": [
+        "ground pickup",
+        "raw carry/storage",
+        "coal smelter ore port"
+      ],
+      "scale_intent": "Match the selected ordinary/context size baseline while retaining distinct silhouette, material, accounting identity and fitting every applicable receiving interface.",
+      "numeric_target": null,
+      "target_status": "PENDING_NEW_RENDER_AGAINST_SELECTED_BASELINES",
+      "conveyor_eligibility": "No automatic new conveyor eligibility; use only an approved typed route.",
+      "identity_preserved": true,
+      "review_status": "PENDING_NEW_RENDER",
+      "latest_size_authority": "Exact selected core R4 for ordinary pickups; exact selected R1 for its depicted conveyor context; authored variable fish/species meat allowed."
+    },
+    {
+      "id": "coal",
+      "display_name": "Coal",
+      "kind": "raw",
+      "canonical_art_path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviewed-concepts/13-coal.png",
+      "canonical_status": "live_build14",
+      "source_or_process_unchanged": "Registered coal mining.",
+      "inputs_unchanged": [],
+      "uses_unchanged": [
+        "iron smelting",
+        "steel refining",
+        "oil refining"
+      ],
+      "priority": "P1",
+      "direct_observed_frame_refs": [],
+      "reference_relation": "No exact item-size target established from the six inspected frames; preserve approved authored identity and derive a documented proportion from the shared scale rule.",
+      "observed_current_code_values": [
+        {
+          "context": "factory default maximum X/Z footprint width",
+          "value": 0.39,
+          "source_fact": "F01",
+          "units": "existing engine units; not reference target"
+        },
+        {
+          "context": "raw carry maximum X/Z footprint width",
+          "value": 0.2,
+          "source_fact": "F02",
+          "units": "existing engine units; not reference target"
+        },
+        {
+          "context": "raw storage per-slot footprint widths",
+          "value": [
+            0.87,
+            0.69
+          ],
+          "source_fact": "F04",
+          "units": "existing engine units; before any outer storage_unit_scale"
+        }
+      ],
+      "observed_code_value_limit": "Values are pinned source settings. They do not prove final onscreen dimensions, account for every parent transform, or set a new target.",
+      "existing_runtime_contexts_to_retest": [
+        "ground pickup",
+        "player raw carry",
+        "raw storage",
+        "raw transfer",
+        "vehicle cargo"
+      ],
+      "authored_contexts_to_check": [],
+      "specific_interface_checks": [
+        "raw carry/storage",
+        "smelter coal port",
+        "steel forge coal port",
+        "refinery heat port"
+      ],
+      "scale_intent": "Match the selected ordinary/context size baseline while retaining distinct silhouette, material, accounting identity and fitting every applicable receiving interface.",
+      "numeric_target": null,
+      "target_status": "PENDING_NEW_RENDER_AGAINST_SELECTED_BASELINES",
+      "conveyor_eligibility": "No automatic new conveyor eligibility; use only an approved typed route.",
+      "identity_preserved": true,
+      "review_status": "PENDING_NEW_RENDER",
+      "latest_size_authority": "Exact selected core R4 for ordinary pickups; exact selected R1 for its depicted conveyor context; authored variable fish/species meat allowed."
+    },
+    {
+      "id": "steel",
+      "display_name": "Steel",
+      "kind": "processed",
+      "canonical_art_path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviewed-concepts/04-steel.png",
+      "canonical_status": "previously_authored_not_live_build14",
+      "source_or_process_unchanged": "steel_forge",
+      "inputs_unchanged": [
+        "iron_bars",
+        "coal"
+      ],
+      "uses_unchanged": [
+        "blades and reinforced chassis",
+        "drive assemblies",
+        "traction assemblies"
+      ],
+      "priority": "P2",
+      "direct_observed_frame_refs": [],
+      "reference_relation": "No exact item-size target established from the six inspected frames; preserve approved authored identity and derive a documented proportion from the shared scale rule.",
+      "observed_current_code_values": [],
+      "observed_code_value_limit": "Values are pinned source settings. They do not prove final onscreen dimensions, account for every parent transform, or set a new target.",
+      "existing_runtime_contexts_to_retest": [],
+      "authored_contexts_to_check": [
+        "approved authored presentation only; validate its applicable producer, storage, carry and use interface before registration"
+      ],
+      "specific_interface_checks": [
+        "steel forge output",
+        "assembly bench steel input",
+        "vehicle construction pad"
+      ],
+      "scale_intent": "Match the selected ordinary/context size baseline while retaining distinct silhouette, material, accounting identity and fitting every applicable receiving interface.",
+      "numeric_target": null,
+      "target_status": "PENDING_NEW_RENDER_AGAINST_SELECTED_BASELINES",
+      "conveyor_eligibility": "No automatic new conveyor eligibility; use only an approved typed route.",
+      "identity_preserved": true,
+      "review_status": "PENDING_NEW_RENDER",
+      "latest_size_authority": "Exact selected core R4 for ordinary pickups; exact selected R1 for its depicted conveyor context; authored variable fish/species meat allowed."
+    },
+    {
+      "id": "slate",
+      "display_name": "Slate",
+      "kind": "raw",
+      "canonical_art_path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviewed-concepts/03-slate.png",
+      "canonical_status": "live_build14",
+      "source_or_process_unchanged": "Registered slate deposits.",
+      "inputs_unchanged": [],
+      "uses_unchanged": [
+        "weatherproof roofs",
+        "protected work surfaces"
+      ],
+      "priority": "P1",
+      "direct_observed_frame_refs": [],
+      "reference_relation": "No exact item-size target established from the six inspected frames; preserve approved authored identity and derive a documented proportion from the shared scale rule.",
+      "observed_current_code_values": [
+        {
+          "context": "factory default maximum X/Z footprint width",
+          "value": 0.47,
+          "source_fact": "F01",
+          "units": "existing engine units; not reference target"
+        },
+        {
+          "context": "raw carry maximum X/Z footprint width",
+          "value": 0.205,
+          "source_fact": "F02",
+          "units": "existing engine units; not reference target"
+        },
+        {
+          "context": "raw storage per-slot footprint widths",
+          "value": [
+            0.91,
+            0.74
+          ],
+          "source_fact": "F04",
+          "units": "existing engine units; before any outer storage_unit_scale"
+        }
+      ],
+      "observed_code_value_limit": "Values are pinned source settings. They do not prove final onscreen dimensions, account for every parent transform, or set a new target.",
+      "existing_runtime_contexts_to_retest": [
+        "ground pickup",
+        "player raw carry",
+        "raw storage",
+        "raw transfer",
+        "vehicle cargo"
+      ],
+      "authored_contexts_to_check": [],
+      "specific_interface_checks": [
+        "raw carry/storage",
+        "roof/work-surface construction pads"
+      ],
+      "scale_intent": "Match the selected ordinary/context size baseline while retaining distinct silhouette, material, accounting identity and fitting every applicable receiving interface.",
+      "numeric_target": null,
+      "target_status": "PENDING_NEW_RENDER_AGAINST_SELECTED_BASELINES",
+      "conveyor_eligibility": "No automatic new conveyor eligibility; use only an approved typed route.",
+      "identity_preserved": true,
+      "review_status": "PENDING_NEW_RENDER",
+      "latest_size_authority": "Exact selected core R4 for ordinary pickups; exact selected R1 for its depicted conveyor context; authored variable fish/species meat allowed."
+    },
+    {
+      "id": "planks",
+      "display_name": "Planks",
+      "kind": "processed",
+      "canonical_art_path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviewed-concepts/17-timber-planks.png",
+      "canonical_status": "live_build14",
+      "source_or_process_unchanged": "saw_bench",
+      "inputs_unchanged": [
+        "wood"
+      ],
+      "uses_unchanged": [
+        "garage structure",
+        "cargo floor",
+        "traction assembly",
+        "producer frames"
+      ],
+      "priority": "P1",
+      "direct_observed_frame_refs": [],
+      "reference_relation": "No exact item-size target established from the six inspected frames; preserve approved authored identity and derive a documented proportion from the shared scale rule.",
+      "observed_current_code_values": [
+        {
+          "context": "factory default maximum X/Z footprint width",
+          "value": 0.48,
+          "source_fact": "F01",
+          "units": "existing engine units; not reference target"
+        },
+        {
+          "context": "finished/cash carry footprint width",
+          "value": 0.251,
+          "source_fact": "F03",
+          "units": "existing engine units; not reference target"
+        },
+        {
+          "context": "public counter stock factory width",
+          "value": 0.29,
+          "source_fact": "F13",
+          "units": "existing engine units; not reference target"
+        },
+        {
+          "context": "customer exchange factory width",
+          "value": 0.33,
+          "source_fact": "F13",
+          "units": "existing engine units; not reference target"
+        },
+        {
+          "context": "warehouse product shelf model multiplier",
+          "value": 0.4,
+          "source_fact": "F05",
+          "units": "model scale multiplier; not engine width and not moving conveyor scale"
+        }
+      ],
+      "observed_code_value_limit": "Values are pinned source settings. They do not prove final onscreen dimensions, account for every parent transform, or set a new target.",
+      "existing_runtime_contexts_to_retest": [
+        "machine output",
+        "finished goods carry",
+        "paid conveyor",
+        "product storage",
+        "public counter",
+        "customer handoff",
+        "vehicle cargo"
+      ],
+      "authored_contexts_to_check": [],
+      "specific_interface_checks": [
+        "saw output",
+        "product storage/conveyor",
+        "eligible counter stock",
+        "assembly bench timber input"
+      ],
+      "scale_intent": "Match the selected ordinary/context size baseline while retaining distinct silhouette, material, accounting identity and fitting every applicable receiving interface.",
+      "numeric_target": null,
+      "target_status": "PENDING_NEW_RENDER_AGAINST_SELECTED_BASELINES",
+      "conveyor_eligibility": "Current processed/service lane",
+      "identity_preserved": true,
+      "review_status": "PENDING_NEW_RENDER",
+      "latest_size_authority": "Exact selected core R4 for ordinary pickups; exact selected R1 for its depicted conveyor context; authored variable fish/species meat allowed."
+    },
+    {
+      "id": "fuel",
+      "display_name": "Fuel",
+      "kind": "processed",
+      "canonical_art_path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviewed-concepts/06-fuel.png",
+      "canonical_status": "existing_design_salvage_id_new_refining_route",
+      "source_or_process_unchanged": "coal_refinery",
+      "inputs_unchanged": [
+        "crude_oil",
+        "coal"
+      ],
+      "uses_unchanged": [
+        "funded vehicle tank",
+        "ordinary refuelling",
+        "eligible future powered-work jobs"
+      ],
+      "priority": "P2",
+      "direct_observed_frame_refs": [],
+      "reference_relation": "No exact item-size target established from the six inspected frames; preserve approved authored identity and derive a documented proportion from the shared scale rule.",
+      "observed_current_code_values": [],
+      "observed_code_value_limit": "Values are pinned source settings. They do not prove final onscreen dimensions, account for every parent transform, or set a new target.",
+      "existing_runtime_contexts_to_retest": [],
+      "authored_contexts_to_check": [
+        "approved authored presentation only; validate its applicable producer, storage, carry and use interface before registration"
+      ],
+      "specific_interface_checks": [
+        "refinery finished-fuel outlet",
+        "storage carrier",
+        "vehicle refill port"
+      ],
+      "scale_intent": "Keep refined fuel distinct from crude. Refit refill/storage handling and vehicle port while preserving authored quantities and recovery routes.",
+      "numeric_target": null,
+      "target_status": "PENDING_NEW_RENDER_AGAINST_SELECTED_BASELINES",
+      "conveyor_eligibility": "No automatic new conveyor eligibility; use only an approved typed route.",
+      "identity_preserved": true,
+      "review_status": "PENDING_NEW_RENDER",
+      "latest_size_authority": "Exact selected core R4 for ordinary pickups; exact selected R1 for its depicted conveyor context; authored variable fish/species meat allowed."
+    },
+    {
+      "id": "meat",
+      "display_name": "Meat",
+      "kind": "raw",
+      "canonical_art_path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviewed-concepts/07-meat.png",
+      "canonical_status": "SELECT_SHARED_RAW_FOOD",
+      "source_or_process_unchanged": "Retain current hostile-wolf drops and select Tundra Stag hunting; owned companions are never valid targets. Preserve all already-owned generic meat. Boar remains art reserve.",
+      "inputs_unchanged": [],
+      "uses_unchanged": [
+        "Cooked meal service and explicit rescue/roost supplies."
+      ],
+      "priority": "P0",
+      "direct_observed_frame_refs": [
+        "B@4",
+        "B@8"
+      ],
+      "reference_relation": "Observable family/shape in inspected footage; Havenline identity stays authoritative. This is qualitative evidence, not a numeric dimension.",
+      "observed_current_code_values": [
+        {
+          "context": "factory default maximum X/Z footprint width",
+          "value": 0.39,
+          "source_fact": "F01",
+          "units": "existing engine units; not reference target"
+        },
+        {
+          "context": "raw carry maximum X/Z footprint width",
+          "value": 0.23,
+          "source_fact": "F02",
+          "units": "existing engine units; not reference target"
+        },
+        {
+          "context": "raw storage per-slot footprint widths",
+          "value": [
+            0.72,
+            0.72,
+            0.72,
+            0.72,
+            0.72,
+            0.72,
+            0.62
+          ],
+          "source_fact": "F04",
+          "units": "existing engine units; before any outer storage_unit_scale"
+        },
+        {
+          "context": "conveyor factory width",
+          "value": 0.45,
+          "source_fact": "F05",
+          "units": "existing engine units; not reference target"
+        }
+      ],
+      "observed_code_value_limit": "Values are pinned source settings. They do not prove final onscreen dimensions, account for every parent transform, or set a new target.",
+      "existing_runtime_contexts_to_retest": [
+        "ground pickup",
+        "player raw carry",
+        "raw storage",
+        "raw transfer",
+        "vehicle cargo",
+        "paid conveyor",
+        "processor input"
+      ],
+      "authored_contexts_to_check": [],
+      "specific_interface_checks": [
+        "raw carry/storage",
+        "cooker raw input",
+        "typed raw conveyor"
+      ],
+      "scale_intent": "Preserve selected R4 ordinary steak scale; animal-specific cut shapes and size differences are authorized as presentation variants of meat. Keep approved source and recipe rules.",
+      "numeric_target": null,
+      "target_status": "OWNER_SELECTED_CORE_STATIC_BASELINE_NATIVE_DIMENSIONS_PENDING",
+      "conveyor_eligibility": "Current raw lane",
+      "identity_preserved": true,
+      "review_status": "OWNER_SELECTED_STATIC_CORE_VARIANT_SCOPE_ONLY",
+      "latest_size_authority": "Exact selected core R4 for ordinary pickups; exact selected R1 for its depicted conveyor context; authored variable fish/species meat allowed."
+    },
+    {
+      "id": "meal",
+      "display_name": "Meal",
+      "kind": "processed",
+      "canonical_art_path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviewed-concepts/12-cooked-game-meat.png",
+      "canonical_status": "SELECT_PROCESSED_FOOD",
+      "source_or_process_unchanged": "camp_cooker",
+      "inputs_unchanged": [
+        "meat"
+      ],
+      "uses_unchanged": [
+        "Customer service and selected named supply objectives."
+      ],
+      "priority": "P1",
+      "direct_observed_frame_refs": [],
+      "reference_relation": "No exact item-size target established from the six inspected frames; preserve approved authored identity and derive a documented proportion from the shared scale rule.",
+      "observed_current_code_values": [
+        {
+          "context": "factory default maximum X/Z footprint width",
+          "value": 0.36,
+          "source_fact": "F01",
+          "units": "existing engine units; not reference target"
+        },
+        {
+          "context": "finished/cash carry footprint width",
+          "value": 0.251,
+          "source_fact": "F03",
+          "units": "existing engine units; not reference target"
+        },
+        {
+          "context": "public counter stock factory width",
+          "value": 0.29,
+          "source_fact": "F13",
+          "units": "existing engine units; not reference target"
+        },
+        {
+          "context": "customer exchange factory width",
+          "value": 0.33,
+          "source_fact": "F13",
+          "units": "existing engine units; not reference target"
+        },
+        {
+          "context": "warehouse product shelf model multiplier",
+          "value": 0.4,
+          "source_fact": "F05",
+          "units": "model scale multiplier; not engine width and not moving conveyor scale"
+        }
+      ],
+      "observed_code_value_limit": "Values are pinned source settings. They do not prove final onscreen dimensions, account for every parent transform, or set a new target.",
+      "existing_runtime_contexts_to_retest": [
+        "machine output",
+        "finished goods carry",
+        "paid conveyor",
+        "product storage",
+        "public counter",
+        "customer handoff",
+        "vehicle cargo"
+      ],
+      "authored_contexts_to_check": [],
+      "specific_interface_checks": [
+        "cooker output",
+        "product conveyor/storage",
+        "carry",
+        "public stock",
+        "customer handoff"
+      ],
+      "scale_intent": "Match the selected ordinary/context size baseline while retaining distinct silhouette, material, accounting identity and fitting every applicable receiving interface.",
+      "numeric_target": null,
+      "target_status": "PENDING_NEW_RENDER_AGAINST_SELECTED_BASELINES",
+      "conveyor_eligibility": "Current processed/service lane",
+      "identity_preserved": true,
+      "review_status": "PENDING_NEW_RENDER",
+      "latest_size_authority": "Exact selected core R4 for ordinary pickups; exact selected R1 for its depicted conveyor context; authored variable fish/species meat allowed."
+    },
+    {
+      "id": "fish",
+      "display_name": "Fish",
+      "kind": "raw",
+      "canonical_art_path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviewed-concepts/08-fish.png",
+      "canonical_status": "SELECT_RAW_FOOD_T16",
+      "source_or_process_unchanged": "Authored automatic fishing action.",
+      "inputs_unchanged": [],
+      "uses_unchanged": [
+        "Whole cooked-fish service branch."
+      ],
+      "priority": "P1",
+      "direct_observed_frame_refs": [
+        "A@16",
+        "A@40"
+      ],
+      "reference_relation": "Observable family/shape in inspected footage; Havenline identity stays authoritative. This is qualitative evidence, not a numeric dimension.",
+      "observed_current_code_values": [],
+      "observed_code_value_limit": "Values are pinned source settings. They do not prove final onscreen dimensions, account for every parent transform, or set a new target.",
+      "existing_runtime_contexts_to_retest": [],
+      "authored_contexts_to_check": [
+        "approved authored presentation only; validate its applicable producer, storage, carry and use interface before registration"
+      ],
+      "specific_interface_checks": [
+        "shore intake",
+        "raw conveyor/cooker input",
+        "carry/stock where authored"
+      ],
+      "scale_intent": "Preserve selected R4 ordinary fish and selected R1 larger conveyor context. Add distinct fish types/sizes explicitly; a specific unit retains its selected variant through its route.",
+      "numeric_target": null,
+      "target_status": "OWNER_SELECTED_CORE_STATIC_BASELINE_NATIVE_DIMENSIONS_PENDING",
+      "conveyor_eligibility": "No automatic new conveyor eligibility; use only an approved typed route.",
+      "identity_preserved": true,
+      "review_status": "OWNER_SELECTED_STATIC_CORE_VARIANT_SCOPE_ONLY",
+      "latest_size_authority": "Exact selected core R4 for ordinary pickups; exact selected R1 for its depicted conveyor context; authored variable fish/species meat allowed."
+    },
+    {
+      "id": "cooked_fish",
+      "display_name": "Cooked Fish",
+      "kind": "processed",
+      "canonical_art_path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviewed-concepts/15-cooked-fish.png",
+      "canonical_status": "SELECT_PROCESSED_FOOD_T16",
+      "source_or_process_unchanged": "existing_intake_and_cooker_T16",
+      "inputs_unchanged": [
+        "fish"
+      ],
+      "uses_unchanged": [
+        "Eligible customer orders."
+      ],
+      "priority": "P1",
+      "direct_observed_frame_refs": [
+        "A@16",
+        "A@20",
+        "A@40",
+        "A@43"
+      ],
+      "reference_relation": "Observable family/shape in inspected footage; Havenline identity stays authoritative. This is qualitative evidence, not a numeric dimension.",
+      "observed_current_code_values": [],
+      "observed_code_value_limit": "Values are pinned source settings. They do not prove final onscreen dimensions, account for every parent transform, or set a new target.",
+      "existing_runtime_contexts_to_retest": [],
+      "authored_contexts_to_check": [
+        "approved authored presentation only; validate its applicable producer, storage, carry and use interface before registration"
+      ],
+      "specific_interface_checks": [
+        "fish cooker output",
+        "prepared-food buffer/storage",
+        "eligible counter/handoff"
+      ],
+      "scale_intent": "Match the selected ordinary/context size baseline while retaining distinct silhouette, material, accounting identity and fitting every applicable receiving interface.",
+      "numeric_target": null,
+      "target_status": "PENDING_NEW_RENDER_AGAINST_SELECTED_BASELINES",
+      "conveyor_eligibility": "No automatic new conveyor eligibility; use only an approved typed route.",
+      "identity_preserved": true,
+      "review_status": "PENDING_NEW_RENDER",
+      "latest_size_authority": "Exact selected core R4 for ordinary pickups; exact selected R1 for its depicted conveyor context; authored variable fish/species meat allowed."
+    },
+    {
+      "id": "wheat",
+      "display_name": "Wheat",
+      "kind": "raw",
+      "canonical_art_path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviewed-concepts/09-wheat.png",
+      "canonical_status": "SELECT_CROP_T19",
+      "source_or_process_unchanged": "Registered crop harvesting.",
+      "inputs_unchanged": [],
+      "uses_unchanged": [
+        "Direct bread-like production input."
+      ],
+      "priority": "P2",
+      "direct_observed_frame_refs": [],
+      "reference_relation": "No exact item-size target established from the six inspected frames; preserve approved authored identity and derive a documented proportion from the shared scale rule.",
+      "observed_current_code_values": [],
+      "observed_code_value_limit": "Values are pinned source settings. They do not prove final onscreen dimensions, account for every parent transform, or set a new target.",
+      "existing_runtime_contexts_to_retest": [],
+      "authored_contexts_to_check": [
+        "approved authored presentation only; validate its applicable producer, storage, carry and use interface before registration"
+      ],
+      "specific_interface_checks": [
+        "crop pickup/harvester",
+        "existing wheat processor intake"
+      ],
+      "scale_intent": "Match the selected ordinary/context size baseline while retaining distinct silhouette, material, accounting identity and fitting every applicable receiving interface.",
+      "numeric_target": null,
+      "target_status": "PENDING_NEW_RENDER_AGAINST_SELECTED_BASELINES",
+      "conveyor_eligibility": "No automatic new conveyor eligibility; use only an approved typed route.",
+      "identity_preserved": true,
+      "review_status": "PENDING_NEW_RENDER",
+      "latest_size_authority": "Exact selected core R4 for ordinary pickups; exact selected R1 for its depicted conveyor context; authored variable fish/species meat allowed."
+    },
+    {
+      "id": "bread",
+      "display_name": "Bread",
+      "kind": "processed",
+      "canonical_art_path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviewed-concepts/10-cooked-food.png",
+      "canonical_status": "SELECT_AUTHORED_PRODUCT_T19",
+      "source_or_process_unchanged": "existing_wheat_processor_T19",
+      "inputs_unchanged": [
+        "wheat"
+      ],
+      "uses_unchanged": [
+        "Eligible customer and mixed food orders."
+      ],
+      "priority": "P1",
+      "direct_observed_frame_refs": [
+        "A@43"
+      ],
+      "reference_relation": "Observable family/shape in inspected footage; Havenline identity stays authoritative. This is qualitative evidence, not a numeric dimension.",
+      "observed_current_code_values": [],
+      "observed_code_value_limit": "Values are pinned source settings. They do not prove final onscreen dimensions, account for every parent transform, or set a new target.",
+      "existing_runtime_contexts_to_retest": [],
+      "authored_contexts_to_check": [
+        "approved authored presentation only; validate its applicable producer, storage, carry and use interface before registration"
+      ],
+      "specific_interface_checks": [
+        "wheat processor output",
+        "prepared-food carry/storage",
+        "eligible counter/handoff"
+      ],
+      "scale_intent": "Match the selected ordinary/context size baseline while retaining distinct silhouette, material, accounting identity and fitting every applicable receiving interface.",
+      "numeric_target": null,
+      "target_status": "PENDING_NEW_RENDER_AGAINST_SELECTED_BASELINES",
+      "conveyor_eligibility": "No automatic new conveyor eligibility; use only an approved typed route.",
+      "identity_preserved": true,
+      "review_status": "PENDING_NEW_RENDER",
+      "latest_size_authority": "Exact selected core R4 for ordinary pickups; exact selected R1 for its depicted conveyor context; authored variable fish/species meat allowed."
+    },
+    {
+      "id": "hide",
+      "display_name": "Hide",
+      "kind": "raw_byproduct",
+      "canonical_art_path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviewed-concepts/19-hide.png",
+      "canonical_status": "SELECT_BYPRODUCT_WHEN_SOURCE_REGISTERED",
+      "source_or_process_unchanged": "Selected Tundra Stag byproduct; source/drop flags and quantities require authored evidence.",
+      "inputs_unchanged": [],
+      "uses_unchanged": [
+        "Harness construction and elective retrofitting for visible working equipment."
+      ],
+      "priority": "P2",
+      "direct_observed_frame_refs": [],
+      "reference_relation": "No exact item-size target established from the six inspected frames; preserve approved authored identity and derive a documented proportion from the shared scale rule.",
+      "observed_current_code_values": [],
+      "observed_code_value_limit": "Values are pinned source settings. They do not prove final onscreen dimensions, account for every parent transform, or set a new target.",
+      "existing_runtime_contexts_to_retest": [],
+      "authored_contexts_to_check": [
+        "approved authored presentation only; validate its applicable producer, storage, carry and use interface before registration"
+      ],
+      "specific_interface_checks": [
+        "byproduct pickup",
+        "manual carry/storage",
+        "harness/retrofit use"
+      ],
+      "scale_intent": "Enlarge the readable folded/rolled byproduct presentation as appropriate; initial conveyor routing remains manual unless a later authored route explicitly allows it.",
+      "numeric_target": null,
+      "target_status": "PENDING_NEW_RENDER_AGAINST_SELECTED_BASELINES",
+      "conveyor_eligibility": "No automatic new conveyor eligibility; use only an approved typed route.",
+      "identity_preserved": true,
+      "review_status": "PENDING_NEW_RENDER",
+      "latest_size_authority": "Exact selected core R4 for ordinary pickups; exact selected R1 for its depicted conveyor context; authored variable fish/species meat allowed."
+    },
+    {
+      "id": "fur",
+      "display_name": "Fur",
+      "kind": "raw_byproduct",
+      "canonical_art_path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviewed-concepts/20-fur.png",
+      "canonical_status": "SELECT_BYPRODUCT_WHEN_SOURCE_REGISTERED",
+      "source_or_process_unchanged": "Selected winter-stag byproduct or ordinary earned supply order; no owned-pet harvesting.",
+      "inputs_unchanged": [],
+      "uses_unchanged": [
+        "Specific cold-work clothing and shelter fittings."
+      ],
+      "priority": "P2",
+      "direct_observed_frame_refs": [],
+      "reference_relation": "No exact item-size target established from the six inspected frames; preserve approved authored identity and derive a documented proportion from the shared scale rule.",
+      "observed_current_code_values": [],
+      "observed_code_value_limit": "Values are pinned source settings. They do not prove final onscreen dimensions, account for every parent transform, or set a new target.",
+      "existing_runtime_contexts_to_retest": [],
+      "authored_contexts_to_check": [
+        "approved authored presentation only; validate its applicable producer, storage, carry and use interface before registration"
+      ],
+      "specific_interface_checks": [
+        "byproduct pickup",
+        "manual carry/storage",
+        "clothing/shelter use"
+      ],
+      "scale_intent": "Preserve fur versus hide silhouette and ordinary source rules; folded or rolled presentation does not create new inventory IDs.",
+      "numeric_target": null,
+      "target_status": "PENDING_NEW_RENDER_AGAINST_SELECTED_BASELINES",
+      "conveyor_eligibility": "No automatic new conveyor eligibility; use only an approved typed route.",
+      "identity_preserved": true,
+      "review_status": "PENDING_NEW_RENDER",
+      "latest_size_authority": "Exact selected core R4 for ordinary pickups; exact selected R1 for its depicted conveyor context; authored variable fish/species meat allowed."
+    },
+    {
+      "id": "money",
+      "display_name": "Cash",
+      "kind": "currency",
+      "canonical_art_path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviewed-concepts/11-money.png",
+      "canonical_status": "ONE_ORDINARY_CURRENCY",
+      "source_or_process_unchanged": "Exactly-once fulfilled service orders; custody in till, pocket or house.",
+      "inputs_unchanged": [],
+      "uses_unchanged": [
+        "Station improvements, mechanical add-ons, transport construction/services and optional efficiency specialization."
+      ],
+      "priority": "P0",
+      "direct_observed_frame_refs": [
+        "A@20",
+        "A@40",
+        "A@43",
+        "B@8"
+      ],
+      "reference_relation": "Observable family/shape in inspected footage; Havenline identity stays authoritative. This is qualitative evidence, not a numeric dimension.",
+      "observed_current_code_values": [
+        {
+          "context": "factory default maximum X/Z footprint width",
+          "value": 0.26,
+          "source_fact": "F01",
+          "units": "existing engine units; not reference target"
+        },
+        {
+          "context": "finished/cash carry footprint width",
+          "value": 0.251,
+          "source_fact": "F03",
+          "units": "existing engine units; not reference target"
+        },
+        {
+          "context": "public cash pile model multiplier",
+          "value": 0.8,
+          "source_fact": "F13",
+          "units": "model scale multiplier; not engine width"
+        },
+        {
+          "context": "warehouse cash shelf model multiplier",
+          "value": 0.6,
+          "source_fact": "F14",
+          "units": "model scale multiplier; not engine width"
+        }
+      ],
+      "observed_code_value_limit": "Values are pinned source settings. They do not prove final onscreen dimensions, account for every parent transform, or set a new target.",
+      "existing_runtime_contexts_to_retest": [
+        "public cash pile",
+        "player/survivor collection",
+        "finished goods carry",
+        "cash storage",
+        "cash transfer",
+        "vehicle cargo"
+      ],
+      "authored_contexts_to_check": [],
+      "specific_interface_checks": [
+        "separate public cash pile",
+        "collection transfer",
+        "player/survivor carry",
+        "cash shelf",
+        "payment pad"
+      ],
+      "scale_intent": "Preserve selected R4 bundle size and identity; use additional units for larger piles without changing value or custody.",
+      "numeric_target": null,
+      "target_status": "OWNER_SELECTED_CORE_STATIC_BASELINE_NATIVE_DIMENSIONS_PENDING",
+      "conveyor_eligibility": "No automatic new conveyor eligibility; use only an approved typed route.",
+      "identity_preserved": true,
+      "review_status": "OWNER_SELECTED_STATIC_CORE_VARIANT_SCOPE_ONLY",
+      "latest_size_authority": "Exact selected core R4 for ordinary pickups; exact selected R1 for its depicted conveyor context; authored variable fish/species meat allowed."
+    },
+    {
+      "id": "cargo",
+      "display_name": "Cargo",
+      "kind": "container_presentation",
+      "canonical_art_path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviewed-concepts/12-cargo.png",
+      "canonical_status": "CONTAINER_NOT_NEW_ECONOMY_ITEM",
+      "source_or_process_unchanged": "Typed goods grouped for physical transfer.",
+      "inputs_unchanged": [],
+      "uses_unchanged": [
+        "Preserve transport custody and legibility."
+      ],
+      "priority": "P2",
+      "direct_observed_frame_refs": [],
+      "reference_relation": "No exact item-size target established from the six inspected frames; preserve approved authored identity and derive a documented proportion from the shared scale rule.",
+      "observed_current_code_values": [],
+      "observed_code_value_limit": "Values are pinned source settings. They do not prove final onscreen dimensions, account for every parent transform, or set a new target.",
+      "existing_runtime_contexts_to_retest": [],
+      "authored_contexts_to_check": [
+        "approved authored presentation only; validate its applicable producer, storage, carry and use interface before registration"
+      ],
+      "specific_interface_checks": [
+        "typed contained goods",
+        "vehicle loading aperture",
+        "storage/transfer clearance"
+      ],
+      "scale_intent": "Treat the crate/wrapper as presentation around typed goods. Fit doors, loading bays and larger contents without creating a cargo currency or silently shrinking contents.",
+      "numeric_target": null,
+      "target_status": "PENDING_NEW_RENDER_AGAINST_SELECTED_BASELINES",
+      "conveyor_eligibility": "No automatic new conveyor eligibility; use only an approved typed route.",
+      "identity_preserved": true,
+      "review_status": "PENDING_NEW_RENDER",
+      "latest_size_authority": "Exact selected core R4 for ordinary pickups; exact selected R1 for its depicted conveyor context; authored variable fish/species meat allowed."
+    },
+    {
+      "id": "iron_bars",
+      "display_name": "Iron bars",
+      "kind": "processed",
+      "canonical_art_path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/selected/iron-bars.png",
+      "canonical_status": "new_authored_requires_registration",
+      "source_or_process_unchanged": "coal_smelter",
+      "inputs_unchanged": [
+        "metal",
+        "coal"
+      ],
+      "uses_unchanged": [
+        "sheet metal",
+        "parts",
+        "steel",
+        "axles and producer frames"
+      ],
+      "priority": "P2",
+      "direct_observed_frame_refs": [],
+      "reference_relation": "No exact item-size target established from the six inspected frames; preserve approved authored identity and derive a documented proportion from the shared scale rule.",
+      "observed_current_code_values": [],
+      "observed_code_value_limit": "Values are pinned source settings. They do not prove final onscreen dimensions, account for every parent transform, or set a new target.",
+      "existing_runtime_contexts_to_retest": [],
+      "authored_contexts_to_check": [
+        "approved authored presentation only; validate its applicable producer, storage, carry and use interface before registration"
+      ],
+      "specific_interface_checks": [
+        "smelter output",
+        "hand metal bench input",
+        "steel forge input"
+      ],
+      "scale_intent": "Match the selected ordinary/context size baseline while retaining distinct silhouette, material, accounting identity and fitting every applicable receiving interface.",
+      "numeric_target": null,
+      "target_status": "PENDING_NEW_RENDER_AGAINST_SELECTED_BASELINES",
+      "conveyor_eligibility": "No automatic new conveyor eligibility; use only an approved typed route.",
+      "identity_preserved": true,
+      "review_status": "PENDING_NEW_RENDER",
+      "latest_size_authority": "Exact selected core R4 for ordinary pickups; exact selected R1 for its depicted conveyor context; authored variable fish/species meat allowed."
+    },
+    {
+      "id": "sheet_metal",
+      "display_name": "Sheet metal",
+      "kind": "processed",
+      "canonical_art_path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/selected/sheet-metal.png",
+      "canonical_status": "new_authored_requires_registration",
+      "source_or_process_unchanged": "hand_metal_bench",
+      "inputs_unchanged": [
+        "iron_bars"
+      ],
+      "uses_unchanged": [
+        "vehicle body panels",
+        "garage door",
+        "refinery casing"
+      ],
+      "priority": "P2",
+      "direct_observed_frame_refs": [],
+      "reference_relation": "No exact item-size target established from the six inspected frames; preserve approved authored identity and derive a documented proportion from the shared scale rule.",
+      "observed_current_code_values": [],
+      "observed_code_value_limit": "Values are pinned source settings. They do not prove final onscreen dimensions, account for every parent transform, or set a new target.",
+      "existing_runtime_contexts_to_retest": [],
+      "authored_contexts_to_check": [
+        "approved authored presentation only; validate its applicable producer, storage, carry and use interface before registration"
+      ],
+      "specific_interface_checks": [
+        "hand metal bench sheet output",
+        "assembly bench panel input",
+        "garage/refinery construction"
+      ],
+      "scale_intent": "Match the selected ordinary/context size baseline while retaining distinct silhouette, material, accounting identity and fitting every applicable receiving interface.",
+      "numeric_target": null,
+      "target_status": "PENDING_NEW_RENDER_AGAINST_SELECTED_BASELINES",
+      "conveyor_eligibility": "No automatic new conveyor eligibility; use only an approved typed route.",
+      "identity_preserved": true,
+      "review_status": "PENDING_NEW_RENDER",
+      "latest_size_authority": "Exact selected core R4 for ordinary pickups; exact selected R1 for its depicted conveyor context; authored variable fish/species meat allowed."
+    },
+    {
+      "id": "mechanical_parts",
+      "display_name": "Mechanical parts",
+      "kind": "component",
+      "canonical_art_path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/selected/mechanical-parts.png",
+      "canonical_status": "new_authored_requires_registration",
+      "source_or_process_unchanged": "hand_metal_bench",
+      "inputs_unchanged": [
+        "iron_bars"
+      ],
+      "uses_unchanged": [
+        "drive assemblies",
+        "traction assemblies",
+        "garage shutter",
+        "oil pump/refinery"
+      ],
+      "priority": "P2",
+      "direct_observed_frame_refs": [],
+      "reference_relation": "No exact item-size target established from the six inspected frames; preserve approved authored identity and derive a documented proportion from the shared scale rule.",
+      "observed_current_code_values": [],
+      "observed_code_value_limit": "Values are pinned source settings. They do not prove final onscreen dimensions, account for every parent transform, or set a new target.",
+      "existing_runtime_contexts_to_retest": [],
+      "authored_contexts_to_check": [
+        "approved authored presentation only; validate its applicable producer, storage, carry and use interface before registration"
+      ],
+      "specific_interface_checks": [
+        "hand metal bench parts output",
+        "assembly bench parts input",
+        "pump/refinery construction"
+      ],
+      "scale_intent": "Keep one parts family with readable chunky members; contents remain one registered family and its approved quantity convention.",
+      "numeric_target": null,
+      "target_status": "PENDING_NEW_RENDER_AGAINST_SELECTED_BASELINES",
+      "conveyor_eligibility": "No automatic new conveyor eligibility; use only an approved typed route.",
+      "identity_preserved": true,
+      "review_status": "PENDING_NEW_RENDER",
+      "latest_size_authority": "Exact selected core R4 for ordinary pickups; exact selected R1 for its depicted conveyor context; authored variable fish/species meat allowed."
+    },
+    {
+      "id": "drive_assembly",
+      "display_name": "Drive assembly",
+      "kind": "component",
+      "canonical_art_path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/selected/drive-assembly.png",
+      "canonical_status": "new_authored_requires_registration",
+      "source_or_process_unchanged": "assembly_bench",
+      "inputs_unchanged": [
+        "steel",
+        "mechanical_parts",
+        "sheet_metal"
+      ],
+      "uses_unchanged": [
+        "vehicle drive systems",
+        "powered lift/hauler rebuilds"
+      ],
+      "priority": "P2",
+      "direct_observed_frame_refs": [],
+      "reference_relation": "No exact item-size target established from the six inspected frames; preserve approved authored identity and derive a documented proportion from the shared scale rule.",
+      "observed_current_code_values": [],
+      "observed_code_value_limit": "Values are pinned source settings. They do not prove final onscreen dimensions, account for every parent transform, or set a new target.",
+      "existing_runtime_contexts_to_retest": [],
+      "authored_contexts_to_check": [
+        "approved authored presentation only; validate its applicable producer, storage, carry and use interface before registration"
+      ],
+      "specific_interface_checks": [
+        "assembly bench output",
+        "carry/transport",
+        "vehicle drive installation"
+      ],
+      "scale_intent": "Use the approved complete assembly as one component identity; review bench, carrying and vehicle interface envelope without splitting gears into new resource wallets.",
+      "numeric_target": null,
+      "target_status": "PENDING_NEW_RENDER_AGAINST_SELECTED_BASELINES",
+      "conveyor_eligibility": "No automatic new conveyor eligibility; use only an approved typed route.",
+      "identity_preserved": true,
+      "review_status": "PENDING_NEW_RENDER",
+      "latest_size_authority": "Exact selected core R4 for ordinary pickups; exact selected R1 for its depicted conveyor context; authored variable fish/species meat allowed."
+    },
+    {
+      "id": "traction_kit",
+      "display_name": "Mobility assembly",
+      "kind": "component",
+      "canonical_art_path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/selected/mobility-assembly.png",
+      "canonical_status": "new_authored_requires_registration",
+      "source_or_process_unchanged": "assembly_bench",
+      "inputs_unchanged": [
+        "steel",
+        "mechanical_parts",
+        "planks"
+      ],
+      "uses_unchanged": [
+        "wheel or track modules",
+        "captive rail bogies",
+        "marine propulsion fittings"
+      ],
+      "priority": "P2",
+      "direct_observed_frame_refs": [],
+      "reference_relation": "No exact item-size target established from the six inspected frames; preserve approved authored identity and derive a documented proportion from the shared scale rule.",
+      "observed_current_code_values": [],
+      "observed_code_value_limit": "Values are pinned source settings. They do not prove final onscreen dimensions, account for every parent transform, or set a new target.",
+      "existing_runtime_contexts_to_retest": [],
+      "authored_contexts_to_check": [
+        "approved authored presentation only; validate its applicable producer, storage, carry and use interface before registration"
+      ],
+      "specific_interface_checks": [
+        "assembly bench output",
+        "wheel/track/marine variant envelope",
+        "vehicle installation"
+      ],
+      "scale_intent": "Keep wheel/track/marine presentation variants within the one mobility identity. Check full variant envelopes, not just a flat thumbnail.",
+      "numeric_target": null,
+      "target_status": "PENDING_NEW_RENDER_AGAINST_SELECTED_BASELINES",
+      "conveyor_eligibility": "No automatic new conveyor eligibility; use only an approved typed route.",
+      "identity_preserved": true,
+      "review_status": "PENDING_NEW_RENDER",
+      "latest_size_authority": "Exact selected core R4 for ordinary pickups; exact selected R1 for its depicted conveyor context; authored variable fish/species meat allowed."
+    },
+    {
+      "id": "crude_oil",
+      "display_name": "Crude oil",
+      "kind": "raw",
+      "canonical_art_path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/selected/crude-oil.png",
+      "canonical_status": "new_authored_requires_registration",
+      "source_or_process_unchanged": "manual_oil_pump",
+      "inputs_unchanged": [],
+      "uses_unchanged": [
+        "fuel refining"
+      ],
+      "priority": "P2",
+      "direct_observed_frame_refs": [],
+      "reference_relation": "No exact item-size target established from the six inspected frames; preserve approved authored identity and derive a documented proportion from the shared scale rule.",
+      "observed_current_code_values": [],
+      "observed_code_value_limit": "Values are pinned source settings. They do not prove final onscreen dimensions, account for every parent transform, or set a new target.",
+      "existing_runtime_contexts_to_retest": [],
+      "authored_contexts_to_check": [
+        "approved authored presentation only; validate its applicable producer, storage, carry and use interface before registration"
+      ],
+      "specific_interface_checks": [
+        "manual pump outlet",
+        "raw carrier/storage",
+        "refinery crude inlet"
+      ],
+      "scale_intent": "Keep the dark crude carrier distinguishable from finished fuel. Refit pump/refinery vessel and transfer interface without adding liquid balances or a fuel-powered bootstrap.",
+      "numeric_target": null,
+      "target_status": "PENDING_NEW_RENDER_AGAINST_SELECTED_BASELINES",
+      "conveyor_eligibility": "No automatic new conveyor eligibility; use only an approved typed route.",
+      "identity_preserved": true,
+      "review_status": "PENDING_NEW_RENDER",
+      "latest_size_authority": "Exact selected core R4 for ordinary pickups; exact selected R1 for its depicted conveyor context; authored variable fish/species meat allowed."
+    },
+    {
+      "id": "blocks",
+      "display_name": "Stone blocks",
+      "kind": "processed",
+      "canonical_art_path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/selected/stone-blocks.png",
+      "canonical_status": "live_build14",
+      "source_or_process_unchanged": "quarry_drill",
+      "inputs_unchanged": [
+        "stone"
+      ],
+      "uses_unchanged": [
+        "garage foundations",
+        "smelter/refinery bases",
+        "safe route structures"
+      ],
+      "priority": "P1",
+      "direct_observed_frame_refs": [],
+      "reference_relation": "No exact item-size target established from the six inspected frames; preserve approved authored identity and derive a documented proportion from the shared scale rule.",
+      "observed_current_code_values": [
+        {
+          "context": "factory default maximum X/Z footprint width",
+          "value": 0.39,
+          "source_fact": "F01",
+          "units": "existing engine units; not reference target"
+        },
+        {
+          "context": "finished/cash carry footprint width",
+          "value": 0.251,
+          "source_fact": "F03",
+          "units": "existing engine units; not reference target"
+        },
+        {
+          "context": "public counter stock factory width",
+          "value": 0.29,
+          "source_fact": "F13",
+          "units": "existing engine units; not reference target"
+        },
+        {
+          "context": "customer exchange factory width",
+          "value": 0.33,
+          "source_fact": "F13",
+          "units": "existing engine units; not reference target"
+        },
+        {
+          "context": "warehouse product shelf model multiplier",
+          "value": 0.4,
+          "source_fact": "F05",
+          "units": "model scale multiplier; not engine width and not moving conveyor scale"
+        }
+      ],
+      "observed_code_value_limit": "Values are pinned source settings. They do not prove final onscreen dimensions, account for every parent transform, or set a new target.",
+      "existing_runtime_contexts_to_retest": [
+        "machine output",
+        "finished goods carry",
+        "paid conveyor",
+        "product storage",
+        "public counter",
+        "customer handoff",
+        "vehicle cargo"
+      ],
+      "authored_contexts_to_check": [],
+      "specific_interface_checks": [
+        "quarry output",
+        "product storage/conveyor",
+        "eligible counter",
+        "construction foundation pad"
+      ],
+      "scale_intent": "Match the selected ordinary/context size baseline while retaining distinct silhouette, material, accounting identity and fitting every applicable receiving interface.",
+      "numeric_target": null,
+      "target_status": "PENDING_NEW_RENDER_AGAINST_SELECTED_BASELINES",
+      "conveyor_eligibility": "Current processed/service lane",
+      "identity_preserved": true,
+      "review_status": "PENDING_NEW_RENDER",
+      "latest_size_authority": "Exact selected core R4 for ordinary pickups; exact selected R1 for its depicted conveyor context; authored variable fish/species meat allowed."
+    },
+    {
+      "id": "premium_gems",
+      "display_name": "Gems",
+      "kind": "currency",
+      "canonical_art_path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/selected/gems.png",
+      "canonical_status": "SELECTED_SINGLE_PREMIUM_ID",
+      "source_or_process_unchanged": "Server-authoritative fixed disclosed grants/purchases.",
+      "inputs_unchanged": [],
+      "uses_unchanged": [
+        "Fixed optional catalogue content/value, separated from challenge and mandatory progress."
+      ],
+      "priority": "P2",
+      "direct_observed_frame_refs": [],
+      "reference_relation": "No exact item-size target established from the six inspected frames; preserve approved authored identity and derive a documented proportion from the shared scale rule.",
+      "observed_current_code_values": [],
+      "observed_code_value_limit": "Values are pinned source settings. They do not prove final onscreen dimensions, account for every parent transform, or set a new target.",
+      "existing_runtime_contexts_to_retest": [],
+      "authored_contexts_to_check": [
+        "approved authored presentation only; validate its applicable producer, storage, carry and use interface before registration"
+      ],
+      "specific_interface_checks": [
+        "authored premium icon/physical prop where used",
+        "catalogue presentation"
+      ],
+      "scale_intent": "Keep one premium currency and approved crystal identity. Review physical icon/prop legibility where authored; do not force cash-bundle stacking or factory throughput onto gems.",
+      "numeric_target": null,
+      "target_status": "PENDING_NEW_RENDER_AGAINST_SELECTED_BASELINES",
+      "conveyor_eligibility": "No automatic new conveyor eligibility; use only an approved typed route.",
+      "identity_preserved": true,
+      "review_status": "PENDING_NEW_RENDER",
+      "latest_size_authority": "Exact selected core R4 for ordinary pickups; exact selected R1 for its depicted conveyor context; authored variable fish/species meat allowed."
+    },
+    {
+      "id": "relay_component",
+      "display_name": "Relay component",
+      "kind": "finite_project_object",
+      "canonical_art_path": "Docs/Design/ResourceTurnarounds/2026-11-27-industrial/selected/relay-component.png",
+      "canonical_status": "FINITE_FINAL_REGION_PROJECT_OBJECT",
+      "source_or_process_unchanged": "finite_relay_recovery_replacement_worksite_future",
+      "inputs_unchanged": [],
+      "uses_unchanged": [
+        "Complete the final relay connection under T52."
+      ],
+      "priority": "P2",
+      "direct_observed_frame_refs": [],
+      "reference_relation": "No exact item-size target established from the six inspected frames; preserve approved authored identity and derive a documented proportion from the shared scale rule.",
+      "observed_current_code_values": [],
+      "observed_code_value_limit": "Values are pinned source settings. They do not prove final onscreen dimensions, account for every parent transform, or set a new target.",
+      "existing_runtime_contexts_to_retest": [],
+      "authored_contexts_to_check": [
+        "approved authored presentation only; validate its applicable producer, storage, carry and use interface before registration"
+      ],
+      "specific_interface_checks": [
+        "finite project worksite",
+        "transport/carry envelope",
+        "final relay installation socket"
+      ],
+      "scale_intent": "Preserve the finite project object. Check project-pad, carrying/transport envelope and assembly socket; do not reinterpret it as an infinitely stacked raw resource.",
+      "numeric_target": null,
+      "target_status": "PENDING_NEW_RENDER_AGAINST_SELECTED_BASELINES",
+      "conveyor_eligibility": "No automatic new conveyor eligibility; use only an approved typed route.",
+      "identity_preserved": true,
+      "review_status": "PENDING_NEW_RENDER",
+      "latest_size_authority": "Exact selected core R4 for ordinary pickups; exact selected R1 for its depicted conveyor context; authored variable fish/species meat allowed."
+    }
+  ],
+  "cross_context_dependencies": [
+    "Shared resource factory, imported model normalization and direct scene instantiation",
+    "Player raw pack, finished/cash pack, survivor carrying and full load movement",
+    "Ground pickup/stock plate, stack course spacing and visible-count aggregation",
+    "Belt width, rails, corner radius, incline, crossing headroom, lift/dock and stop gate",
+    "Machine input/output envelopes, bin courses, working sweep and service apron",
+    "Storage shelf/door/side-port/lift/aisle and raw/prepared segregation",
+    "Counter stock bays, customer hands, separate cash pile and bulk service transfer",
+    "Vehicle cargo/loading envelopes and typed wrapper presentation",
+    "Upgrade/resource payment visuals, HUD count readability and short-edge camera composition",
+    "Collision, navigation, transfer interpolation, occlusion and busy-scene performance"
+  ],
+  "updated_utc": "2026-11-28T04:52:02.034218+00:00",
+  "current_authority": "LATEST_OWNER_PREFERENCE.json",
+  "selected_baselines": [
+    "conveyor-r1",
+    "core-r4"
+  ],
+  "conveyor_resize_allowed_by_default": false
+}

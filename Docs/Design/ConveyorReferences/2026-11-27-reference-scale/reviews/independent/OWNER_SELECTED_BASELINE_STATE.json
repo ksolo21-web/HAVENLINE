@@ -1,0 +1,86 @@
+{
+  "reviewer": "/root/independent_critic",
+  "recorded_utc": "2026-11-28T04:45:24.911868+00:00",
+  "scope": "Actual displayed static raster only. No native model, unseen angle, animation, runtime, throughput, or full original gameplay conformity approval.",
+  "owner_authority": "Latest owner explicitly selected uploaded 33179.png (conveyor R1) and 33180.png (core R4), approved their sizes, and allowed fish sizes/types and animal-dependent meat variation. Exact selected originals remain unchanged.",
+  "status": "TWO_OWNER_SELECTED_STATIC_BASELINES_FROZEN_MORE_RENDERS_REQUIRED",
+  "selected": [
+    {
+      "id": "conveyor-r1",
+      "original": {
+        "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/01-reference-line-r1.png",
+        "sha256": "25d9b7f98f5d9407c240a8f0b242bbba6775d0e7fb60cbc720d526514d309249",
+        "bytes": 2060476,
+        "dimensions": [
+          1536,
+          1024
+        ]
+      },
+      "user_attachment": {
+        "path": "/workspace/scratch/59f000bd1476/upload/33179.png",
+        "sha256": "6529f8891e58cabbe583a93ddbe39585f785fd737702a0eaa9238a135ed7c4d9",
+        "bytes": 258238,
+        "dimensions": [
+          1536,
+          1024
+        ]
+      },
+      "attachment_identity": "Fresh actual pixels visually match original composition; compressed file hash differs.",
+      "review": "LINE_R1_REVIEW.json"
+    },
+    {
+      "id": "core-r4",
+      "original": {
+        "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/02-core-resource-scale-r4.png",
+        "sha256": "de3e99e6602e18ee5e2d4619e3761964d6ccab2af8a2ee55b17b0ab3fb316da7",
+        "bytes": 1696844,
+        "dimensions": [
+          1536,
+          1024
+        ]
+      },
+      "user_attachment": {
+        "path": "/workspace/scratch/59f000bd1476/upload/33180.png",
+        "sha256": "09634b7b84e9eebb7b8756d092bf6d8d3342f45fd2bfeeab1e899eb25949695d",
+        "bytes": 162487,
+        "dimensions": [
+          1536,
+          1024
+        ]
+      },
+      "attachment_identity": "Fresh actual pixels visually match original composition; compressed file hash differs.",
+      "review": "CORE_R4_REVIEW.json"
+    }
+  ],
+  "selection_custody_score": 10.0,
+  "whole_task_approval": false,
+  "whole_task_score": null,
+  "owner_size_overrides": [
+    "Earlier larger-resource proposals and subsequent uniform .45-.52H and .23-.30H targets are superseded by the exact selected images.",
+    "Conveyor R1 retains its selected larger resource variants.",
+    "Core R4 controls the ordinary core size reference.",
+    "Fish can vary in size/type; meat can vary with animal.",
+    "Additional renders of both conveyors and resources remain requested."
+  ],
+  "nonselected_observed_candidate": {
+    "candidate": {
+      "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/01-reference-line-r2.png",
+      "sha256": "dbe5dffcb8121713d4122d0dbe9bae5c2ba3035101f961fbdcfe9947f799f63b",
+      "bytes": 2082713,
+      "dimensions": [
+        1536,
+        1024
+      ]
+    },
+    "status": "NOT_SELECTED_DO_NOT_PROPAGATE",
+    "observation": "Full R2 view inspected. Hardware composition is recognizable but C1 is much smaller and raw fish approach C1 height; it is not the owner-selected line baseline. No R2 geometry repair is required for selection because R1 was chosen."
+  },
+  "preserve": [
+    "All prior original art and reviews",
+    "R1 scale-landmark discrepancy as accepted owner adaptation",
+    "Source videos and sampled-frame identities",
+    "Register-free bulk-service rule",
+    "All runtime/unseen-view nulls"
+  ],
+  "next_action": "Review actual additional conveyor views/resource sheets against selected R1/core R4; report concrete defects without reopening owner-approved size by default."
+}

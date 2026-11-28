@@ -1,0 +1,114 @@
+{
+  "schema_version": 2,
+  "reviewer": "/root/independent_critic",
+  "recorded_utc": "2026-11-28T05:55:52.406078+00:00",
+  "approval_boundary": "Static illustrated evidence only. No native model, motion, collision, automation, inventory or runtime approval.",
+  "runtime_approved": false,
+  "policy": {
+    "path": "Docs/Production/REFERENCE_ACCEPTANCE_POLICY.json",
+    "source_commit": "2fc474bbbb03d9a242b216d33e8588e028de4ce5",
+    "sha256": "c34c0cbe5b6d473be40ee5f0f0e08aab8f6ff42f97cfe2e7c93b2694e4dbaf43",
+    "applicable_reference_style_gates": "Exact unrounded 10",
+    "additional_reference_dimensions_minimum": 9.9,
+    "other_dimensions_minimum": 9.5,
+    "all_mandatory_evidence_required": true,
+    "averaging_forbidden": true
+  },
+  "candidate_files_edited": false,
+  "score_is_not_an_average": true,
+  "candidate": {
+    "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/06-conveyor-views-r7b.png",
+    "sha256": "81079a8e6e6199343c4f4529b317c492252fd0b8eb3b62963e06a55cc01f5f2f",
+    "bytes": 1878486,
+    "dimensions": [
+      1536,
+      1024
+    ]
+  },
+  "status": "HOLD_LEFT_SIDE_CYLINDER_COUNT",
+  "score": 9.0,
+  "scope": "Four static empty-hardware views of the owner-selected line. The exact 13-cylinder count is an authored consistency target for this study only.",
+  "coverage": {
+    "full_sheet_inspected": true,
+    "native_bed_crops_inspected": 4,
+    "nearest_neighbour_magnifications_inspected": [
+      "front",
+      "rear",
+      "left",
+      "right"
+    ]
+  },
+  "authored_target": 13,
+  "source_video_exact_count": null,
+  "owner_baseline_exact_count": null,
+  "physical_body_counts": {
+    "front_three_quarter": 13,
+    "rear_three_quarter": 13,
+    "left_side": 12,
+    "right_side": 13
+  },
+  "scores": {
+    "selected_hardware_identity_and_style": 10,
+    "approved_overall_line_scale": 10,
+    "rear_count_and_density": 10,
+    "front_count": 10,
+    "right_count": 10,
+    "left_count": 9,
+    "framing_and_C1": 10
+  },
+  "resolved_defects": [
+    "The rear now exposes 13 individually rounded carrying cylinders, including the body nearest the intake and the body nearest the silver plate."
+  ],
+  "defects": [
+    {
+      "id": "VIEW-R7B-01",
+      "matrix_cell": "F01",
+      "severity": "blocking_authored_cross_view_count",
+      "panel": "LEFT SIDE",
+      "native_region_xyxy": [
+        237,
+        713,
+        406,
+        799
+      ],
+      "actual_distinct_bodies": 12,
+      "required_distinct_bodies": 13,
+      "finding": "The left side has twelve rounded cylinder profiles from the throat to the plate. The last broad body can create more than one brightness peak; surface highlights are not additional cylinders.",
+      "repair": "Redraw only the left roller bed as 13 separate narrow round cylinders within the same bay bounds. Preserve the now-correct rear, front and right views, overall line size, casings and C1."
+    }
+  ],
+  "regression_note": "Earlier side-count approvals remain historical. R7b is a changed raster and its fresh left-side defect reopens that gate; this review does not assert when the missing body first appeared.",
+  "evidence_manifest": {
+    "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/critic/conveyor-views-r7b-evidence/CROP_MANIFEST.json",
+    "sha256": "bca6bfb8494aaad907ab7600d3ff45331ade032313684117dd3f09a94ae3cffe",
+    "bytes": 1864
+  },
+  "additional_evidence": [
+    {
+      "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/generation/conveyors/builder-inspection/06-r7b-rear-bed.png",
+      "sha256": "aad49412e170d674c54d6f51036259a37b24d10cc2e5f15637fe479712fe94a3",
+      "bytes": 61219,
+      "dimensions": [
+        225,
+        156
+      ]
+    },
+    {
+      "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/generation/conveyors/builder-inspection/06-r7b-rear-bed-4x-inspection.png",
+      "sha256": "85418145d984d80f54658a0eb4ba50dbb518c9494f1b9cf8ce88f379c6050c53",
+      "bytes": 93732,
+      "dimensions": [
+        900,
+        624
+      ]
+    }
+  ],
+  "history": [
+    {
+      "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/critic/CONVEYOR_VIEWS_R6_REVIEW.json",
+      "sha256": "fd9d3eeecef280126929134a012ec8b5369c4003e2931640695c3a188f7704a3",
+      "bytes": 1663
+    }
+  ],
+  "measurement_limit": "Manual inspection counts separate round bodies. Helper brightness traces can locate features but are not cylinder proof. The literal 13-cylinder generation guide is authored guidance, not source footage or evidence that generation obeyed it."
+}

@@ -1,0 +1,85 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/independent_critic",
+  "recorded_utc": "2026-11-28T05:04:49.349058+00:00",
+  "candidate": {
+    "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/11-conveyor-routing-r1.png",
+    "sha256": "4dac2c87a904883a566d6621df43737a017711df93f92600fb209881c9c9cd32",
+    "bytes": 2162769,
+    "dimensions": [
+      1536,
+      1024
+    ]
+  },
+  "status": "HOLD_PHYSICAL_STOPS_AND_INCOMPLETE_DIVERTER_STATES",
+  "score": 8.0,
+  "scope": "Six displayed static routing/buffer state concepts; no actual logic or motion approval.",
+  "coverage": {
+    "panels_inspected": 6,
+    "panels_required": 6
+  },
+  "passing_observations": [
+    "Selected orange/yellow/dark-roller family and C1 proportions retained.",
+    "Diverter has one IN and two OUT branches; merge has two IN and one OUT.",
+    "Merge and alternate panels show one cross-lane gate closed and the other raised/open, with held input goods outside the center.",
+    "Goods have visible carrying surfaces and do not visibly change size between illustrated states."
+  ],
+  "defects": [
+    {
+      "id": "ROUTE-R1-01",
+      "matrix_cell": "R04",
+      "severity": "blocking_visible_affordance",
+      "region_xyxy": [
+        140,
+        735,
+        305,
+        926
+      ],
+      "finding": "WRONG ITEM HELD shows the log on an open incoming lane; no closed cross-lane stop exists between it and the fork. Amber light and FOOD sign do not establish a physical hold.",
+      "repair": "Add a clearly closed gate spanning the incoming path immediately ahead of the log and before the central fork; preserve recoverable pickup access."
+    },
+    {
+      "id": "ROUTE-R1-02",
+      "matrix_cell": "R03",
+      "severity": "blocking_visible_affordance",
+      "region_xyxy": [
+        [
+          1320,
+          164,
+          1447,
+          251
+        ],
+        [
+          1320,
+          665,
+          1447,
+          755
+        ]
+      ],
+      "finding": "READY and FULL buffers have an open far gray end plate without a terminal restraint/output stop. The FULL input gate alone cannot visibly keep stored items from leaving the far end.",
+      "repair": "Show the same clear terminal restraint/output stop across the far end in both panels. Keep READY inlet open and FULL inlet closed, and preserve pickup access."
+    },
+    {
+      "id": "ROUTE-R1-03",
+      "matrix_cell": "R01",
+      "severity": "missing_required_state_evidence",
+      "finding": "Only one diverter selection is depicted. The opposite outgoing selection and blocked-branch state required by the matrix are absent.",
+      "repair": "Provide the opposite branch selection and a blocked-branch state in an additional panel/sheet or complete revised study; do not infer them from a label."
+    }
+  ],
+  "matrix_statuses": {
+    "R01": "PARTIAL: topology present; second selection and blocked branch pending.",
+    "R02": "Two complementary gate states visually coherent; opposing-view requirement and runtime remain separate.",
+    "R03": "FAIL: terminal restraint missing.",
+    "R04": "FAIL: upstream physical stop missing.",
+    "R05": "Not depicted; separate crossing study required."
+  },
+  "no_global_resize_requested": true,
+  "runtime_scores": {
+    "routing_logic": null,
+    "backpressure_and_resume": null,
+    "inventory_ownership": null,
+    "full_functionality": null
+  },
+  "next_action": "Targeted stop repairs and additional diverter state evidence; preserve this candidate and retest actual outputs."
+}

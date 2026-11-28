@@ -1,0 +1,82 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/independent_critic",
+  "recorded_utc": "2026-11-28T05:34:16.984314+00:00",
+  "authority": "Exact owner-selected R1 conveyor and R4 core resources; current 36-cell matrix.",
+  "approval_boundary": "Static illustrated concept only. No native mesh, motion, collision, routing/processing execution or inventory/cash conservation approval.",
+  "runtime_scores": {
+    "motion": null,
+    "collision": null,
+    "routing_and_processing": null,
+    "inventory_conservation": null,
+    "full_functionality": null
+  },
+  "candidate": {
+    "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/13-conveyor-food-machines-r2.png",
+    "sha256": "6498812c08513d066917bac49aad94694eab68c962d380688b1c2ac6f3a43fbb",
+    "bytes": 2066511,
+    "dimensions": [
+      1536,
+      1024
+    ]
+  },
+  "status": "HOLD_FULL_STATE_PHYSICAL_STOPS",
+  "score": 9.0,
+  "scope": "Four food-machine static studies; F02\u2013F05.",
+  "coverage": {
+    "full_panels_inspected": 4,
+    "native_closeups_inspected": [
+      "full-throat-native.png",
+      "full-output-native.png"
+    ]
+  },
+  "resolved_defects": [
+    "FOOD-R1-01: enclosed orange/blue supports replace exposed legs and side motor.",
+    "FOOD-R1-03: bread units reduced to the approved compact family.",
+    "Waiting fish are now located before the cooker throat rather than behind the remote feeder-head stop."
+  ],
+  "defects": [
+    {
+      "id": "FOOD-R2-01",
+      "matrix_cell": "F03",
+      "severity": "blocking_hold_visibility",
+      "region_xyxy": [
+        855,
+        220,
+        1100,
+        370
+      ],
+      "finding": "The full-state red-light post has moved to the throat, but an unambiguous closed cross-lane gate is not visible spanning the incoming path.",
+      "repair": "Show a clear physical bar/plate across the whole cooker infeed immediately before the throat, with both raw fish upstream."
+    },
+    {
+      "id": "FOOD-R2-02",
+      "matrix_cell": "F03",
+      "severity": "blocking_terminal_restraint_regression",
+      "region_xyxy": [
+        1210,
+        325,
+        1525,
+        520
+      ],
+      "finding": "The full output ends in a flush gray cap with vertical fascia below the carrying level. The previous raised stock restraint has been lost in the casing redraw.",
+      "repair": "Restore a raised terminal restraint across the far end of the FULL receiver. Normal continuing OUT interfaces may remain open; do not add a blocking wall at every joined transfer."
+    }
+  ],
+  "scores": {
+    "selected_style_and_scale": 10,
+    "canonical_forms": 10,
+    "normal_typed_connections": 10,
+    "full_state_hold_visibility": 8,
+    "full_receiver_restraint": 8,
+    "layout": 10
+  },
+  "matrix_statuses": {
+    "F01": "Not assessed by this sheet; exact F01 view/fit requirements remain assigned to the selected fishing line and its additional views.",
+    "F02": "PASS for displayed raw left-input connection and readable access.",
+    "F03": "HOLD for full-state throat and terminal stops.",
+    "F04": "PASS for displayed meat-to-meal input/output concept.",
+    "F05": "PASS for displayed wheat-to-bread concept and corrected loaf size."
+  },
+  "next_action": "Repair only FULL panel physical stops, preserve successful supports, resource sizes and other panels, then regress the entire sheet."
+}

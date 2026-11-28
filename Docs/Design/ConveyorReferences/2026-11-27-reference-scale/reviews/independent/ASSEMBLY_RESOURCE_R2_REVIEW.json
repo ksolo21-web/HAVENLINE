@@ -1,0 +1,97 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/independent_critic",
+  "recorded_utc": "2026-11-28T05:02:08.529248+00:00",
+  "candidate": {
+    "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/05-assembly-resource-scale-r2.png",
+    "sha256": "b03b8badcc393d4dc5f2498cea222e631f659ddb96724036c90f04f57872e530",
+    "bytes": 1813334,
+    "dimensions": [
+      1536,
+      1024
+    ]
+  },
+  "reference": {
+    "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/source/identity-boards/boards/04-assemblies-containers-SOURCE_IDENTITY_ONLY.png",
+    "sha256": "0fce552a6e5a9cddb6bf70aa737a917a408c33057f77b632f7cc7c2cb70ee5dd",
+    "bytes": 1080953,
+    "dimensions": [
+      1260,
+      1178
+    ]
+  },
+  "status": "PASS_SIX_STATIC_IDENTITIES_AND_COMPACT_SCALE",
+  "score": 10.0,
+  "scope": "Six displayed single-unit assembly/container/valuable resource panels only.",
+  "coverage": {
+    "panels_inspected": 6,
+    "panels_required": 6,
+    "native_unit_closeups_inspected": 6,
+    "additional_reference_closeups": [
+      "drive_assembly",
+      "relay_component"
+    ]
+  },
+  "per_resource": [
+    {
+      "key": "mechanical_parts",
+      "label": "Mechanical parts",
+      "score": 10.0,
+      "status": "PASS_SCOPED_STATIC",
+      "finding": "Eight broad gear teeth, central hole and metal rim."
+    },
+    {
+      "key": "drive_assembly",
+      "label": "Drive assembly",
+      "score": 10.0,
+      "status": "PASS_SCOPED_STATIC",
+      "finding": "Navy housing with three front ribs, four orange-lid bolts, opposing shafts and mounting feet."
+    },
+    {
+      "key": "traction_kit",
+      "label": "Mobility assembly",
+      "score": 10.0,
+      "status": "PASS_SCOPED_STATIC",
+      "finding": "Orange shaft/spool between metal flanges on the navy bracket and timber base."
+    },
+    {
+      "key": "cargo",
+      "label": "Cargo",
+      "score": 10.0,
+      "status": "PASS_SCOPED_STATIC",
+      "finding": "Timber crate, green cover, rope, tag and corner hardware."
+    },
+    {
+      "key": "premium_gems",
+      "label": "Gems",
+      "score": 10.0,
+      "status": "PASS_SCOPED_STATIC",
+      "finding": "Faceted cyan rectangular gem, kept compact."
+    },
+    {
+      "key": "relay_component",
+      "label": "Relay component",
+      "score": 10.0,
+      "status": "PASS_SCOPED_STATIC",
+      "finding": "Gray handled enclosure, cyan front light and three side vent slats."
+    }
+  ],
+  "evidence": [
+    "assembly-r2-evidence/actual-unit-closeups.png",
+    "assembly-r2-evidence/relay-inspection.png",
+    "assembly-r2-evidence/CROP_MANIFEST.json"
+  ],
+  "visible_checks": [
+    "Identity details retained at compact C1-relative size.",
+    "All labels and anchors inspected; full framing and ground support.",
+    "No duplicate miniature-stock group or unsupported object."
+  ],
+  "active_defects": [],
+  "not_approved": {
+    "carry_stock_belt_storage_counter_contexts": null,
+    "additional_angles": null,
+    "native_model_geometry": null,
+    "runtime_functionality": null,
+    "all_conveyor_completion": null
+  }
+}

@@ -1,0 +1,120 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/independent_critic",
+  "recorded_utc": "2026-11-28T05:02:08.529248+00:00",
+  "status": "PASS_27_OF_27_SINGLE_UNIT_STATIC_SCALE_IDENTITIES",
+  "score": 10.0,
+  "scope": "Four actual reviewed scale sheets, canonical single-unit static identities and C1-relative presentation only.",
+  "canonical_count": 27,
+  "unique_canonical_count": 27,
+  "sets": [
+    {
+      "group": "core",
+      "candidate": {
+        "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/02-core-resource-scale-r4.png",
+        "sha256": "de3e99e6602e18ee5e2d4619e3761964d6ccab2af8a2ee55b17b0ab3fb316da7",
+        "bytes": 1696844,
+        "dimensions": [
+          1536,
+          1024
+        ]
+      },
+      "canonical_keys": [
+        "money",
+        "meat",
+        "wood",
+        "fish"
+      ],
+      "count": 4,
+      "review_path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/critic/CORE_R4_REVIEW.json",
+      "review_sha256": "99f3332e2ebaeed182108e60492789a831059e582a5113214bb2352c12353e27",
+      "score": 10.0
+    },
+    {
+      "group": "raw",
+      "candidate": {
+        "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/03-raw-resource-scale-r2.png",
+        "sha256": "827cab0dbe3911ae754e56471393a136b4e946b77eb1bf126dfc096139214414",
+        "bytes": 1847980,
+        "dimensions": [
+          1024,
+          1536
+        ]
+      },
+      "canonical_keys": [
+        "stone",
+        "metal",
+        "coal",
+        "slate",
+        "wheat",
+        "hide",
+        "fur",
+        "crude_oil"
+      ],
+      "count": 8,
+      "review_path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/critic/RAW_RESOURCE_R2_REVIEW.json",
+      "review_sha256": "16ab20f62a5be46a0ac3031a9a103e7ff4036b1d8c83339922d8b4f7912affeb",
+      "score": 10.0
+    },
+    {
+      "group": "processed",
+      "candidate": {
+        "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/04-processed-resource-scale-r2.png",
+        "sha256": "7f500471166c172a3d849cc2be4956b700418b2e66d42af678976817fb5f1cc8",
+        "bytes": 1862096,
+        "dimensions": [
+          1254,
+          1254
+        ]
+      },
+      "canonical_keys": [
+        "meal",
+        "cooked_fish",
+        "bread",
+        "planks",
+        "blocks",
+        "steel",
+        "iron_bars",
+        "sheet_metal",
+        "fuel"
+      ],
+      "count": 9,
+      "review_path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/critic/PROCESSED_RESOURCE_R2_REVIEW.json",
+      "review_sha256": "d5584f48117dcac5d6ef24af73a11dabbb16476bc7c893aaafbbfc42e6534a86",
+      "score": 10.0
+    },
+    {
+      "group": "assemblies",
+      "candidate": {
+        "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/05-assembly-resource-scale-r2.png",
+        "sha256": "b03b8badcc393d4dc5f2498cea222e631f659ddb96724036c90f04f57872e530",
+        "bytes": 1813334,
+        "dimensions": [
+          1536,
+          1024
+        ]
+      },
+      "canonical_keys": [
+        "mechanical_parts",
+        "drive_assembly",
+        "traction_kit",
+        "cargo",
+        "premium_gems",
+        "relay_component"
+      ],
+      "count": 6,
+      "review_path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/critic/ASSEMBLY_RESOURCE_R2_REVIEW.json",
+      "review_sha256": "8708392bafa67e5838aff0301c42466e518bb574f9f52d4dcec7aa90c364fbcc",
+      "score": 10.0
+    }
+  ],
+  "owner_authority": "Core R4 is the selected ordinary-unit baseline. Selected conveyor R1 larger fish and later species/type-dependent fish/meat variations remain permitted.",
+  "not_completion_claims": [
+    "Not all conveyor modules/interfaces.",
+    "Not full 360/native models.",
+    "Not carry, stock, belt, storage or counter contexts.",
+    "Not runtime functionality, motion, collision or quantity conservation."
+  ],
+  "whole_task_score": null,
+  "next_action": "Continue remaining conveyor coverage and fish/meat/context renders; preserve these four passing sheets."
+}

@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/independent_critic",
+  "recorded_utc": "2026-11-28T05:27:10.654797+00:00",
+  "authority": "Exact owner-selected conveyor R1 and core R4; current required 36-cell matrix; register-free bulk self-service contract.",
+  "approval_boundary": "Static illustrated concepts only. No native mesh, motion cycle, collision, item/cash conservation, routing/processing implementation or runtime conformity approval.",
+  "runtime_scores": {
+    "motion": null,
+    "collision": null,
+    "inventory_and_cash_conservation": null,
+    "routing_and_processing": null,
+    "full_functionality": null
+  },
+  "no_global_resize_requested": true,
+  "candidate": {
+    "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/19-conveyor-crossing-r2.png",
+    "sha256": "22f6a8099ae786dbbde58d02ab7db83a614d961bd22c3de9f664ac977ecd618f",
+    "bytes": 2069862,
+    "dimensions": [
+      1536,
+      1024
+    ]
+  },
+  "status": "PASS_STATIC_R05",
+  "score": 10,
+  "scope": "R05 authored two-level crossing: four displayed views, independent loaded routes, lower headroom and outside pedestrian approach.",
+  "coverage": {
+    "full_panels_inspected": 4,
+    "native_headroom_closeup_inspected": true
+  },
+  "scores": {
+    "selected_style_and_c1_scale": 10,
+    "independent_route_geometry": 10,
+    "supported_rises_bridge_and_falls": 10,
+    "load_orientation_consistency": 10,
+    "visible_static_load_clearance": 10,
+    "outside_gate_access": 10,
+    "layout": 10
+  },
+  "resolved_defects": [
+    "CROSS-R1-01: side-view lower salmon now follows its perpendicular lower lane."
+  ],
+  "observations": [
+    "The lower fish faces along its own lane, rather than broadside along the upper route.",
+    "The fin and tail remain visibly separated from the bridge underside by a continuous strip of empty background; the gap is smaller than R1 but present in the actual native raster.",
+    "The foreshortened lower fish is not treated as a shrunk world-space load. Upper and lower loads remain in the approved large salmon family.",
+    "The other panels retain supported independent routes and the clear outside walkway to the gate."
+  ],
+  "defects": [],
+  "matrix_statuses": {
+    "R05": "PASS all mandatory static views and largest-load appearance."
+  },
+  "evidence_manifest": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/critic/crossing-r2-evidence/CROP_MANIFEST.json",
+  "clearance_boundary": "Visible raster clearance only; no millimeter margin, swept collision volume or simulation tolerance is certified."
+}

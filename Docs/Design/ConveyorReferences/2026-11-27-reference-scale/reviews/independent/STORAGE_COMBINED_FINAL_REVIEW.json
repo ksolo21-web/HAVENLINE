@@ -1,0 +1,84 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/independent_critic",
+  "recorded_utc": "2026-11-28T05:27:10.654797+00:00",
+  "authority": "Exact owner-selected conveyor R1 and core R4; current required 36-cell matrix; register-free bulk self-service contract.",
+  "approval_boundary": "Static illustrated concepts only. No native mesh, motion cycle, collision, item/cash conservation, routing/processing implementation or runtime conformity approval.",
+  "runtime_scores": {
+    "motion": null,
+    "collision": null,
+    "inventory_and_cash_conservation": null,
+    "routing_and_processing": null,
+    "full_functionality": null
+  },
+  "no_global_resize_requested": true,
+  "candidates": [
+    {
+      "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/12-conveyor-storage-r2.png",
+      "sha256": "489dc33bfbdbdd3ad9a0578512dc762804e11b2c56dcce357cf08ee9ddc270fa",
+      "bytes": 2043294,
+      "dimensions": [
+        1672,
+        941
+      ]
+    },
+    {
+      "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/12b-utility-cassette-detail-r1.png",
+      "sha256": "e96baba254c57373537579251577a4f5c696aac4949f22c94f7056c6b41f80c0",
+      "bytes": 2029046,
+      "dimensions": [
+        1672,
+        941
+      ]
+    }
+  ],
+  "status": "PASS_STATIC_S01_THROUGH_S06_COMBINED",
+  "score": 10,
+  "scope": "Combined storage R2 exterior/interior sheet plus new utility wall-transfer cutaway. Both exact files are required for this approval.",
+  "coverage": {
+    "storage_panels_inspected": 4,
+    "utility_detail_inspected": 1,
+    "native_utility_detail_closeup_inspected": true,
+    "required_cells": [
+      "S01",
+      "S02",
+      "S03",
+      "S04",
+      "S05",
+      "S06"
+    ]
+  },
+  "scores": {
+    "protected_house_and_port_positions": 10,
+    "canonical_resource_props": 10,
+    "utility_intake_hold": 10,
+    "distinct_visible_sleeve_handoffs": 10,
+    "local_shuttle_lift_and_shelf_support": 10,
+    "food_shelf_and_separate_ports": 10,
+    "selected_style": 10,
+    "layout": 10
+  },
+  "resolved_defects": [
+    "ST-R2-01 / remaining ST-R1-01: new raised cutaway exposes separate IN-to-RECEIVE and OUT-to-DISPATCH local positions."
+  ],
+  "observations": [
+    "IN and OUT retain distinct low-left sleeves; arrows and a closed receiving gate show inward and outward directions.",
+    "The raised cutaway exposes supported local RECEIVE and DISPATCH branches, local shuttle/lift and a supported selected mineral-shelf interface.",
+    "Unchanged storage R2 supplies rear shelf-height food ports, local food shuttle, closed raw-food cabinets and protected front/window/vent/fuel-hatch context."
+  ],
+  "defects": [],
+  "matrix_statuses": {
+    "S01": "PASS for mandatory static geometry/views using both exact candidates.",
+    "S02": "PASS for mandatory static geometry/views using both exact candidates.",
+    "S03": "PASS for mandatory static geometry/views using both exact candidates.",
+    "S04": "PASS for mandatory static geometry/views using both exact candidates.",
+    "S05": "PASS for mandatory static geometry/views using both exact candidates.",
+    "S06": "PASS for mandatory static geometry/views using both exact candidates."
+  },
+  "evidence_manifest": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/critic/storage-detail-r1-evidence/CROP_MANIFEST.json",
+  "prior_reviews": [
+    "/workspace/scratch/59f000bd1476/conveyor-reference-revision/critic/STORAGE_R1_REVIEW.json",
+    "/workspace/scratch/59f000bd1476/conveyor-reference-revision/critic/STORAGE_R2_REVIEW.json"
+  ],
+  "mechanism_boundary": "The exposed mechanism is an authored local-transfer concept. Motion, controller sequencing, request dispatch, inventory ownership and prevention of circulation loops are not proved."
+}

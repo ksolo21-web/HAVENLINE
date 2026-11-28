@@ -1,0 +1,166 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/independent_critic",
+  "session": "Havenline conveyor continuation 2026-11-28",
+  "recorded_utc": "2026-11-28T06:03:06.280303+00:00",
+  "independent": true,
+  "independence": "Reviewer did not generate or modify candidate images; only inspection crops were created.",
+  "candidate_files_edited": false,
+  "scope_boundary": "Static illustrated reference sheets only; no native model, gameplay, motion, collision, throughput or inventory approval.",
+  "runtime_approved": false,
+  "policy": {
+    "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Production/REFERENCE_ACCEPTANCE_POLICY.json",
+    "sha256": "c34c0cbe5b6d473be40ee5f0f0e08aab8f6ff42f97cfe2e7c93b2694e4dbaf43",
+    "bytes": 12510
+  },
+  "numeric_gate": {
+    "reference_minimum": 9.9,
+    "existing_exact_10_retained": true,
+    "averaging_forbidden": true,
+    "all_mandatory_evidence_required": true
+  },
+  "owner_baselines": [
+    {
+      "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/01-reference-line-r1.png",
+      "sha256": "25d9b7f98f5d9407c240a8f0b242bbba6775d0e7fb60cbc720d526514d309249",
+      "bytes": 2060476,
+      "dimensions": [
+        1536,
+        1024
+      ]
+    },
+    {
+      "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/02-core-resource-scale-r4.png",
+      "sha256": "de3e99e6602e18ee5e2d4619e3761964d6ccab2af8a2ee55b17b0ab3fb316da7",
+      "bytes": 1696844,
+      "dimensions": [
+        1536,
+        1024
+      ]
+    }
+  ],
+  "candidate": {
+    "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/06-conveyor-views-r8.png",
+    "sha256": "fbd8559105c16700034a1ded974956c5cd406a8f2caf9e8002461e0bfe9c3ba2",
+    "bytes": 1881123,
+    "dimensions": [
+      1536,
+      1024
+    ]
+  },
+  "matrix_cell": "F01",
+  "status": "HOLD_LEFT_SIDE_CYLINDER_COUNT",
+  "score": 9.0,
+  "all_mandatory_checks_pass": false,
+  "coverage": {
+    "full_sheet_inspected": true,
+    "native_bed_details_inspected": 4,
+    "nearest_neighbour_magnifications_inspected": 4
+  },
+  "scores": {
+    "hardware_identity_and_style": 10,
+    "selected_overall_line_scale": 10,
+    "front_count": 10,
+    "rear_count": 10,
+    "left_count": 9.0,
+    "right_count": 10,
+    "framing_and_character": 10
+  },
+  "authored_target": 13,
+  "source_video_exact_count": null,
+  "owner_baseline_exact_count": null,
+  "physical_body_counts": {
+    "front_three_quarter": 13,
+    "rear_three_quarter": 13,
+    "left_side": 12,
+    "right_side": 13
+  },
+  "defects": [
+    {
+      "id": "F01-R8-01",
+      "severity": "blocking",
+      "region": [
+        232,
+        710,
+        406,
+        803
+      ],
+      "finding": "Left side exposes twelve separate rounded cylinders; front, rear and right expose thirteen. Distinct highlights on one broad body were not counted as extra cylinders.",
+      "repair": "Replace only the left bed within the same bay with thirteen individually rounded cylinders. Preserve the other three views and all assembly/character proportions."
+    }
+  ],
+  "evidence": [
+    {
+      "path": "/workspace/scratch/9a64cbeeb049/conveyor-continuation/reviews/initial-evidence/06-conveyor-views-r8-front-3x.png",
+      "sha256": "3f0717c616477dd233ca19abdc190d0dd5b797e342635b18643a1d4291de8702",
+      "bytes": 95937,
+      "dimensions": [
+        687,
+        522
+      ]
+    },
+    {
+      "path": "/workspace/scratch/9a64cbeeb049/conveyor-continuation/reviews/initial-evidence/06-conveyor-views-r8-front-native.png",
+      "sha256": "9bb6807ec1a91000a8174e1bee29586a822d7fc82d328bffbafd7b6f6ff6f409",
+      "bytes": 65676,
+      "dimensions": [
+        229,
+        174
+      ]
+    },
+    {
+      "path": "/workspace/scratch/9a64cbeeb049/conveyor-continuation/reviews/initial-evidence/06-conveyor-views-r8-left-3x.png",
+      "sha256": "d2b87410fdd60cbf60d35dd400e6e0aff2615d2137640518cf036a3e0756af6b",
+      "bytes": 38118,
+      "dimensions": [
+        522,
+        279
+      ]
+    },
+    {
+      "path": "/workspace/scratch/9a64cbeeb049/conveyor-continuation/reviews/initial-evidence/06-conveyor-views-r8-left-native.png",
+      "sha256": "e8d58a365dd1db8781dccb167bfdbd32f5a940c1ba921c8bb360d921ef1d05a7",
+      "bytes": 24887,
+      "dimensions": [
+        174,
+        93
+      ]
+    },
+    {
+      "path": "/workspace/scratch/9a64cbeeb049/conveyor-continuation/reviews/initial-evidence/06-conveyor-views-r8-rear-3x.png",
+      "sha256": "cfe82799a4f0809ab50ee8f42d86d9b11f111690559ed446ece599a6b796e613",
+      "bytes": 97699,
+      "dimensions": [
+        696,
+        513
+      ]
+    },
+    {
+      "path": "/workspace/scratch/9a64cbeeb049/conveyor-continuation/reviews/initial-evidence/06-conveyor-views-r8-rear-native.png",
+      "sha256": "49cca105e2e62b19873493c385e2b9d24c9022cfd3faf7428e4a473c01536131",
+      "bytes": 67349,
+      "dimensions": [
+        232,
+        171
+      ]
+    },
+    {
+      "path": "/workspace/scratch/9a64cbeeb049/conveyor-continuation/reviews/initial-evidence/06-conveyor-views-r8-right-3x.png",
+      "sha256": "fe713926a5826d1eb76f440115bcffa5d7599116c6fc3f24ddec6fdecef23f4b",
+      "bytes": 40478,
+      "dimensions": [
+        573,
+        285
+      ]
+    },
+    {
+      "path": "/workspace/scratch/9a64cbeeb049/conveyor-continuation/reviews/initial-evidence/06-conveyor-views-r8-right-native.png",
+      "sha256": "b9a47b9d198ea62fa4be9bb8e5ec7dfe26f48a53d747df126bc632769853993d",
+      "bytes": 26421,
+      "dimensions": [
+        191,
+        95
+      ]
+    }
+  ]
+}

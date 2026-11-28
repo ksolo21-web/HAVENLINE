@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "updated_utc": "2026-11-28T05:21:24.376359+00:00",
+  "stage": "FULL_CONVEYOR_RENDER_SCOPE_AND_VARIANT_HANDOFF_READY",
+  "task_owner": "/root/processing_plan",
+  "art_commit": "2fc474bbbb03d9a242b216d33e8588e028de4ce5",
+  "preserved_gameplay_commit": "ea6e4896cc6692ee84b56f89e127feaa606eb370",
+  "completed": {
+    "locked_video_hashes_reverified": 2,
+    "canonical_families_mapped": 27,
+    "actual_source_frames_visually_inspected": 6,
+    "source_facts_recorded": 18,
+    "frozen_source_snapshots": 44,
+    "mandatory_acceptance_checks_defined": 20,
+    "identity_reference_boards_independently_reviewed": 4,
+    "identity_source_crop_and_board_bindings_verified": 27,
+    "owner_selected_static_baselines": 2,
+    "original_A_partial_native_playback_runs": 2,
+    "meat_source_reference_boards_reviewed": 2,
+    "meat_source_variants_verified": 10,
+    "conveyor_coverage_cells_defined": 36,
+    "conveyor_study_groups": 9,
+    "legacy_conveyor_images_hash_matched_and_viewed": 7,
+    "handoff_integrity_checks_passed": 12
+  },
+  "not_completed": [
+    "Additional conveyor views and resource renders requested by owner",
+    "New fish type/size and animal-meat variant render approval",
+    "Native physical-size implementation",
+    "Complete continuous source/candidate motion comparison",
+    "Functional gameplay retest",
+    "Whole-task final approval"
+  ],
+  "active_gameplay_files_changed": false,
+  "historical_art_or_export_files_changed": false,
+  "next_action": "Build all required conveyor studies against selected R1/R4; planner assigned storage/counter/camp sheets. Independent visual review remains required; runtime owner integrates and proves actual motion separately.",
+  "independent_plan_review": "NOT_YET_REVIEWED",
+  "revision_score": null,
+  "revision_approved": false,
+  "identity_board_review": {
+    "path": "IDENTITY_BOARD_COVERAGE_REVIEW.json",
+    "sha256": "4efa606d27b4327a877682af11bdf1233bb0b5981f5e479f2e8d28b94da6f532",
+    "score": 10.0,
+    "scope": "Identity-reference coverage and custody only",
+    "runtime_or_scale_approval": false
+  },
+  "latest_owner_preference": "LATEST_OWNER_PREFERENCE.json",
+  "original_source_playback_ledger": "ORIGINAL_PLAYBACK_LEDGER.json",
+  "variant_handoff": "VARIANT_SCALE_HANDOFF.json",
+  "meat_identity_review": "MEAT_IDENTITY_COVERAGE_REVIEW.json",
+  "whole_task_complete": false,
+  "integration_contracts": [
+    "../integration/RESOURCE_VARIANT_CONTRACT.json",
+    "../integration/CONVEYOR_FUNCTION_CONTRACT.md",
+    "../integration/SOURCE_PLAYBACK_LEDGER.json",
+    "../integration/CONTRACT_VALIDATION.json"
+  ],
+  "conveyor_render_matrix": "REQUIRED_CONVEYOR_RENDER_MATRIX.json"
+}

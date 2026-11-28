@@ -1,0 +1,800 @@
+{
+  "schema_version": 1,
+  "reviewed_utc": "2026-11-28T04:28:37.535020+00:00",
+  "reviewer": "/root/processing_plan",
+  "builder": "/root/resource_inventory",
+  "scope": "Independent identity-source contact coverage and custody only. Not new render, world scale, native asset, motion, or functionality approval.",
+  "verdict": "PASS_IDENTITY_REFERENCE_COVERAGE_ONLY",
+  "score": 10.0,
+  "mandatory_checks_all_pass": true,
+  "manifest": {
+    "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/source/identity-boards/IDENTITY_BOARD_MANIFEST.json",
+    "sha256": "e227b10d11c2d663a009724ffb933dac7421cfb98495417e5b310ca2a0206a94"
+  },
+  "summary_checks": {
+    "exact_27_keys_once": true,
+    "four_boards_partition_4_8_9_6": true,
+    "all_board_keys_once": true,
+    "all_27_source_bindings_and_native_crops": true,
+    "all_27_native_board_placements": true,
+    "manifest_unchanged": true,
+    "source_only_scope_clear_on_all_four_images": true,
+    "all_27_identity_shapes_visible_and_labels_correct": true,
+    "C1_complete_unscaled_crop": true
+  },
+  "actual_images_viewed": [
+    {
+      "id": "01-core",
+      "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/source/identity-boards/boards/01-core-SOURCE_IDENTITY_ONLY.png",
+      "sha256": "fbf18e59bd702d3dc2d2912f29a7592416f2d28f9730e5591958a19ab7b7faca",
+      "identity_count": 4,
+      "displayed_keys": [
+        "money",
+        "meat",
+        "wood",
+        "fish"
+      ],
+      "file_check": true,
+      "actual_image_visually_inspected": true
+    },
+    {
+      "id": "02-raw",
+      "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/source/identity-boards/boards/02-raw-SOURCE_IDENTITY_ONLY.png",
+      "sha256": "dd8849c0945de8434a0fa6d05fe0404b0c8b9d623736b3c722916232be071a16",
+      "identity_count": 8,
+      "displayed_keys": [
+        "stone",
+        "metal",
+        "coal",
+        "slate",
+        "wheat",
+        "hide",
+        "fur",
+        "crude_oil"
+      ],
+      "file_check": true,
+      "actual_image_visually_inspected": true
+    },
+    {
+      "id": "03-processed",
+      "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/source/identity-boards/boards/03-processed-SOURCE_IDENTITY_ONLY.png",
+      "sha256": "c665e8cd14a4e46b89f5ce97ae6ac98a5289810cd9346745527cbc76491fcc9f",
+      "identity_count": 9,
+      "displayed_keys": [
+        "meal",
+        "cooked_fish",
+        "bread",
+        "planks",
+        "blocks",
+        "steel",
+        "iron_bars",
+        "sheet_metal",
+        "fuel"
+      ],
+      "file_check": true,
+      "actual_image_visually_inspected": true
+    },
+    {
+      "id": "04-assemblies-containers",
+      "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/source/identity-boards/boards/04-assemblies-containers-SOURCE_IDENTITY_ONLY.png",
+      "sha256": "0fce552a6e5a9cddb6bf70aa737a917a408c33057f77b632f7cc7c2cb70ee5dd",
+      "identity_count": 6,
+      "displayed_keys": [
+        "mechanical_parts",
+        "drive_assembly",
+        "traction_kit",
+        "cargo",
+        "premium_gems",
+        "relay_component"
+      ],
+      "file_check": true,
+      "actual_image_visually_inspected": true
+    }
+  ],
+  "visual_findings": [
+    "All four board headers explicitly state source identity only and no relative/world scale.",
+    "All 27 canonical IDs and display names are visible, with raw/processed, ore/coal/slate, crude/fuel and assembly distinctions retained.",
+    "The corrected planks crop includes both ends of the approved plank bundle.",
+    "C1 crop shows the complete approved front character including head, fingertips and boots; no numerical world-unit scale is encoded.",
+    "Original source panel borders/lettering remain in several crops; they do not obscure the resource and do not affect identity-only use."
+  ],
+  "identities": [
+    {
+      "key": "money",
+      "checks": {
+        "canonical_path": true,
+        "canonical_display_and_kind": true,
+        "source_sha256": true,
+        "source_git_blob": true,
+        "source_dimensions": true,
+        "crop_sha256": true,
+        "native_crop_exact_pixels": true,
+        "crop_dimensions": true,
+        "no_resampling": true
+      },
+      "source_sha256": "ad719c6bda631bfbbb56dcb47b1c70fba31502cd9a82768637fb0632f8f48bae",
+      "source_git_blob": "74fe2dd9fcca9e2ad8e266b89d7bba61f5c8df21",
+      "crop_sha256": "41f8205a96bebc0b9aaa74a552d496e91db181d2ba938e1ac6535e041134bddb"
+    },
+    {
+      "key": "meat",
+      "checks": {
+        "canonical_path": true,
+        "canonical_display_and_kind": true,
+        "source_sha256": true,
+        "source_git_blob": true,
+        "source_dimensions": true,
+        "crop_sha256": true,
+        "native_crop_exact_pixels": true,
+        "crop_dimensions": true,
+        "no_resampling": true
+      },
+      "source_sha256": "29671642ed2fbb9d4a7e39b34923f3b9576ee95282ffcea5bb5c16b4f3496254",
+      "source_git_blob": "12dd418cf4ed3e38770a67442bb39beb6cf9180b",
+      "crop_sha256": "d9f0be6702a08ef584f819085bf390e4a54700dfde7cd356902204f08495fb73"
+    },
+    {
+      "key": "wood",
+      "checks": {
+        "canonical_path": true,
+        "canonical_display_and_kind": true,
+        "source_sha256": true,
+        "source_git_blob": true,
+        "source_dimensions": true,
+        "crop_sha256": true,
+        "native_crop_exact_pixels": true,
+        "crop_dimensions": true,
+        "no_resampling": true
+      },
+      "source_sha256": "3b528ed8c5485f4c7433cb82223c7eb8081e5858bf5f90f7222778106719641b",
+      "source_git_blob": "c94ba1d94a3d7fdbb5c9cc096c5b3f30eb180cb4",
+      "crop_sha256": "af63f0998871f59c36974ba6c80af3db2cbecd4262bec08ade75e3b49baa127d"
+    },
+    {
+      "key": "fish",
+      "checks": {
+        "canonical_path": true,
+        "canonical_display_and_kind": true,
+        "source_sha256": true,
+        "source_git_blob": true,
+        "source_dimensions": true,
+        "crop_sha256": true,
+        "native_crop_exact_pixels": true,
+        "crop_dimensions": true,
+        "no_resampling": true
+      },
+      "source_sha256": "b62af41e1c8e96ecd37016ded5b74f3ae34e5beb3fd3d2ad11b02d4498e80901",
+      "source_git_blob": "e69e7fa6d68c2a112e8b12e9ae69e567e7a5c1fd",
+      "crop_sha256": "5ec090847c0b406132e96de513524c4cbe77f6aad94327739f99dd54c39ca1cc"
+    },
+    {
+      "key": "stone",
+      "checks": {
+        "canonical_path": true,
+        "canonical_display_and_kind": true,
+        "source_sha256": true,
+        "source_git_blob": true,
+        "source_dimensions": true,
+        "crop_sha256": true,
+        "native_crop_exact_pixels": true,
+        "crop_dimensions": true,
+        "no_resampling": true
+      },
+      "source_sha256": "5360d9d44ed505f48c788b870e322105edce48c726525252d0e884549800016e",
+      "source_git_blob": "c2a7e1a7cb2caa8fb1dc80699b5d02604adadbe1",
+      "crop_sha256": "53f143464409a55faad958fe50f8b06f432cbe0e83ef733e811e01ba4246fba2"
+    },
+    {
+      "key": "metal",
+      "checks": {
+        "canonical_path": true,
+        "canonical_display_and_kind": true,
+        "source_sha256": true,
+        "source_git_blob": true,
+        "source_dimensions": true,
+        "crop_sha256": true,
+        "native_crop_exact_pixels": true,
+        "crop_dimensions": true,
+        "no_resampling": true
+      },
+      "source_sha256": "9e6965c343e017052d14800a7c3d3673ec396552e1f648cac15e7fb26a5b4d4a",
+      "source_git_blob": "c3bdeddef77ddf35f1a32bfc598bea809bb816c8",
+      "crop_sha256": "8bec49ba1c9afb1d558424cf15e1bbf1deb1f46ec034695a90517f33d30a30a9"
+    },
+    {
+      "key": "coal",
+      "checks": {
+        "canonical_path": true,
+        "canonical_display_and_kind": true,
+        "source_sha256": true,
+        "source_git_blob": true,
+        "source_dimensions": true,
+        "crop_sha256": true,
+        "native_crop_exact_pixels": true,
+        "crop_dimensions": true,
+        "no_resampling": true
+      },
+      "source_sha256": "860f781f8ac7425e4a7899d1f9748a5e1e5dc920ae33862a7b6180f244703b5d",
+      "source_git_blob": "e2e0e11613a65ad01d3aa3255317a3de3bd89ba9",
+      "crop_sha256": "448205ee95ed7881d23f4fa020885918cdde136877c61f07631c2365aed3d80e"
+    },
+    {
+      "key": "slate",
+      "checks": {
+        "canonical_path": true,
+        "canonical_display_and_kind": true,
+        "source_sha256": true,
+        "source_git_blob": true,
+        "source_dimensions": true,
+        "crop_sha256": true,
+        "native_crop_exact_pixels": true,
+        "crop_dimensions": true,
+        "no_resampling": true
+      },
+      "source_sha256": "651269f18342422fb7aeac236e61c4b7b59c325040dc2a7b71d446afa2c37b64",
+      "source_git_blob": "5280b3c6a69b01b39a1f5577686162228b177008",
+      "crop_sha256": "d5425352beecaf69c186be53db031f9f1fb8975bb82283bf9df624d76112ebe7"
+    },
+    {
+      "key": "wheat",
+      "checks": {
+        "canonical_path": true,
+        "canonical_display_and_kind": true,
+        "source_sha256": true,
+        "source_git_blob": true,
+        "source_dimensions": true,
+        "crop_sha256": true,
+        "native_crop_exact_pixels": true,
+        "crop_dimensions": true,
+        "no_resampling": true
+      },
+      "source_sha256": "ba766eb586fdfbbb459dae6193091f1c9f68c9439f52685351322828102f80ff",
+      "source_git_blob": "a87813358bad204455a32ab6f68bfbebfd28426c",
+      "crop_sha256": "3d9d86f0a72cf95741f71944d927b248c3fde3b9f5c61a2dea04078f6447398b"
+    },
+    {
+      "key": "hide",
+      "checks": {
+        "canonical_path": true,
+        "canonical_display_and_kind": true,
+        "source_sha256": true,
+        "source_git_blob": true,
+        "source_dimensions": true,
+        "crop_sha256": true,
+        "native_crop_exact_pixels": true,
+        "crop_dimensions": true,
+        "no_resampling": true
+      },
+      "source_sha256": "c368be726122e041832c5ded3f197a83e54a42b68b79958cf11f7d178616d1bb",
+      "source_git_blob": "467d026b3e091a970a52d95352335c545bc65d42",
+      "crop_sha256": "c2a0159237541ec041adf495b13fb7093332781defdea0d0c73f1118b8bd2138"
+    },
+    {
+      "key": "fur",
+      "checks": {
+        "canonical_path": true,
+        "canonical_display_and_kind": true,
+        "source_sha256": true,
+        "source_git_blob": true,
+        "source_dimensions": true,
+        "crop_sha256": true,
+        "native_crop_exact_pixels": true,
+        "crop_dimensions": true,
+        "no_resampling": true
+      },
+      "source_sha256": "f056da43eb6845742d211ade47ecd1ac9441d610b3c6fa5ed4ecb91e3e2dc06d",
+      "source_git_blob": "de2c7f0f38f633e0336380337cdb42628ca1b026",
+      "crop_sha256": "e38c12a0001e2bd53f1a6ddbea1f76791c8bbcbfeeca2778494f5355f5045529"
+    },
+    {
+      "key": "crude_oil",
+      "checks": {
+        "canonical_path": true,
+        "canonical_display_and_kind": true,
+        "source_sha256": true,
+        "source_git_blob": true,
+        "source_dimensions": true,
+        "crop_sha256": true,
+        "native_crop_exact_pixels": true,
+        "crop_dimensions": true,
+        "no_resampling": true
+      },
+      "source_sha256": "3730c25937d77fb630b13839ee77438ac8e669944f99df71861f6b4ae5392a9b",
+      "source_git_blob": "7aa7fd133f8681de0038059eff81a9de866a5b9e",
+      "crop_sha256": "0defca304c53ce44b1b351bc256ed7cf5d5134b747d797a82c59e39f66a24212"
+    },
+    {
+      "key": "meal",
+      "checks": {
+        "canonical_path": true,
+        "canonical_display_and_kind": true,
+        "source_sha256": true,
+        "source_git_blob": true,
+        "source_dimensions": true,
+        "crop_sha256": true,
+        "native_crop_exact_pixels": true,
+        "crop_dimensions": true,
+        "no_resampling": true
+      },
+      "source_sha256": "9e18c914d25135cac8bb574d462bc627ee21102cae844cd77dfe10567c6eab33",
+      "source_git_blob": "4734e01e81a8237e1316948f776ea74b73f85f01",
+      "crop_sha256": "3d9ca0cdac584a25129e0ef673c2b8926da456c2a21a7c4581bafa9eabe7b053"
+    },
+    {
+      "key": "cooked_fish",
+      "checks": {
+        "canonical_path": true,
+        "canonical_display_and_kind": true,
+        "source_sha256": true,
+        "source_git_blob": true,
+        "source_dimensions": true,
+        "crop_sha256": true,
+        "native_crop_exact_pixels": true,
+        "crop_dimensions": true,
+        "no_resampling": true
+      },
+      "source_sha256": "f05750afdd656c4aa2f9fae322bfea019ce55b1a6474d57a86cef14444a3cdb5",
+      "source_git_blob": "1ef176e0f029f0bcc7d249e0b3de632b9ddebbfa",
+      "crop_sha256": "74a30db70d87eb2a6f4de2ee4b50778a2a4ffe044198577ce76353db28661d1a"
+    },
+    {
+      "key": "bread",
+      "checks": {
+        "canonical_path": true,
+        "canonical_display_and_kind": true,
+        "source_sha256": true,
+        "source_git_blob": true,
+        "source_dimensions": true,
+        "crop_sha256": true,
+        "native_crop_exact_pixels": true,
+        "crop_dimensions": true,
+        "no_resampling": true
+      },
+      "source_sha256": "ba237b6ecadaba5d8f9ae8f6d55ad5814fdfad5a263617f2d2e0553067dbc815",
+      "source_git_blob": "2579fbaee59b771c9956d72dd580255498ade402",
+      "crop_sha256": "053c2b2abe10e20fe573d733f6a5f2ae3315f146c678c4e43f20e7ce7ef110ce"
+    },
+    {
+      "key": "planks",
+      "checks": {
+        "canonical_path": true,
+        "canonical_display_and_kind": true,
+        "source_sha256": true,
+        "source_git_blob": true,
+        "source_dimensions": true,
+        "crop_sha256": true,
+        "native_crop_exact_pixels": true,
+        "crop_dimensions": true,
+        "no_resampling": true
+      },
+      "source_sha256": "122191d8f989aa3b739e7db9e2d76e8907493034004105ee14a023917ebf62c5",
+      "source_git_blob": "a5228c65e84b1a617d821701680483a959694a41",
+      "crop_sha256": "a22af39c2dffa5dd6a1878f812597eaa66e4a72d0548cfcddf7f8109e7e5621c"
+    },
+    {
+      "key": "blocks",
+      "checks": {
+        "canonical_path": true,
+        "canonical_display_and_kind": true,
+        "source_sha256": true,
+        "source_git_blob": true,
+        "source_dimensions": true,
+        "crop_sha256": true,
+        "native_crop_exact_pixels": true,
+        "crop_dimensions": true,
+        "no_resampling": true
+      },
+      "source_sha256": "1e3fabe7593b89df90e67b4aa2f216e4b9c4414ec9f64d1260f72a9fef8aea19",
+      "source_git_blob": "b596ca8474a546f75d80164e5eb3fa15da22b6e7",
+      "crop_sha256": "313e003d34e9e4f6dea93d327792286a8b4aa3ecf33a53c12e29fa7646b0c949"
+    },
+    {
+      "key": "steel",
+      "checks": {
+        "canonical_path": true,
+        "canonical_display_and_kind": true,
+        "source_sha256": true,
+        "source_git_blob": true,
+        "source_dimensions": true,
+        "crop_sha256": true,
+        "native_crop_exact_pixels": true,
+        "crop_dimensions": true,
+        "no_resampling": true
+      },
+      "source_sha256": "905c74c92209963de34f80efca33408af2738f761ff6c82abe2fefff8f0a4347",
+      "source_git_blob": "8030843df6055046f23b908c5c5c98c4aa6ceb33",
+      "crop_sha256": "5e6f6e9055d8035864e02f57d5448857769baf193cbd7c5529d5828c7b02ca3e"
+    },
+    {
+      "key": "iron_bars",
+      "checks": {
+        "canonical_path": true,
+        "canonical_display_and_kind": true,
+        "source_sha256": true,
+        "source_git_blob": true,
+        "source_dimensions": true,
+        "crop_sha256": true,
+        "native_crop_exact_pixels": true,
+        "crop_dimensions": true,
+        "no_resampling": true
+      },
+      "source_sha256": "df6093297abc33498f2d13b28a301a736f3fefa1625021c05831feeb5c2e86ea",
+      "source_git_blob": "4e7e11601c78ff78122b5a09169679ee0753c67b",
+      "crop_sha256": "42473b69371de1af4e4f208090c0f5e53ce75fbf65f2fb6ccb861c15cf3c9854"
+    },
+    {
+      "key": "sheet_metal",
+      "checks": {
+        "canonical_path": true,
+        "canonical_display_and_kind": true,
+        "source_sha256": true,
+        "source_git_blob": true,
+        "source_dimensions": true,
+        "crop_sha256": true,
+        "native_crop_exact_pixels": true,
+        "crop_dimensions": true,
+        "no_resampling": true
+      },
+      "source_sha256": "b463a0af9aebc6190f81ea9937c3fdf613ae517d0bf86c7ce752ac49bdcc40c1",
+      "source_git_blob": "f66cdc1ffbd49d7a081249ca0a2f944af1477f61",
+      "crop_sha256": "0916f4e9305e424ced7c1f657293a785cb92f46965ac1e52430a4607aa39f671"
+    },
+    {
+      "key": "fuel",
+      "checks": {
+        "canonical_path": true,
+        "canonical_display_and_kind": true,
+        "source_sha256": true,
+        "source_git_blob": true,
+        "source_dimensions": true,
+        "crop_sha256": true,
+        "native_crop_exact_pixels": true,
+        "crop_dimensions": true,
+        "no_resampling": true
+      },
+      "source_sha256": "c9a17187e1009b9d466b024608a28887b86b7746da3aae8b378e6caee649c306",
+      "source_git_blob": "ac409458a51373a09abb3874dc2f82a28eecca2a",
+      "crop_sha256": "4a9298657e7f7cc1d47fd33d1464ae745d6c8d8ddd6b6eb89d4c3589f8f9eeaa"
+    },
+    {
+      "key": "mechanical_parts",
+      "checks": {
+        "canonical_path": true,
+        "canonical_display_and_kind": true,
+        "source_sha256": true,
+        "source_git_blob": true,
+        "source_dimensions": true,
+        "crop_sha256": true,
+        "native_crop_exact_pixels": true,
+        "crop_dimensions": true,
+        "no_resampling": true
+      },
+      "source_sha256": "80dea343f57bccedf02731fefe4e8ca3cff1c437cb258576d691c20b8885397f",
+      "source_git_blob": "7a36497192bc5d064df91cb48410d48134377c16",
+      "crop_sha256": "1602dd02e2afc0903447f4abe3ef5180776f9e0f102491a14a3d7645177ef3e9"
+    },
+    {
+      "key": "drive_assembly",
+      "checks": {
+        "canonical_path": true,
+        "canonical_display_and_kind": true,
+        "source_sha256": true,
+        "source_git_blob": true,
+        "source_dimensions": true,
+        "crop_sha256": true,
+        "native_crop_exact_pixels": true,
+        "crop_dimensions": true,
+        "no_resampling": true
+      },
+      "source_sha256": "69646d6f98f24001a9fe87b658a17d13af1c15407174e1bcc26146298e6eef93",
+      "source_git_blob": "6072aa01f55399c743b066f70a50a25b7727dc91",
+      "crop_sha256": "6f5566ff132bc932aa6881123d472ad1aa5f933016a7e369d92081dccacaab7a"
+    },
+    {
+      "key": "traction_kit",
+      "checks": {
+        "canonical_path": true,
+        "canonical_display_and_kind": true,
+        "source_sha256": true,
+        "source_git_blob": true,
+        "source_dimensions": true,
+        "crop_sha256": true,
+        "native_crop_exact_pixels": true,
+        "crop_dimensions": true,
+        "no_resampling": true
+      },
+      "source_sha256": "69cfd1e68e6bb6a5618745c49ee2d29b0b11657a7d4eb57c2f2bd63594953eaf",
+      "source_git_blob": "d853ae4f24b0bfbe41105f132647f439d7579be9",
+      "crop_sha256": "16aff729b94a39cfbf859e9e06a0569ac2aa7d6564e226d1ad0bc48315bc2aa9"
+    },
+    {
+      "key": "cargo",
+      "checks": {
+        "canonical_path": true,
+        "canonical_display_and_kind": true,
+        "source_sha256": true,
+        "source_git_blob": true,
+        "source_dimensions": true,
+        "crop_sha256": true,
+        "native_crop_exact_pixels": true,
+        "crop_dimensions": true,
+        "no_resampling": true
+      },
+      "source_sha256": "507ee9985dff799b67c1d82d6217ece5e834d786f53771e3abebfe41196c2809",
+      "source_git_blob": "0f00f3467086f520c62d4304a8900775e55e02f1",
+      "crop_sha256": "91ddbe71f6710ce8139f62e2f0c570a0a90686568623c2bfd5fe8594760eccbd"
+    },
+    {
+      "key": "premium_gems",
+      "checks": {
+        "canonical_path": true,
+        "canonical_display_and_kind": true,
+        "source_sha256": true,
+        "source_git_blob": true,
+        "source_dimensions": true,
+        "crop_sha256": true,
+        "native_crop_exact_pixels": true,
+        "crop_dimensions": true,
+        "no_resampling": true
+      },
+      "source_sha256": "8ab6b87da0a5fae16f9be6288d784a256098d56ca407c8110fc38e2fd8448864",
+      "source_git_blob": "f0a3a06d91d8086e20bde5da489c2b30fa7f7c88",
+      "crop_sha256": "e8506978e0a2f07dcd8737bb5b9f413a108f16878d29319f56c5d26bab41de5e"
+    },
+    {
+      "key": "relay_component",
+      "checks": {
+        "canonical_path": true,
+        "canonical_display_and_kind": true,
+        "source_sha256": true,
+        "source_git_blob": true,
+        "source_dimensions": true,
+        "crop_sha256": true,
+        "native_crop_exact_pixels": true,
+        "crop_dimensions": true,
+        "no_resampling": true
+      },
+      "source_sha256": "fe6b8228890fe9e55001b7ebc5392c37e0b9f20af28f7ca8a8e6196b70fe6aa2",
+      "source_git_blob": "012c98098d7c8792fbd06f4dfd61e3f951f8a96a",
+      "crop_sha256": "327271791eb73c3cbf5d770e0ef7291a20146dce11be27a63ad2b1059f6bdcca"
+    }
+  ],
+  "placements": [
+    {
+      "key": "money",
+      "board": "01-core",
+      "pixel_identity": true,
+      "display_scale_1": true,
+      "resampling_none": true,
+      "within_board": true
+    },
+    {
+      "key": "meat",
+      "board": "01-core",
+      "pixel_identity": true,
+      "display_scale_1": true,
+      "resampling_none": true,
+      "within_board": true
+    },
+    {
+      "key": "wood",
+      "board": "01-core",
+      "pixel_identity": true,
+      "display_scale_1": true,
+      "resampling_none": true,
+      "within_board": true
+    },
+    {
+      "key": "fish",
+      "board": "01-core",
+      "pixel_identity": true,
+      "display_scale_1": true,
+      "resampling_none": true,
+      "within_board": true
+    },
+    {
+      "key": "stone",
+      "board": "02-raw",
+      "pixel_identity": true,
+      "display_scale_1": true,
+      "resampling_none": true,
+      "within_board": true
+    },
+    {
+      "key": "metal",
+      "board": "02-raw",
+      "pixel_identity": true,
+      "display_scale_1": true,
+      "resampling_none": true,
+      "within_board": true
+    },
+    {
+      "key": "coal",
+      "board": "02-raw",
+      "pixel_identity": true,
+      "display_scale_1": true,
+      "resampling_none": true,
+      "within_board": true
+    },
+    {
+      "key": "slate",
+      "board": "02-raw",
+      "pixel_identity": true,
+      "display_scale_1": true,
+      "resampling_none": true,
+      "within_board": true
+    },
+    {
+      "key": "wheat",
+      "board": "02-raw",
+      "pixel_identity": true,
+      "display_scale_1": true,
+      "resampling_none": true,
+      "within_board": true
+    },
+    {
+      "key": "hide",
+      "board": "02-raw",
+      "pixel_identity": true,
+      "display_scale_1": true,
+      "resampling_none": true,
+      "within_board": true
+    },
+    {
+      "key": "fur",
+      "board": "02-raw",
+      "pixel_identity": true,
+      "display_scale_1": true,
+      "resampling_none": true,
+      "within_board": true
+    },
+    {
+      "key": "crude_oil",
+      "board": "02-raw",
+      "pixel_identity": true,
+      "display_scale_1": true,
+      "resampling_none": true,
+      "within_board": true
+    },
+    {
+      "key": "meal",
+      "board": "03-processed",
+      "pixel_identity": true,
+      "display_scale_1": true,
+      "resampling_none": true,
+      "within_board": true
+    },
+    {
+      "key": "cooked_fish",
+      "board": "03-processed",
+      "pixel_identity": true,
+      "display_scale_1": true,
+      "resampling_none": true,
+      "within_board": true
+    },
+    {
+      "key": "bread",
+      "board": "03-processed",
+      "pixel_identity": true,
+      "display_scale_1": true,
+      "resampling_none": true,
+      "within_board": true
+    },
+    {
+      "key": "planks",
+      "board": "03-processed",
+      "pixel_identity": true,
+      "display_scale_1": true,
+      "resampling_none": true,
+      "within_board": true
+    },
+    {
+      "key": "blocks",
+      "board": "03-processed",
+      "pixel_identity": true,
+      "display_scale_1": true,
+      "resampling_none": true,
+      "within_board": true
+    },
+    {
+      "key": "steel",
+      "board": "03-processed",
+      "pixel_identity": true,
+      "display_scale_1": true,
+      "resampling_none": true,
+      "within_board": true
+    },
+    {
+      "key": "iron_bars",
+      "board": "03-processed",
+      "pixel_identity": true,
+      "display_scale_1": true,
+      "resampling_none": true,
+      "within_board": true
+    },
+    {
+      "key": "sheet_metal",
+      "board": "03-processed",
+      "pixel_identity": true,
+      "display_scale_1": true,
+      "resampling_none": true,
+      "within_board": true
+    },
+    {
+      "key": "fuel",
+      "board": "03-processed",
+      "pixel_identity": true,
+      "display_scale_1": true,
+      "resampling_none": true,
+      "within_board": true
+    },
+    {
+      "key": "mechanical_parts",
+      "board": "04-assemblies-containers",
+      "pixel_identity": true,
+      "display_scale_1": true,
+      "resampling_none": true,
+      "within_board": true
+    },
+    {
+      "key": "drive_assembly",
+      "board": "04-assemblies-containers",
+      "pixel_identity": true,
+      "display_scale_1": true,
+      "resampling_none": true,
+      "within_board": true
+    },
+    {
+      "key": "traction_kit",
+      "board": "04-assemblies-containers",
+      "pixel_identity": true,
+      "display_scale_1": true,
+      "resampling_none": true,
+      "within_board": true
+    },
+    {
+      "key": "cargo",
+      "board": "04-assemblies-containers",
+      "pixel_identity": true,
+      "display_scale_1": true,
+      "resampling_none": true,
+      "within_board": true
+    },
+    {
+      "key": "premium_gems",
+      "board": "04-assemblies-containers",
+      "pixel_identity": true,
+      "display_scale_1": true,
+      "resampling_none": true,
+      "within_board": true
+    },
+    {
+      "key": "relay_component",
+      "board": "04-assemblies-containers",
+      "pixel_identity": true,
+      "display_scale_1": true,
+      "resampling_none": true,
+      "within_board": true
+    }
+  ],
+  "character_anchor": {
+    "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/source/identity-boards/character-anchor/C1-front-native-crop.png",
+    "checks": {
+      "source_sha256": true,
+      "source_git_blob": true,
+      "crop_sha256": true,
+      "native_crop_pixels": true,
+      "full_character_visually_visible": true,
+      "numeric_world_scale_not_claimed": true
+    }
+  },
+  "critical_defects": [],
+  "required_repairs": [],
+  "explicit_nonapprovals": [
+    "new scale or larger resources",
+    "conveyor reference appearance match",
+    "3D/native assets",
+    "motion/functionality",
+    "overall user revision completion"
+  ]
+}

@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/independent_critic",
+  "recorded_utc": "2026-11-28T05:14:19.774246+00:00",
+  "authority": "Latest owner-selected R1 conveyor and R4 core scale; current 36-cell conveyor matrix; register-free bulk self-service rule.",
+  "approval_boundary": "Static illustrated concept only. Native model consistency, motion, state transitions, routing, inventory conservation and runtime integration are not approved.",
+  "runtime_scores": {
+    "motion": null,
+    "inventory_and_cash_conservation": null,
+    "transfer_logic": null,
+    "backpressure_and_resume": null,
+    "full_functionality": null
+  },
+  "no_global_resize_requested": true,
+  "candidate": {
+    "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/17-conveyor-counter-r4.png",
+    "sha256": "10676f8021a20caea31413e13a4463950cfbae583a9dc0fb0aff8e4018d4fccd",
+    "bytes": 1878007,
+    "dimensions": [
+      1536,
+      1024
+    ]
+  },
+  "status": "PASS_STATIC_C01_ONLY",
+  "score": 10,
+  "scope": "C01 self-service food counter: four displayed static views/states. Does not include C02 material-counter coverage.",
+  "coverage": {
+    "panels_inspected": 4,
+    "panels_required": 4,
+    "closeups_inspected": [
+      "counter-r4-evidence/bulk-restock-hands.png",
+      "counter-r4-evidence/full-gate-and-receiver.png"
+    ]
+  },
+  "scores": {
+    "owner_selected_style_and_scale": 10,
+    "self_service_contract": 10,
+    "canonical_meal_and_cash_identity": 10,
+    "cross_view_cash_and_conveyor_placement": 10,
+    "customer_and_bulk_access": 10,
+    "ready_and_full_gate_geometry": 10,
+    "stock_support_and_held_item": 10,
+    "layout_and_readability": 10
+  },
+  "mandatory_static_checks": {
+    "customer_facing_overview": true,
+    "rear_side_bulk_restock_view": true,
+    "separate_cash_pickup_area": true,
+    "no_register_or_fixed_clerk": true,
+    "ready_gate_clears_the_carrying_lane": true,
+    "full_gate_physically_spans_incoming_lane": true,
+    "held_meal_is_upstream_and_on_same_lane": true,
+    "stock_receiver_is_supported_and_finite": true,
+    "same_cash_end_opposite_conveyor_in_opposing_views": true,
+    "current_eligible_meal_example": true,
+    "complete_nonclipped_character_and_hands": true
+  },
+  "observations": [
+    "Customer-side view shows a customer taking a canonical roast-meal tray from the accessible counter face.",
+    "Bulk-restock view shows C1 carrying three trays with supported hands and visible clearance.",
+    "Cash remains on its separate pad at the counter end opposite the conveyor in both opposing views.",
+    "READY shows the intake gate upright and clear; FULL shows the cross-lane bar down, with a waiting meal physically upstream and three meal trays in the receiving stock area.",
+    "The two close-ups show no visible hand/stack clipping or unsupported receiver gap."
+  ],
+  "defects": [],
+  "matrix_statuses": {
+    "C01": "PASS for all mandatory displayed static views/states.",
+    "C02": "NOT_REVIEWED_NOT_DEPICTED: allowed material stock and ineligible-form hold require a separate study."
+  },
+  "evidence_manifest": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/critic/counter-r4-evidence/CROP_MANIFEST.json",
+  "next_action": "Preserve this exact R4 candidate as the passing C01 static selection; provide C02 separately. Runtime service, bulk transaction, exact cash and stock-full resume are still untested."
+}

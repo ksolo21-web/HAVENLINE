@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/independent_critic",
+  "recorded_utc": "2026-11-28T05:34:16.984314+00:00",
+  "authority": "Exact owner-selected R1 conveyor and R4 core resources; current 36-cell matrix.",
+  "approval_boundary": "Static illustrated concept only. No native mesh, motion, collision, routing/processing execution or inventory/cash conservation approval.",
+  "runtime_scores": {
+    "motion": null,
+    "collision": null,
+    "routing_and_processing": null,
+    "inventory_conservation": null,
+    "full_functionality": null
+  },
+  "candidate": {
+    "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/20-conveyor-connected-use-r4.png",
+    "sha256": "133a14327f09d3118a012c3f4fb237ccc294440baf41712202cc095e750bd1c5",
+    "bytes": 1996461,
+    "dimensions": [
+      1536,
+      1024
+    ]
+  },
+  "status": "PASS_DISPLAYED_STATIC_CONNECTED_USE",
+  "score": 10,
+  "scope": "Six transport/routing connected-use studies; use with transport kit, routing R3 and crossing R2 for per-cell coverage.",
+  "coverage": {
+    "full_panels_inspected": 6,
+    "panels_required": 6
+  },
+  "scores": {
+    "selected_style_and_size": 10,
+    "loaded_left_right_turns": 10,
+    "supported_descending_landing": 10,
+    "joined_coupler_and_side_support": 10,
+    "opposite_diverter_pose": 10,
+    "actual_outlet_to_buffer_join": 10,
+    "upstream_hold_and_terminal_stop": 10,
+    "raw_versus_cooked_resource_forms": 10,
+    "layout": 10
+  },
+  "resolved_defects": [
+    "USE-R1-01: full buffer now joins the actual right OUT with a continuous supported plate and consistent travel axis.",
+    "USE-R1-02: guide now moves to the opposite side of its pivot, clearly opening the right branch; blocked branch repeats that selected pose.",
+    "USE-R1-03: bottom routing examples use canonical cooked fish; top transport fit tests remain raw fish.",
+    "Intermediate root-observed missing IN stop is restored in R4, with a cooked fish physically upstream."
+  ],
+  "defects": [],
+  "matrix_statuses": {
+    "T02": "PASS static loaded left turn with continuous arc and visible entry/exit.",
+    "T03": "PASS static loaded right turn with continuous arc and visible entry/exit.",
+    "T05": "PASS loaded descent and supported receiving stop/landing; true side context also supplied by crossing study.",
+    "T06": "PASS joined plate and side support views.",
+    "R01": "PASS both selector choices and blocked-branch static state when combined with routing R3."
+  },
+  "fit_boundary": "Illustrated largest-load poses and static joins are reviewed; dynamic swept clearance remains untested."
+}

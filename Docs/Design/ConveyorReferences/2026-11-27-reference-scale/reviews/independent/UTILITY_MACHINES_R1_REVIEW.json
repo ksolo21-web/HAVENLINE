@@ -1,0 +1,108 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/independent_critic",
+  "recorded_utc": "2026-11-28T05:20:43.894742+00:00",
+  "approval_boundary": "Static illustrated concepts only. No native mesh, continuous motion, collisions, inventory conservation, recipe execution or runtime conformity approval.",
+  "runtime_scores": {
+    "motion": null,
+    "collision_and_clearance": null,
+    "processing_logic": null,
+    "inventory_conservation": null,
+    "full_functionality": null
+  },
+  "authority": "Latest exact owner-selected conveyor R1 and core R4; current 36-cell matrix. The authored 13-cylinder target applies only to the additional 06 fishing-line view study, not the original footage or all conveyor modules.",
+  "candidate": {
+    "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/14-conveyor-utility-machines-r1.png",
+    "sha256": "0611e9da32cd7da38a008a9b89380294f62ad7b0d9109456a5bba73913377d6e",
+    "bytes": 2512256,
+    "dimensions": [
+      1536,
+      1024
+    ]
+  },
+  "status": "HOLD_SUPPORT_STYLE_SELECTED_GATES_QUARRY_PORTS_AND_WOOD_SCALE",
+  "score": 7.5,
+  "scope": "U01\u2013U03 typed utility feeder and timber/mineral processing connections.",
+  "coverage": {
+    "panels_inspected": 4,
+    "native_closeups_inspected": [
+      "timber-selected-gate.png",
+      "mineral-selected-gate.png",
+      "quarry-docks.png"
+    ]
+  },
+  "passing_observations": [
+    "Timber and mineral feeder bins remain distinct; the wrong-class example is held by a real gate immediately outside the saw input.",
+    "The saw and parked quarry/tower retain their visual identities.",
+    "Wood-to-plank and stone-to-block intended forms are labelled; front C1 and worker access are visible."
+  ],
+  "defects": [
+    {
+      "id": "UTILITY-R1-01",
+      "matrix_cells": [
+        "U01",
+        "U02"
+      ],
+      "severity": "blocking_selected_style",
+      "finding": "Elevated conveyor runs stand on thin timber legs rather than the selected enclosed orange/blue support family.",
+      "repair": "Replace only conveyor support geometry with enclosed, supported rise/adapter housings matching the approved kit; preserve machine timber frames."
+    },
+    {
+      "id": "UTILITY-R1-02",
+      "matrix_cell": "U01",
+      "severity": "blocking_gate_state",
+      "region_xyxy": [
+        [
+          25,
+          160,
+          275,
+          370
+        ],
+        [
+          30,
+          615,
+          465,
+          921
+        ]
+      ],
+      "finding": "TIMBER SELECTED and MINERALS SELECTED still show a vertical silver gate across the selected hopper mouth. An arrow sign changes the label but does not visibly open the carrying path.",
+      "repair": "Raise, swing or retract the selected gate clear of the carrying surface, leaving the non-selected class physically closed. Preserve the wrong-class stop at the saw throat."
+    },
+    {
+      "id": "UTILITY-R1-03",
+      "matrix_cell": "U03",
+      "severity": "blocking_machine_dock_visibility",
+      "region_xyxy": [
+        810,
+        210,
+        1515,
+        402
+      ],
+      "finding": "The raw-stone bridge terminates against the winch/tower base, and the finished-block bridge meets beside the vehicle track/body without visible processing apertures. Typed signs alone do not show a physically connected processor.",
+      "repair": "Expose short distinct typed input and output sleeve/aperture connections at the parked processing body, with supported matched transfer plates; do not feed the winch or treads. Preserve the blue vehicle and tower identity."
+    },
+    {
+      "id": "UTILITY-R1-04",
+      "matrix_cells": [
+        "U01",
+        "U02"
+      ],
+      "severity": "ordinary_unit_scale_drift",
+      "finding": "The bound wood props read roughly 0.35\u20130.43 of C1 height in the wide timber panel, compared with about 0.26 in the owner-selected core R4. These are approximate projected comparisons, not world dimensions.",
+      "repair": "Calibrate ordinary bound wood units down toward the exact core R4 reference while keeping C1, the feeder and saw dimensions. Use more compact units for stock piles instead of enlarging a unit."
+    }
+  ],
+  "reference_paths": [
+    "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/01-reference-line-r1.png",
+    "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/02-core-resource-scale-r4.png",
+    "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/03-raw-resource-scale-r2.png",
+    "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/04-processed-resource-scale-r2.png"
+  ],
+  "evidence_manifest": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/critic/utility-machines-r1-evidence/CROP_MANIFEST.json",
+  "matrix_statuses": {
+    "U01": "HOLD: selected gate does not visibly clear the path; support style and wood scale drift.",
+    "U02": "Saw route and physical wrong-class stop visible; support style and wood scale correction required.",
+    "U03": "HOLD: typed input/output apertures not visible at the parked processing body."
+  },
+  "next_action": "Repair the selected feeder gate states, dock sleeves, conveyor housings and ordinary wood props without redesigning the machines."
+}

@@ -1,0 +1,78 @@
+{
+  "schema_version": 2,
+  "reviewer": "/root/independent_critic",
+  "recorded_utc": "2026-11-28T05:54:42.195521+00:00",
+  "independence": "Reviewer did not generate or edit the candidate art. Only inspection crops were created.",
+  "approval_boundary": "Static illustrated evidence only; no native model, moving-load clearance, gate cycle, processing logic, inventory or runtime approval.",
+  "runtime_approved": false,
+  "policy": {
+    "path": "Docs/Production/REFERENCE_ACCEPTANCE_POLICY.json",
+    "source_commit": "2fc474bbbb03d9a242b216d33e8588e028de4ce5",
+    "sha256": "c34c0cbe5b6d473be40ee5f0f0e08aab8f6ff42f97cfe2e7c93b2694e4dbaf43",
+    "applicable_reference_style_gates": "Exact unrounded 10",
+    "additional_reference_dimensions_minimum": 9.9,
+    "other_dimensions_minimum": 9.5,
+    "all_mandatory_evidence_required": true,
+    "averaging_forbidden": true
+  },
+  "score_is_not_an_average": true,
+  "candidate": {
+    "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/13-conveyor-food-machines-r4.png",
+    "sha256": "1d079c46d5c9e4a38bcf72095094157de4bede8f4ed93c8dbf99e400b3206dc6",
+    "bytes": 1947727,
+    "dimensions": [
+      1536,
+      1024
+    ]
+  },
+  "status": "PASS_STATIC_FOOD_MACHINE_SCOPE",
+  "score": 10,
+  "all_mandatory_checks_pass": true,
+  "scope": "Four food-machine static concepts F02–F05. The true reverse cooker connection is independently supplied by 22 R2 bottom-right.",
+  "coverage": {
+    "full_panels_inspected": 4,
+    "native_throat_closeup_inspected": true,
+    "native_output_restraint_closeup_inspected": true
+  },
+  "scores": {
+    "selected_machine_and_resource_identity": 10,
+    "selected_closed_low_housing_style": 10,
+    "approved_compact_resource_scale": 10,
+    "raw_and_cooked_route_separation": 10,
+    "full_state_upstream_throat_gate": 10,
+    "finite_full_output_restraint": 10,
+    "framing_and_C1_access": 10,
+    "required_static_use_states": 10
+  },
+  "resolved_defects": [
+    "FOOD-R3-01: the input stop is now transverse across the useful lane immediately before the cooker throat, with support at each rim. Both raw fish wait upstream.",
+    "The successful far output terminal bar remains raised across the lane and retains the full cooked receiver.",
+    "Earlier exposed-support and oversized-bread defects remain repaired."
+  ],
+  "observations": [
+    "Connected fish panel preserves separate raw IN and cooked OUT, with continuous supported docks.",
+    "The full-state gate crosses the lane rather than running beside it; its short up-right span in this projection joins the near and far edges.",
+    "Meat-to-meal uses the selected raw steak and roast-meal forms; wheat-to-bread preserves compact selected bread and the separate wheat input.",
+    "C1 identity, machine housings, pressure vessel and accessible front aprons remain coherent in the displayed studies."
+  ],
+  "defects": [],
+  "matrix_statuses": {
+    "F02": "PASS with true reverse detail in 22 R2.",
+    "F03": "PASS mandatory static full-state gate and retained output.",
+    "F04": "PASS displayed meat-to-meal concept.",
+    "F05": "PASS displayed wheat-to-bread concept."
+  },
+  "evidence_manifest": {
+    "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/critic/food-machines-r4-evidence/CROP_MANIFEST.json",
+    "sha256": "588e39956aced19fd6461555831de3a7fbae35993dd331a2891fb70479ddd942",
+    "bytes": 1265
+  },
+  "history": [
+    {
+      "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/critic/FOOD_MACHINES_R3_REVIEW.json",
+      "sha256": "54352e0a42034980763b3f5b69621483061de7d4268edd1f0ff5ed3a3f8b8aea",
+      "bytes": 2147
+    }
+  ],
+  "candidate_files_edited": false
+}

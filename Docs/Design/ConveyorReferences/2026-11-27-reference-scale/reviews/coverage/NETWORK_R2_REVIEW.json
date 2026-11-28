@@ -1,0 +1,78 @@
+{
+  "schema_version": 2,
+  "reviewer": "/root/independent_critic",
+  "recorded_utc": "2026-11-28T05:55:52.406078+00:00",
+  "approval_boundary": "Static illustrated evidence only. No native model, motion, collision, automation, inventory or runtime approval.",
+  "runtime_approved": false,
+  "policy": {
+    "path": "Docs/Production/REFERENCE_ACCEPTANCE_POLICY.json",
+    "source_commit": "2fc474bbbb03d9a242b216d33e8588e028de4ce5",
+    "sha256": "c34c0cbe5b6d473be40ee5f0f0e08aab8f6ff42f97cfe2e7c93b2694e4dbaf43",
+    "applicable_reference_style_gates": "Exact unrounded 10",
+    "additional_reference_dimensions_minimum": 9.9,
+    "other_dimensions_minimum": 9.5,
+    "all_mandatory_evidence_required": true,
+    "averaging_forbidden": true
+  },
+  "candidate_files_edited": false,
+  "score_is_not_an_average": true,
+  "candidate": {
+    "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/23-expanded-network-r2.png",
+    "sha256": "ba8ec4e17eb0e15a544dfeacbe2a0dabaeb1e3b0ac3e898e39789ab0be8d4e83",
+    "bytes": 2318153,
+    "dimensions": [
+      1670,
+      941
+    ]
+  },
+  "status": "HOLD_CONNECTED_INTERFACES",
+  "score": 8.5,
+  "scope": "Full four-panel N02 expanded network candidate, including timber and mineral house routes, self-service destinations and both industrial views.",
+  "coverage": {
+    "full_panels_inspected": 4,
+    "native_interface_closeups_inspected": 3,
+    "approved_metal_bench_input_reference_inspected": true
+  },
+  "scores": {
+    "selected_style_and_machine_identity": 10,
+    "compact_goods_and_C1_scale": 10,
+    "separate_typed_modes_and_manual_collection": 10,
+    "protected_front_aisles": 10,
+    "traceable_destination_and_industrial_joins": 8.5
+  },
+  "defects": [
+    {
+      "id": "NET-R2-01",
+      "region": "Both upper counter joins",
+      "finding": "Storage OUT lanes terminate at the right cash ends of the counters, while the actual receiving roller modules remain on their opposite left ends.",
+      "repair": "Connect each incoming lane to the receiving roller module; keep the separate cash pad and front service apron."
+    },
+    {
+      "id": "NET-R2-02",
+      "region": "Top-left PLANKS IN, approximately [445,240,535,315]",
+      "finding": "The saw output lane ends against the house side beside the front-facing IN aperture. The actual dark IN mouth remains visibly uncoupled.",
+      "repair": "Add a supported bend into the existing mouth, or rotate the whole house to expose the protected utility wall and connect the true input."
+    },
+    {
+      "id": "NET-R2-03",
+      "region": "Both lower metal-bench input joins",
+      "finding": "The iron lane meets the bench left upright/wood edge beside the front roller nip. It does not visibly reach the approved rear-left iron receiving rack.",
+      "repair": "Reposition the bench or route the lane behind the rollers into the existing rear-left receiving rack, with a visible supported bridge. Preserve manual sheet pickup and clear controls."
+    },
+    {
+      "id": "NET-R2-04",
+      "region": "Upper-right proposed parked cassette OUT",
+      "finding": "The BLOCK OUT label and solid side plate obscure the dark outlet mouth at the join, weakening the traceability established by approved detail22.",
+      "repair": "Expose the same dark OUT aperture above the roller bridge, with the label above it."
+    }
+  ],
+  "positive_findings": [
+    "The mineral house IN already has a legible bend into its actual mouth.",
+    "Compact planks, blocks, iron and cash remain comfortable relative to C1.",
+    "Timber and mineral modes are separate typed studies; finished industrial sheets remain manual pickup with no industrial sales counter.",
+    "Machine identities and front worker aisles remain legible."
+  ],
+  "additional_camera_requirement": null,
+  "matrix_boundary": "The existing focused industrial inset satisfies the matrix camera category; no new opposing-camera requirement is introduced. Physical interfaces still must be traceable.",
+  "builder_repair_in_progress": "Planner reported the counter-only follow-up and is producing a fresh layout addressing the consolidated joins. No unviewed revision is approved."
+}

@@ -1,0 +1,100 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/independent_critic",
+  "session": "Havenline conveyor continuation 2026-11-28",
+  "recorded_utc": "2026-11-28T06:03:39.103200+00:00",
+  "independent": true,
+  "independence": "Reviewer did not generate or modify candidate images; only inspection crops were created.",
+  "candidate_files_edited": false,
+  "scope_boundary": "Static illustrated reference sheets only; no native model, gameplay, motion, collision, throughput or inventory approval.",
+  "runtime_approved": false,
+  "policy": {
+    "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Production/REFERENCE_ACCEPTANCE_POLICY.json",
+    "sha256": "c34c0cbe5b6d473be40ee5f0f0e08aab8f6ff42f97cfe2e7c93b2694e4dbaf43",
+    "bytes": 12510
+  },
+  "numeric_gate": {
+    "reference_minimum": 9.9,
+    "existing_exact_10_retained": true,
+    "averaging_forbidden": true,
+    "all_mandatory_evidence_required": true
+  },
+  "owner_baselines": [
+    {
+      "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/01-reference-line-r1.png",
+      "sha256": "25d9b7f98f5d9407c240a8f0b242bbba6775d0e7fb60cbc720d526514d309249",
+      "bytes": 2060476,
+      "dimensions": [
+        1536,
+        1024
+      ]
+    },
+    {
+      "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/02-core-resource-scale-r4.png",
+      "sha256": "de3e99e6602e18ee5e2d4619e3761964d6ccab2af8a2ee55b17b0ab3fb316da7",
+      "bytes": 1696844,
+      "dimensions": [
+        1536,
+        1024
+      ]
+    }
+  ],
+  "candidate": {
+    "path": "/workspace/scratch/9a64cbeeb049/conveyor-continuation/fishing/attempts/06-conveyor-left-panel-r9.png",
+    "bytes": 1654194,
+    "sha256": "d3bf5b83a51f17a5a280285f911fb40644aaaecb19452d4eeb932ef7315fce23",
+    "dimensions": [
+      1576,
+      998
+    ]
+  },
+  "matrix_cell": "F01",
+  "status": "PASS_ISOLATED_LEFT_PANEL_ONLY",
+  "score": 10,
+  "all_mandatory_checks_pass": true,
+  "coverage": {
+    "full_panel_inspected": true,
+    "original_source_panel_compared": true,
+    "native_bed_detail_inspected": true,
+    "nearest_neighbour_magnification_inspected": true
+  },
+  "scores": {
+    "hardware_identity_and_style": 10,
+    "relative_line_and_character_scale": 10,
+    "thirteen_distinct_cylinders": 10,
+    "same_bay_proportions": 10,
+    "framing": 10
+  },
+  "authored_target": 13,
+  "source_video_exact_count": null,
+  "owner_baseline_exact_count": null,
+  "physical_body_counts": {
+    "left_side": 13
+  },
+  "defects": [],
+  "evidence": [
+    {
+      "path": "/workspace/scratch/9a64cbeeb049/conveyor-continuation/reviews/r9-evidence/left-r9-roller-bed-3x.png",
+      "bytes": 108525,
+      "sha256": "dc43c8e13f4ef1cddb79cb77e30beb7232678a73e6de91f9f0890be773c473b6",
+      "dimensions": [
+        996,
+        489
+      ]
+    },
+    {
+      "path": "/workspace/scratch/9a64cbeeb049/conveyor-continuation/reviews/r9-evidence/left-r9-roller-bed-native.png",
+      "bytes": 70726,
+      "sha256": "3dbf1dc28911a7b0597d0893db742165fea234c894058ac4097831330b6ff59c",
+      "dimensions": [
+        332,
+        163
+      ]
+    }
+  ],
+  "scope": "Corrected isolated left-side panel only. Final reintegrated full sheet requires separate fresh review.",
+  "resolved_defects": [
+    "The corrected isolated panel has 13 individually rounded rollers separated by 12 valleys in the unchanged bay."
+  ],
+  "whole_F01_closed": false
+}

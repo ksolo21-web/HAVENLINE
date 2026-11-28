@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/independent_critic",
+  "recorded_utc": "2026-11-28T05:38:14.995467+00:00",
+  "candidate": {
+    "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/21-conveyor-reverse-side-r2.png",
+    "sha256": "aa97e1491926b751ac27e33ce91b0680c56ff9a87be0ecbe60fd0f3e63e7a26c",
+    "bytes": 2017717,
+    "dimensions": [
+      1536,
+      1024
+    ]
+  },
+  "status": "PASS_STATIC_REVERSE_SIDE_SUPPLEMENT",
+  "score": 10,
+  "scope": "Six displayed loaded straight, rise/fall side and opposing merge studies. Use with transport10 and connected-use20 for combined row coverage.",
+  "coverage": {
+    "panels_inspected": 6,
+    "panels_required": 6
+  },
+  "scores": {
+    "selected_style_and_c1_scale": 10,
+    "loaded_straight_opposing_views": 10,
+    "supported_labelled_rise": 10,
+    "supported_labelled_descent": 10,
+    "opposing_merge_gate_and_label_consistency": 10,
+    "canonical_fish_forms": 10,
+    "layout": 10
+  },
+  "observations": [
+    "Straight front/reverse views preserve a large salmon load, supported ends and label-defined travel direction.",
+    "Rising and descending side panels clearly distinguish low-IN/high-OUT and high-IN/low-OUT arrangements.",
+    "Merge input-facing A-left/B-right correctly becomes rear B-left/A-right. A remains physically held and B remains open, with the same cooked-fish family.",
+    "The actual lower receiving stop/landing is supplied by connected-use20; this side sheet does not invent an unseen receiver."
+  ],
+  "defects": [],
+  "matrix_statuses": {
+    "T01": "PASS with transport10 and this loaded opposing pair.",
+    "T04": "PASS loaded labelled rising arrangement and side profile.",
+    "T05": "PASS side profile combined with actual lower landing/stop in connected-use20.",
+    "R02": "PASS required opposing camera combined with alternate grant/hold states in routing11."
+  },
+  "approval_boundary": "Static illustrated geometry and use-state evidence only. No moving clearance, grant logic, anti-slip physics, backpressure, inventory or runtime approval.",
+  "runtime_scores": {
+    "motion": null,
+    "collision": null,
+    "routing_logic": null,
+    "full_functionality": null
+  }
+}

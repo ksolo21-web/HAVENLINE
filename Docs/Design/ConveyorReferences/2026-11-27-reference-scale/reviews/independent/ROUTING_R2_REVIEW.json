@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/independent_critic",
+  "recorded_utc": "2026-11-28T05:12:33.651158+00:00",
+  "authority": "Latest owner-selected conveyor R1 and core R4; current 36-cell matrix; register-free self-service rule. No prior static score is inherited for new evidence.",
+  "approval_boundary": "Static illustrated concepts only. No native mesh, continuous motion, collision, inventory, routing logic or runtime conformity approval.",
+  "runtime_scores": {
+    "motion": null,
+    "routing_logic": null,
+    "collision_and_clearance": null,
+    "backpressure_and_resume": null,
+    "inventory_ownership": null,
+    "full_functionality": null
+  },
+  "no_global_resize_requested": true,
+  "candidate": {
+    "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/11-conveyor-routing-r2.png",
+    "sha256": "e5476ee407481cd91aa12ed367936a1396942c1eaa05184eadc677ba22327b77",
+    "bytes": 2054813,
+    "dimensions": [
+      1536,
+      1024
+    ]
+  },
+  "status": "HOLD_WRONG_RESOURCE_FORM",
+  "score": 9.0,
+  "scope": "Six displayed routing and finite-buffer concepts; retest of upstream and terminal stop repairs.",
+  "coverage": {
+    "panels_inspected": 6,
+    "panels_required": 6
+  },
+  "scores": {
+    "selected_style_and_scale": 10,
+    "physical_stop_repairs": 10,
+    "illustrated_merge_gate_complementarity": 10,
+    "resource_form_correctness": 7,
+    "layout_and_readability": 10
+  },
+  "passing_observations": [
+    "Wrong-item log is now held behind a physical closed cross-lane gate before the diverter fork; the FOOD type sign remains readable.",
+    "READY and FULL buffer panels now share a visible far terminal restraint; READY entry is open and FULL entry is closed, with accessible bounded stock.",
+    "The two merge states retain one closed approach and one open approach, with held goods outside the center.",
+    "No new housing, C1, support, clipping, or global-size defect was found across the six displayed panels."
+  ],
+  "resolved_defects": [
+    "ROUTE-R1-01: upstream physical wrong-item stop",
+    "ROUTE-R1-02: terminal buffer restraint"
+  ],
+  "defects": [
+    {
+      "id": "ROUTE-R2-01",
+      "severity": "blocking_resource_identity",
+      "finding": "Compatible food examples use the blue/orange RAW fish family, whereas this routing study is specified for prepared food. This issue was identified by root and is independently confirmed in the actual pixels.",
+      "repair": "Replace all routing-sheet fish with the canonical golden/orange striped cooked_fish token, preserving size, spacing, supports, gates and composition."
+    }
+  ],
+  "matrix_statuses": {
+    "R01": "Partial: one generic selector pose; new opposite-selection and blocked-branch companion sheet has separate review.",
+    "R02": "Alternating gate states coherent. Opposing camera evidence remains outside this sheet; raw/cooked mismatch blocks form acceptance.",
+    "R03": "Terminal and entry stop geometry now passes. Resource-form correction pending.",
+    "R04": "Physical hold and selected FOOD type pass; compatible-flow token must be cooked.",
+    "R05": "Not depicted; crossing study remains separate."
+  },
+  "prior_review": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/critic/ROUTING_R1_REVIEW.json",
+  "next_action": "Recolor only incompatible fish props, preserve repaired geometry, and retest the actual new PNG. Retain this R2 candidate and review as history."
+}

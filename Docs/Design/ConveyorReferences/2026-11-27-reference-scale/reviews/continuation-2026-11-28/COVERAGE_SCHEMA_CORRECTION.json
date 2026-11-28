@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/independent_critic",
+  "recorded_utc": "2026-11-28T06:12:32.225808+00:00",
+  "previous_snapshot": {
+    "path": "/workspace/scratch/9a64cbeeb049/conveyor-continuation/reviews/history/CONVEYOR_COVERAGE_FINAL_schema3_before_static_runtime_field_split.json",
+    "sha256": "d7c1f0cb6eadb95a0dbc368b2f7352b36df0579fe7e30fc8fc1b055da0a70c95",
+    "bytes": 52076
+  },
+  "corrected_snapshot": {
+    "path": "/workspace/scratch/9a64cbeeb049/conveyor-continuation/reviews/CONVEYOR_COVERAGE_FINAL.json",
+    "sha256": "600bed5d0dabc41c994c84feee7a9e902aedff91adf50d70d33cccbf82eabf2c",
+    "bytes": 53477
+  },
+  "changes": [
+    {
+      "row": "F01",
+      "old_field": "remaining_requirement",
+      "new_field": "runtime_remaining_requirement",
+      "exact_text": "Static coverage complete. Actual runtime geometry, transfer, motion and ledger proof remain required separately."
+    },
+    {
+      "row": "N02",
+      "old_field": "remaining_requirement",
+      "new_field": "runtime_remaining_requirement",
+      "exact_text": "Static coverage complete. Actual lane clearance, movement, full/blocked/resume and inventory proof remain required separately."
+    }
+  ],
+  "pixel_rescore": false,
+  "artifact_change": false,
+  "validator_weakened": false,
+  "runtime_approved": false,
+  "whole_task_runtime_complete": false
+}

@@ -1,0 +1,87 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/independent_critic",
+  "recorded_utc": "2026-11-28T05:20:43.894742+00:00",
+  "approval_boundary": "Static illustrated concepts only. No native mesh, continuous motion, collisions, inventory conservation, recipe execution or runtime conformity approval.",
+  "runtime_scores": {
+    "motion": null,
+    "collision_and_clearance": null,
+    "processing_logic": null,
+    "inventory_conservation": null,
+    "full_functionality": null
+  },
+  "authority": "Latest exact owner-selected conveyor R1 and core R4; current 36-cell matrix. The authored 13-cylinder target applies only to the additional 06 fishing-line view study, not the original footage or all conveyor modules.",
+  "candidate": {
+    "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/13-conveyor-food-machines-r1.png",
+    "sha256": "4f73a3a8d6fa89dfd5343a3ddbc7203ab7df7cd6f3e4e0a4876a9575131b3620",
+    "bytes": 2143526,
+    "dimensions": [
+      1536,
+      1024
+    ]
+  },
+  "status": "HOLD_SUPPORT_STYLE_INPUT_HOLD_AND_BREAD_SCALE",
+  "score": 8.5,
+  "scope": "F02\u2013F05 food-machine connected studies. F01 is evaluated from selected R1 and its additional discharge/opposite-angle/large-fish evidence, not this food-machine sheet alone.",
+  "coverage": {
+    "panels_inspected": 4,
+    "native_closeups_inspected": [
+      "full-input-hold.png",
+      "bread-and-c1.png"
+    ]
+  },
+  "passing_observations": [
+    "Fish and meat cooker designs retain front control access, left raw input and right cooked output.",
+    "Raw fish and canonical cooked striped fish remain distinct; meat-to-roast-meal and wheat-to-scored-bread forms are legible.",
+    "No blanket reduction is requested for fish variants, meat/meal, C1 or the machine bodies."
+  ],
+  "defects": [
+    {
+      "id": "FOOD-R1-01",
+      "matrix_cells": [
+        "F02",
+        "F03",
+        "F04",
+        "F05"
+      ],
+      "severity": "blocking_selected_style",
+      "finding": "Conveyor approaches use exposed adjustable metal legs and a hanging side motor. These replace the selected enclosed orange/yellow housing with blue lower trim. Higher machine ports explain the height but do not require an unrelated support language.",
+      "repair": "Preserve machine dock heights with properly supported closed orange/blue rise/adapter housings and flush gray plates. Keep machine bodies and clear front aprons."
+    },
+    {
+      "id": "FOOD-R1-02",
+      "matrix_cell": "F03",
+      "severity": "ambiguous_full_state_hold",
+      "region_xyxy": [
+        800,
+        150,
+        1100,
+        437
+      ],
+      "finding": "The OUTPUT FULL gate is at the feeder head while two raw fish already sit beyond it immediately before the cooker. The picture does not show those admitted fish being held outside the producer throat.",
+      "repair": "Move or add a clear physical stop immediately before the cooker input; place all waiting raw fish upstream of that stop. Preserve the full finite cooked-output receiver."
+    },
+    {
+      "id": "FOOD-R1-03",
+      "matrix_cell": "F05",
+      "severity": "blocking_approved_ordinary_unit_scale",
+      "finding": "Bread units appear roughly 0.35\u20130.40 of the depicted C1 height, whereas approved processed R2 bread is about 0.25. This is an approximate projected comparison, not a world-space measurement. The ordinary loaf has been enlarged substantially.",
+      "repair": "Reduce loaf props about a quarter to a third toward the actual approved processed R2 reference, keeping oven, C1 and conveyor dimensions unchanged. Preserve one loaf identity through output and stock."
+    }
+  ],
+  "reference_paths": [
+    "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/01-reference-line-r1.png",
+    "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/02-core-resource-scale-r4.png",
+    "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/04-processed-resource-scale-r2.png"
+  ],
+  "evidence_manifest": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/critic/food-machines-r1-evidence/CROP_MANIFEST.json",
+  "matrix_statuses": {
+    "F01": "Not evaluated here. Exact matrix asks front-discharge close-up, opposite angle and same largest-fish fit, not a new shoreline environment.",
+    "F02": "Left raw input topology present; selected support style correction required.",
+    "F03": "Right cooked output present; input hold and support style corrections required.",
+    "F04": "Meat and meal identities/topology present; support style correction required.",
+    "F05": "Wheat and bread topology present; loaf scale and support style corrections required."
+  },
+  "next_action": "Apply the targeted support, throat-stop and loaf corrections; preserve machine identities and retest actual candidates.",
+  "scope_correction": "Re-reading the exact matrix removed an overbroad prior reference to a required shore context; no extra environment render is required by F01."
+}

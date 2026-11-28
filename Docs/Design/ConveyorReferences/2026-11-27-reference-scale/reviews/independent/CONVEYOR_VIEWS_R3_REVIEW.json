@@ -1,0 +1,79 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/independent_critic",
+  "recorded_utc": "2026-11-28T05:20:43.894742+00:00",
+  "approval_boundary": "Static illustrated concepts only. No native mesh, continuous motion, collisions, inventory conservation, recipe execution or runtime conformity approval.",
+  "runtime_scores": {
+    "motion": null,
+    "collision_and_clearance": null,
+    "processing_logic": null,
+    "inventory_conservation": null,
+    "full_functionality": null
+  },
+  "authority": "Latest exact owner-selected conveyor R1 and core R4; current 36-cell matrix. The authored 13-cylinder target applies only to the additional 06 fishing-line view study, not the original footage or all conveyor modules.",
+  "candidate": {
+    "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/06-conveyor-views-r3.png",
+    "sha256": "38dd7ae10e0e2fa5a939bc6ca339ebd4a72147dc71ba0668f87c7589e8b1ac07",
+    "bytes": 2040799,
+    "dimensions": [
+      1536,
+      1024
+    ]
+  },
+  "status": "HOLD_REAR_BED_COUNT_NOT_CERTIFIABLE",
+  "score": 9.0,
+  "scope": "Four empty-hardware camera studies of the selected fishing line.",
+  "coverage": {
+    "panels_inspected": 4,
+    "native_bed_closeups_inspected": 4,
+    "inspection_magnifications_inspected": 4
+  },
+  "passing_observations": [
+    "Fish removal exposes the carrying beds.",
+    "Front and both side views now read as separate narrow cylinders rather than the broad striped profiles in R2.",
+    "Selected overall housings, gray transfer plate, blue output and C1 relationship are retained."
+  ],
+  "count_evidence": {
+    "front_three_quarter": {
+      "manual_visible_count": 13,
+      "status": "visually reads as 13"
+    },
+    "rear_three_quarter": {
+      "manual_visible_count": null,
+      "estimated_visible_profile_range": [
+        10,
+        11
+      ],
+      "status": "Broader profiles; cannot certify exactly 13"
+    },
+    "left_side": {
+      "manual_visible_count": 13,
+      "status": "visually reads as 13; mounting bracket covers small portions"
+    },
+    "right_side": {
+      "manual_visible_count": 13,
+      "status": "visually reads as 13; mounting bracket covers small portions"
+    },
+    "source_video_exact_count": null,
+    "owner_selected_R1_exact_count": null,
+    "authored_target": 13,
+    "count_origin": "New authored consistency requirement; not represented as an exact video fact."
+  },
+  "defects": [
+    {
+      "id": "VIEWS-R3-01",
+      "severity": "blocking_authored_geometry_consistency",
+      "region_xyxy": [
+        1040,
+        150,
+        1318,
+        280
+      ],
+      "finding": "Rear bed still reads as roughly 10\u201311 broad profiles, unlike the narrow front and side cylinders. Exact 13 cannot be certified in that view.",
+      "repair": "Change only the rear panel bed to 13 plainly separate narrow cylinders with the same pitch/diameter relationship as the front and side views. Preserve hardware composition, C1, size and all other views."
+    }
+  ],
+  "evidence_manifest": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/critic/conveyor-views-r3-evidence/CROP_MANIFEST.json",
+  "inspection_derivatives": "Additional 3x nearest-neighbor magnifications and an exploratory luminance-profile overlay exist in the evidence folder. They are inspection derivatives only, not delivery artwork. Profile peak numbers are not accepted object counts.",
+  "next_action": "Retest the actual rear-panel-only repair against the other three unchanged views."
+}

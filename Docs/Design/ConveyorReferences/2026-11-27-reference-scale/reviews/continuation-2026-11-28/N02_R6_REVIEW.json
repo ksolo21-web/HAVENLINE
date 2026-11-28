@@ -1,0 +1,241 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/independent_critic",
+  "session": "Havenline conveyor continuation 2026-11-28",
+  "recorded_utc": "2026-11-28T06:04:58.404212+00:00",
+  "independent": true,
+  "independence": "Reviewer did not generate or modify candidate images; only inspection crops were created.",
+  "candidate_files_edited": false,
+  "scope_boundary": "Static illustrated reference sheets only; no native model, gameplay, motion, collision, throughput or inventory approval.",
+  "runtime_approved": false,
+  "policy": {
+    "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Production/REFERENCE_ACCEPTANCE_POLICY.json",
+    "sha256": "c34c0cbe5b6d473be40ee5f0f0e08aab8f6ff42f97cfe2e7c93b2694e4dbaf43",
+    "bytes": 12510
+  },
+  "numeric_gate": {
+    "reference_minimum": 9.9,
+    "existing_exact_10_retained": true,
+    "averaging_forbidden": true,
+    "all_mandatory_evidence_required": true
+  },
+  "owner_baselines": [
+    {
+      "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/01-reference-line-r1.png",
+      "sha256": "25d9b7f98f5d9407c240a8f0b242bbba6775d0e7fb60cbc720d526514d309249",
+      "bytes": 2060476,
+      "dimensions": [
+        1536,
+        1024
+      ]
+    },
+    {
+      "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/02-core-resource-scale-r4.png",
+      "sha256": "de3e99e6602e18ee5e2d4619e3761964d6ccab2af8a2ee55b17b0ab3fb316da7",
+      "bytes": 1696844,
+      "dimensions": [
+        1536,
+        1024
+      ]
+    }
+  ],
+  "candidate": {
+    "path": "/workspace/scratch/9a64cbeeb049/conveyor-continuation/network/attempts/23-expanded-network-r6.png",
+    "sha256": "b0a70c43a5b9c7f8befc1017f099e79f5d9ee7336ffec0d0be58d1cbebb54253",
+    "bytes": 2309001,
+    "dimensions": [
+      1671,
+      941
+    ]
+  },
+  "matrix_cell": "N02",
+  "status": "HOLD_CASSETTE_THROAT_INTERSECTION",
+  "score": 9.0,
+  "all_mandatory_checks_pass": false,
+  "coverage": {
+    "full_sheet_inspected": true,
+    "full_panels_inspected": 4,
+    "native_interface_details_inspected": 7,
+    "magnified_cassette_throat_inspected": true,
+    "reference_storage_and_processor_details_inspected": true
+  },
+  "scores": {
+    "selected_style_and_machine_identity": 10,
+    "compact_goods_and_character_scale": 10,
+    "separate_typed_modes_and_manual_collection": 10,
+    "protected_front_aisles": 10,
+    "counter_receiving_joins": 10,
+    "combined_industrial_rear_rack_join": 10,
+    "timber_input_join": 10,
+    "mineral_input_join": 10,
+    "cassette_output_join": 9
+  },
+  "resolved_defects": [
+    "Both outgoing storage lanes now reach the actual curved counter receiving modules, with the cash pads separate.",
+    "The industrial overview and close-up together establish a supported same-level roller transfer into the rear-left iron rack. Manual sheet pickup and empty parts tray remain distinct.",
+    "Timber input now follows a continuous supported U-shaped lane into the actual IN mouth.",
+    "Mineral input now follows a continuous supported lane into its actual IN mouth; OUT is separate."
+  ],
+  "defects": [
+    {
+      "id": "N02-R6-01",
+      "severity": "blocking",
+      "region": [
+        1060,
+        310,
+        1180,
+        392
+      ],
+      "finding": "The parked-cassette near orange curve rail ends through the emerging block front face. The block rests on the forward gray tray while the roller path begins beside the tray; the intended transfer throat is not physically coherent.",
+      "repair": "Extend a short straight supported roller/bridge throat out of the actual aperture at the same width as the mouth, then bend farther from the machine. Keep both rails outside the emerging block envelope and preserve all other panels."
+    }
+  ],
+  "reference_details": [
+    {
+      "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/selected/12-conveyor-storage.png",
+      "sha256": "489dc33bfbdbdd3ad9a0578512dc762804e11b2c56dcce357cf08ee9ddc270fa",
+      "bytes": 2043294,
+      "dimensions": [
+        1672,
+        941
+      ]
+    },
+    {
+      "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/selected/22-processor-connection-details.png",
+      "sha256": "1b20047870b19196fec9964ed73bce128366e88ddf27c936f6f855b9e1262297",
+      "bytes": 2207191,
+      "dimensions": [
+        1536,
+        1024
+      ]
+    }
+  ],
+  "evidence": [
+    {
+      "path": "/workspace/scratch/9a64cbeeb049/conveyor-continuation/reviews/network-r6-evidence/cassette-throat-6x.png",
+      "sha256": "a328b0ee7a0548b032945cb665181b70c4c154fd1a6fb34bfde09af6dec69910",
+      "bytes": 32786,
+      "dimensions": [
+        720,
+        492
+      ]
+    },
+    {
+      "path": "/workspace/scratch/9a64cbeeb049/conveyor-continuation/reviews/network-r6-evidence/cassette-throat-native.png",
+      "sha256": "405772d483aa90ca1a6f73083717124f20a1fe542fb22c2cda38278c5441551a",
+      "bytes": 18502,
+      "dimensions": [
+        120,
+        82
+      ]
+    },
+    {
+      "path": "/workspace/scratch/9a64cbeeb049/conveyor-continuation/reviews/network-r6-evidence/iron_close-3x.png",
+      "sha256": "8e84a26e16f18190d1f6948b03615a47955cfe05bdd309302cc4d857539e2062",
+      "bytes": 93089,
+      "dimensions": [
+        750,
+        450
+      ]
+    },
+    {
+      "path": "/workspace/scratch/9a64cbeeb049/conveyor-continuation/reviews/network-r6-evidence/iron_close-native.png",
+      "sha256": "12876a9ec1e40a19996c88c1af9a54ce576e699e040d035ed319d7df8855e195",
+      "bytes": 62643,
+      "dimensions": [
+        250,
+        150
+      ]
+    },
+    {
+      "path": "/workspace/scratch/9a64cbeeb049/conveyor-continuation/reviews/network-r6-evidence/iron_overview-3x.png",
+      "sha256": "ee23a3e48bfd9f7d2c312daa336beafaa1855dbc0dd0ebe9c478bc357ea5a76f",
+      "bytes": 65157,
+      "dimensions": [
+        585,
+        405
+      ]
+    },
+    {
+      "path": "/workspace/scratch/9a64cbeeb049/conveyor-continuation/reviews/network-r6-evidence/iron_overview-native.png",
+      "sha256": "cc54d4eedb0656074910d9c8f4451910be8d7f518476f543a82d6dc3d3c069da",
+      "bytes": 43470,
+      "dimensions": [
+        195,
+        135
+      ]
+    },
+    {
+      "path": "/workspace/scratch/9a64cbeeb049/conveyor-continuation/reviews/network-r6-evidence/mineral-3x.png",
+      "sha256": "9327f72f80e0177adb5a939d74f9a39270cd91812d0fb9a1a96323868ea4cc30",
+      "bytes": 225751,
+      "dimensions": [
+        1275,
+        615
+      ]
+    },
+    {
+      "path": "/workspace/scratch/9a64cbeeb049/conveyor-continuation/reviews/network-r6-evidence/mineral-native.png",
+      "sha256": "f2a3eef5cdda6367e7dd57ffde17155857fd3d17eeb7d5efca698c61bbe669b7",
+      "bytes": 152470,
+      "dimensions": [
+        425,
+        205
+      ]
+    },
+    {
+      "path": "/workspace/scratch/9a64cbeeb049/conveyor-continuation/reviews/network-r6-evidence/mineral_counter-3x.png",
+      "sha256": "04dcf1a89bb7d0ae917c74e12c046b6eae9a1425108e14f676e2c0d7bce9b845",
+      "bytes": 72462,
+      "dimensions": [
+        540,
+        465
+      ]
+    },
+    {
+      "path": "/workspace/scratch/9a64cbeeb049/conveyor-continuation/reviews/network-r6-evidence/mineral_counter-native.png",
+      "sha256": "2abb06ec6ea246fa3b9c20d89906f2c164335b86fa0f18fa79763600a04c6adf",
+      "bytes": 48316,
+      "dimensions": [
+        180,
+        155
+      ]
+    },
+    {
+      "path": "/workspace/scratch/9a64cbeeb049/conveyor-continuation/reviews/network-r6-evidence/timber-3x.png",
+      "sha256": "ef8e557a38fd97f1da49a89fcd86a29b566a4de8cf9244c7eb2db9ad6b928505",
+      "bytes": 174748,
+      "dimensions": [
+        936,
+        615
+      ]
+    },
+    {
+      "path": "/workspace/scratch/9a64cbeeb049/conveyor-continuation/reviews/network-r6-evidence/timber-native.png",
+      "sha256": "acfccabd477500b46673b04b82e1245dc6bb6fae7146b8a7a0e748a853fed27e",
+      "bytes": 116652,
+      "dimensions": [
+        312,
+        205
+      ]
+    },
+    {
+      "path": "/workspace/scratch/9a64cbeeb049/conveyor-continuation/reviews/network-r6-evidence/timber_counter-3x.png",
+      "sha256": "9979bb34804962a4670e92b5f0864522f677f2cf6f48653339b2b161de9165b0",
+      "bytes": 71188,
+      "dimensions": [
+        555,
+        450
+      ]
+    },
+    {
+      "path": "/workspace/scratch/9a64cbeeb049/conveyor-continuation/reviews/network-r6-evidence/timber_counter-native.png",
+      "sha256": "c5472a66c29eab5894d1c22e2da3b0632fa7cdbab0b6cb812bcf345738c78603",
+      "bytes": 47483,
+      "dimensions": [
+        185,
+        150
+      ]
+    }
+  ]
+}

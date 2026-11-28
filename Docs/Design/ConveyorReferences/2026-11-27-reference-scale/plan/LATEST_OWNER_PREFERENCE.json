@@ -1,0 +1,90 @@
+{
+  "schema_version": 1,
+  "recorded_utc": "2026-11-28T04:52:02.034218+00:00",
+  "authority": "Latest explicit owner selection reported by root and independently bound to exact originals by /root/independent_critic.",
+  "history_in_order": [
+    {
+      "step": 1,
+      "steering": "Earlier request asked for larger ordinary resources like the footage.",
+      "current_status": "SUPERSEDED_FOR_ORDINARY_UNIT_SIZE"
+    },
+    {
+      "step": 2,
+      "steering": "Owner said latest resources may be a little too big; root proposed about 20% smaller.",
+      "current_status": "SUPERSEDED_PROPOSAL_NOT_NUMERIC_REQUIREMENT"
+    },
+    {
+      "step": 3,
+      "steering": "Owner said still too big; root proposed about half core R3, handheld ordinary pickups and piles made from more units.",
+      "current_status": "SUPERSEDED_NUMERIC_PROPOSAL"
+    },
+    {
+      "step": 4,
+      "steering": "Owner approved the attached conveyor R1 and core R4 size and requested more renders, variable fish types/sizes and animal-specific meat.",
+      "current_status": "CONTROLLING_EXACT_STATIC_BASELINES"
+    }
+  ],
+  "selected": [
+    {
+      "id": "conveyor-r1",
+      "original": {
+        "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/01-reference-line-r1.png",
+        "sha256": "25d9b7f98f5d9407c240a8f0b242bbba6775d0e7fb60cbc720d526514d309249",
+        "bytes": 2060476,
+        "dimensions": [
+          1536,
+          1024
+        ]
+      },
+      "user_attachment": {
+        "path": "/workspace/scratch/59f000bd1476/upload/33179.png",
+        "sha256": "6529f8891e58cabbe583a93ddbe39585f785fd737702a0eaa9238a135ed7c4d9",
+        "bytes": 258238,
+        "dimensions": [
+          1536,
+          1024
+        ]
+      },
+      "attachment_identity": "Fresh actual pixels visually match original composition; compressed file hash differs.",
+      "review": "LINE_R1_REVIEW.json"
+    },
+    {
+      "id": "core-r4",
+      "original": {
+        "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/02-core-resource-scale-r4.png",
+        "sha256": "de3e99e6602e18ee5e2d4619e3761964d6ccab2af8a2ee55b17b0ab3fb316da7",
+        "bytes": 1696844,
+        "dimensions": [
+          1536,
+          1024
+        ]
+      },
+      "user_attachment": {
+        "path": "/workspace/scratch/59f000bd1476/upload/33180.png",
+        "sha256": "09634b7b84e9eebb7b8756d092bf6d8d3342f45fd2bfeeab1e899eb25949695d",
+        "bytes": 162487,
+        "dimensions": [
+          1536,
+          1024
+        ]
+      },
+      "attachment_identity": "Fresh actual pixels visually match original composition; compressed file hash differs.",
+      "review": "CORE_R4_REVIEW.json"
+    }
+  ],
+  "independent_selection_record": {
+    "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/critic/OWNER_SELECTED_BASELINE_STATE.json",
+    "sha256": "5730e2f76ca29d95494b7756bda1050cf683dff0fcbda10b7abb7bbe8508cc73"
+  },
+  "rules": [
+    "Do not resize the selected conveyor R1 by default.",
+    "Use exact selected core R4 for ordinary core pickup presentation.",
+    "Fish may vary in type and size; meat may vary by animal.",
+    "All earlier universal height/pixel multipliers are superseded by the selected images.",
+    "Keep Character 1 and all 27 canonical resource families.",
+    "No new wallet, recipe, price, spawn/drop or runtime behavior is created by this art handoff."
+  ],
+  "new_world_unit_dimensions_approved": false,
+  "candidate_functionality_approved": false,
+  "whole_task_complete": false
+}

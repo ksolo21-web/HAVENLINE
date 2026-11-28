@@ -1,0 +1,130 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/independent_critic",
+  "recorded_utc": "2026-11-28T04:49:43.460751+00:00",
+  "candidate": {
+    "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/03-raw-resource-scale-r2.png",
+    "sha256": "827cab0dbe3911ae754e56471393a136b4e946b77eb1bf126dfc096139214414",
+    "bytes": 1847980,
+    "dimensions": [
+      1024,
+      1536
+    ]
+  },
+  "status": "PASS_STATIC_IDENTITY_AND_COMPACT_SCALE_SHEET",
+  "score": 10.0,
+  "scope": "Eight displayed single-unit raw-resource panels with C1 anchors; static raster only.",
+  "references": [
+    {
+      "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/source/identity-boards/boards/02-raw-SOURCE_IDENTITY_ONLY.png",
+      "sha256": "dd8849c0945de8434a0fa6d05fe0404b0c8b9d623736b3c722916232be071a16",
+      "bytes": 1317427,
+      "dimensions": [
+        1680,
+        1178
+      ]
+    },
+    {
+      "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/02-core-resource-scale-r4.png",
+      "sha256": "de3e99e6602e18ee5e2d4619e3761964d6ccab2af8a2ee55b17b0ab3fb316da7",
+      "bytes": 1696844,
+      "dimensions": [
+        1536,
+        1024
+      ]
+    }
+  ],
+  "coverage": {
+    "panels_inspected": 8,
+    "panels_required": 8,
+    "all_labels_inspected": true,
+    "all_c1_anchors_inspected": true
+  },
+  "per_resource": [
+    {
+      "key": "stone",
+      "label": "Stone",
+      "identity_score": 10.0,
+      "static_scale_score": 10.0,
+      "visible_finding": "Pale faceted lump with the established raised rear lobe.",
+      "status": "PASS_SCOPED_STATIC"
+    },
+    {
+      "key": "metal",
+      "label": "Iron ore",
+      "identity_score": 10.0,
+      "static_scale_score": 10.0,
+      "visible_finding": "Dark matrix with three differentiated pale metallic protrusions.",
+      "status": "PASS_SCOPED_STATIC"
+    },
+    {
+      "key": "coal",
+      "label": "Coal",
+      "identity_score": 10.0,
+      "static_scale_score": 10.0,
+      "visible_finding": "Dark blue-black faceted clustered chunk, distinct from ore and slate.",
+      "status": "PASS_SCOPED_STATIC"
+    },
+    {
+      "key": "slate",
+      "label": "Slate",
+      "identity_score": 10.0,
+      "static_scale_score": 10.0,
+      "visible_finding": "Low blue-gray layered plate with chipped irregular edges.",
+      "status": "PASS_SCOPED_STATIC"
+    },
+    {
+      "key": "wheat",
+      "label": "Wheat",
+      "identity_score": 10.0,
+      "static_scale_score": 10.0,
+      "visible_finding": "Golden grain heads and cut stems held by the brown band.",
+      "status": "PASS_SCOPED_STATIC"
+    },
+    {
+      "key": "hide",
+      "label": "Hide",
+      "identity_score": 10.0,
+      "static_scale_score": 10.0,
+      "visible_finding": "Tan folded smooth hide with pale edge and open fold.",
+      "status": "PASS_SCOPED_STATIC"
+    },
+    {
+      "key": "fur",
+      "label": "Fur",
+      "identity_score": 10.0,
+      "static_scale_score": 10.0,
+      "visible_finding": "Cream tufted folded fur with brown top patch/binding and visible internal fold.",
+      "status": "PASS_SCOPED_STATIC"
+    },
+    {
+      "key": "crude_oil",
+      "label": "Crude oil",
+      "identity_score": 10.0,
+      "static_scale_score": 10.0,
+      "visible_finding": "Dark barrel, orange label band, black droplet, top bung and distinct raised hoops.",
+      "status": "PASS_SCOPED_STATIC"
+    }
+  ],
+  "checks": {
+    "canonical_family_identity": "PASS",
+    "raw_ore_vs_processed_metal_distinction": "PASS",
+    "coal_vs_stone_vs_slate_distinction": "PASS",
+    "crude_oil_vs_refined_fuel_distinction": "PASS",
+    "compact_unit_vs_c1_presentation": "PASS",
+    "clear_labels_no_clipping": "PASS",
+    "ground_support_and_no_duplicate_mini_stock": "PASS",
+    "c1_identity_and_consistent_anchor_scale": "PASS"
+  },
+  "scale_interpretation": "Compact authored presentation follows owner-selected core R4. Flat/bundled objects can have wider projected footprints; no uniform physical size or exact world-unit ratio is inferred. Exact selected core baseline and accepted fish/meat variant rules are not reopened.",
+  "active_defects": [],
+  "out_of_scope_untested": {
+    "rear_or_360_consistency": null,
+    "carry_and_stack_fit": null,
+    "conveyor_storage_counter_fit": null,
+    "native_mesh_geometry": null,
+    "runtime_functionality": null,
+    "all_27_resource_completion": null
+  },
+  "next_action": "Preserve this passing candidate unchanged; review its later contexts separately."
+}

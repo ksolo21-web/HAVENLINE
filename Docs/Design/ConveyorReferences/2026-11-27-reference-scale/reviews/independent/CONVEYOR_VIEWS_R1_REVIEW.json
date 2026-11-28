@@ -1,0 +1,96 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/independent_critic",
+  "recorded_utc": "2026-11-28T04:49:43.460751+00:00",
+  "candidate": {
+    "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/06-conveyor-views-r1.png",
+    "sha256": "9a10bd1d629626f69ea4b600bb5f737e29ed7163e33bbb294003a0773d2504d9",
+    "bytes": 2162963,
+    "dimensions": [
+      1536,
+      1024
+    ]
+  },
+  "status": "HOLD_STATIC_CROSS_VIEW_ROLLER_DENSITY_INCONSISTENCY",
+  "score": 8.5,
+  "scope": "Four displayed authored camera studies compared with selected conveyor R1. No claim of original-video rear faces or one verified physical mesh.",
+  "reference": {
+    "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/01-reference-line-r1.png",
+    "sha256": "25d9b7f98f5d9407c240a8f0b242bbba6775d0e7fb60cbc720d526514d309249",
+    "bytes": 2060476,
+    "dimensions": [
+      1536,
+      1024
+    ]
+  },
+  "coverage": {
+    "full_panels_inspected": 4,
+    "required_panels": 4,
+    "views": [
+      "front three-quarter",
+      "rear three-quarter",
+      "left side",
+      "right side"
+    ],
+    "closeups": "conveyor-views-r1-evidence/CROP_MANIFEST.json; full native bed crops and nearest-neighbor inspection copies actually viewed"
+  },
+  "passing_observations": [
+    "Selected orange/yellow twin-intake, twin noses, roller/plate/output sequence and blue output identity retained.",
+    "One gray transfer plate and one connected output section in each panel; no disconnected branch or open carrying-surface gap found.",
+    "All four complete assemblies and one C1 per panel are framed.",
+    "Owner-selected scale and approved fish identity are sufficiently preserved for this static study; no resize is requested.",
+    "Rear faces are explicitly authored continuations, not claimed video observations."
+  ],
+  "mandatory_defects": [
+    {
+      "id": "CV-R1-01",
+      "requirement": "The same roller bed must keep consistent component density and pitch through all four camera projections.",
+      "severity": "blocking_static_consistency",
+      "locations": {
+        "front_bed_xyxy": [
+          300,
+          125,
+          535,
+          290
+        ],
+        "rear_bed_xyxy": [
+          1050,
+          150,
+          1320,
+          295
+        ],
+        "left_bed_xyxy": [
+          260,
+          700,
+          410,
+          805
+        ],
+        "right_bed_xyxy": [
+          1090,
+          700,
+          1260,
+          805
+        ]
+      },
+      "observed": "The front bed is relatively dense, the rear uses visibly fewer thicker cylinders, and both side beds become about 6\u20137 broad cylinder profiles across the full incline. The visible pitch changes beyond a simple camera reversal.",
+      "approximate_counts_only": {
+        "selected_R1": "about 13, partly occluded",
+        "new_front": "about 11\u201312, partly occluded",
+        "new_rear": "about 9, partly occluded",
+        "new_sides": "about 6\u20137 visible profiles"
+      },
+      "exact_selected_or_video_roller_count": null,
+      "repair": "Keep selected R1 assembly proportions and all other details. Rebuild only the roller pattern in the four-view sheet using one uniform authored 13-cylinder bed, with identical cylinder diameter, pitch and shaft direction through each projection. Do not resize the approved conveyor or resources.",
+      "authored_target_authority": "Root explicitly adopted uniform 13 as a new authored consistency target after discussing count uncertainty; it is not asserted to be a certified count from original footage or fully exposed selected R1.",
+      "retest": "View every repaired panel and bed closeup. Check continuous 13-cylinder geometry and equal pitch under perspective; do not count occluded pixels as proof of hidden components."
+    }
+  ],
+  "active_scale_repair": false,
+  "untested": {
+    "physical_single_mesh_equivalence": null,
+    "rear_original_video_match": null,
+    "motion_and_use_states": null,
+    "runtime_functionality": null
+  },
+  "next_action": "Targeted roller-pattern repair, then actual four-panel retest. Preserve this failed candidate and crops."
+}

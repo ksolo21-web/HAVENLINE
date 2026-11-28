@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/independent_critic",
+  "recorded_utc": "2026-11-28T05:27:10.654797+00:00",
+  "authority": "Exact owner-selected conveyor R1 and core R4; current required 36-cell matrix; register-free bulk self-service contract.",
+  "approval_boundary": "Static illustrated concepts only. No native mesh, motion cycle, collision, item/cash conservation, routing/processing implementation or runtime conformity approval.",
+  "runtime_scores": {
+    "motion": null,
+    "collision": null,
+    "inventory_and_cash_conservation": null,
+    "routing_and_processing": null,
+    "full_functionality": null
+  },
+  "no_global_resize_requested": true,
+  "candidate": {
+    "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/06-conveyor-views-r4.png",
+    "sha256": "6817184523295a6bc8ab03aa82a388c2392525f23cccb79defc8d4d2e906b8ae",
+    "bytes": 1925796,
+    "dimensions": [
+      1536,
+      1024
+    ]
+  },
+  "status": "HOLD_REAR_13_CYLINDER_EVIDENCE",
+  "score": 9.0,
+  "scope": "Four static empty-hardware fishing-line views; authored same-13 requirement.",
+  "coverage": {
+    "full_panels_inspected": 4,
+    "native_rear_crop_inspected": true,
+    "rear_4x_inspection_magnification": true
+  },
+  "scores": {
+    "selected_style_and_scale": 10,
+    "front_and_side_bed_appearance": 10,
+    "rear_count_certainty": null
+  },
+  "defects": [
+    {
+      "id": "VIEWS-R4-01",
+      "origin": "VIEWS-R3-01",
+      "finding": "The rear profiles remain broad, and the reviewer cannot verify exactly 13 discrete cylinders in that view. Prompt compliance is not treated as visual proof.",
+      "repair": "A more direct rear-bed structural repair is required; preserve the three acceptable panels and overall design."
+    }
+  ],
+  "rear_exact_count": null,
+  "authored_target": 13,
+  "source_video_exact_count": null,
+  "evidence_paths": [
+    "/workspace/scratch/59f000bd1476/conveyor-reference-revision/critic/conveyor-views-r4-evidence/rear-bed-native.png",
+    "/workspace/scratch/59f000bd1476/conveyor-reference-revision/critic/conveyor-views-r4-evidence/rear-bed-inspection-4x.png"
+  ],
+  "next_action": "Retest the rear bed after the next targeted repair. Do not inherit a pass from unchanged portions."
+}

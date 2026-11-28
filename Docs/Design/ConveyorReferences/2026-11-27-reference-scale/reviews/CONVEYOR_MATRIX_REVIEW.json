@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/independent_critic",
+  "recorded_utc": "2026-11-28T05:08:19.915849+00:00",
+  "matrix": {
+    "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/plan/REQUIRED_CONVEYOR_RENDER_MATRIX.json",
+    "sha256": "952e9443d6d47249f118062022ee3e2c835fd80fa9f6ac98628b6d0d66daa0b4",
+    "bytes": 43997
+  },
+  "status": "PASS_PLAN_COVERAGE_AND_AUTHORITY_BOUNDARIES",
+  "score": 10.0,
+  "scope": "Completeness and boundaries of the 36-cell static-render coverage plan; no cell art or runtime approval is granted by this report.",
+  "counts": {
+    "unique_cells": 36,
+    "groups": 9
+  },
+  "inputs_read": [
+    {
+      "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/plan/sources/historical-conveyor-design/design/routing-catalogue.json",
+      "sha256": "bc72ba3281a8b3bcda4fbb127f6a964fd86fa73aa7f0c49e66416b9dbc0fe398",
+      "bytes": 55984
+    },
+    {
+      "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/plan/sources/historical-conveyor-design/requirements.json",
+      "sha256": "40a11533d116d78ebc7fe17bc52b7817b9595f62b32eaf78be89a91407487bc9",
+      "bytes": 7578
+    },
+    {
+      "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/plan/sources/gameplay-build14/HavenlineLevel1/field_market.gd",
+      "sha256": "d3ad126dd67c321ae80a62ea14a84b087b6985e1a63d6e89974b0ea8da2e5a45",
+      "bytes": 5649
+    }
+  ],
+  "additional_inputs_read": [
+    "Pinned prior conveyor README/preflight/final scoped acceptance records",
+    "Current resource/processor mapping described in matrix and earlier processing task",
+    "Updated global gates and R04/C01/C02/N01 boundaries"
+  ],
+  "coverage_findings": [
+    "Transport straight/corners/rise/fall/couplers, routing/buffer/reject/crossing, storage four ports/local mechanisms, food and utility processors, six selected industrial interfaces, reserved food assembler, self-service counter and connected camp/network are accounted for.",
+    "Separate left/right and rising/falling usage cannot be assumed from camera reversal.",
+    "All four storage ports preserve the correct wall and height relationships.",
+    "Manual pump and container handoff are not silently liquid belts, pipelines or new empty-drum inventory.",
+    "Reserved dual-input food assembly is distinct from active industrial recipe staging and adds no burger economy.",
+    "Cash, gems, cargo wrappers and finite relay objects do not inherit production belts.",
+    "Current Market.PRODUCTS is explicitly meal/planks/blocks; future fish camp routing is labelled a future unlocked study.",
+    "Exact unrounded10 reference/style gates, additional reference threshold9.9 and other applicable threshold9.5 are retained with all mandatory evidence and no averaging."
+  ],
+  "initial_policy_issue": {
+    "status": "FIXED_AND_RETESTED",
+    "finding": "Earlier closure stated only >9 target10 without retaining stronger current gates.",
+    "fixed_matrix_sha256": "952e9443d6d47249f118062022ee3e2c835fd80fa9f6ac98628b6d0d66daa0b4"
+  },
+  "review_limits": [
+    "This critic audited source contracts/catalogue and policy boundaries; it does not claim fresh pixel inspection of all seven archived studies merely from the planner receipt.",
+    "No unseen art row is marked complete.",
+    "Static state illustrations do not prove the corresponding running behavior."
+  ],
+  "active_plan_defects": [],
+  "art_completion": false,
+  "runtime_approval": false,
+  "next_action": "Bind actual candidates/reviews to each cell; retain PARTIAL/BLOCKED when a direction, state, interface or required view is not visible."
+}

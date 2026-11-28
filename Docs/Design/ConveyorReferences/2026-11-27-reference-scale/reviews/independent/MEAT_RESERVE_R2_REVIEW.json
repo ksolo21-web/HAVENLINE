@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/independent_critic",
+  "recorded_utc": "2026-11-28T05:04:49.349058+00:00",
+  "candidate": {
+    "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/08-meat-variants-reserve-r2.png",
+    "sha256": "e5cdd1b08d53c2f0ccd1d4d356ac994b3157d367288356d09cebe428b71e8c7d",
+    "bytes": 1714682,
+    "dimensions": [
+      1536,
+      1024
+    ]
+  },
+  "reference": {
+    "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/source/meat-variants/boards/02-remaining-four-SOURCE_IDENTITY_ONLY.png",
+    "sha256": "0f92b24793d3c295218d73b5c433bb01f394994ad18a8ca33054a6c761e2f095",
+    "bytes": 711883,
+    "dimensions": [
+      940,
+      1178
+    ]
+  },
+  "status": "PASS_STATIC_VARIANT_IDENTITY_AND_COMPACT_SIZE",
+  "score": 10.0,
+  "scope": "Displayed raw meat variant art only; no spawn, drop, inventory, recipe or runtime activation claim.",
+  "coverage": {
+    "variants_inspected": 4,
+    "variants_required": 4,
+    "all_full_c1_anchors_inspected": true
+  },
+  "variants": [
+    {
+      "source_variant_id": "squirrel_meat",
+      "display_name": "Squirrel",
+      "score": 10.0,
+      "finding": "Two compact pieces, larger back piece with pale cap."
+    },
+    {
+      "source_variant_id": "wild_fox_meat",
+      "display_name": "Wild fox",
+      "score": 10.0,
+      "finding": "Long curved tapered cut with pale cap at the raised end."
+    },
+    {
+      "source_variant_id": "lynx_meat",
+      "display_name": "Lynx",
+      "score": 10.0,
+      "finding": "Two round medallions with pale lower rims and one top seam."
+    },
+    {
+      "source_variant_id": "wolverine_meat",
+      "display_name": "Wolverine",
+      "score": 10.0,
+      "finding": "Two-lobed connected form with pale seam on the raised lobe."
+    }
+  ],
+  "visible_checks": [
+    "Actual full candidate and source board inspected, including every cut and C1 anchor.",
+    "Source-specific silhouette, fat/seam/bone details retained.",
+    "Compact size follows owner-selected core R4; animal-dependent variations permitted.",
+    "All C1 bodies/feet and meat units fully framed; labels readable and ground contact visible."
+  ],
+  "active_defects": [],
+  "not_approved": {
+    "new_spawn_or_drop_table": null,
+    "new_wallet_keys_or_recipes": null,
+    "carried_stacks_or_processor_docks": null,
+    "rear_geometry": null,
+    "native_model_or_runtime": null
+  }
+}

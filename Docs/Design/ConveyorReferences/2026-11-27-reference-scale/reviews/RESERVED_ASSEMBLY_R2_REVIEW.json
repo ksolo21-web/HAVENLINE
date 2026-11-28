@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/independent_critic",
+  "recorded_utc": "2026-11-28T05:34:16.984314+00:00",
+  "authority": "Exact owner-selected R1 conveyor and R4 core resources; current 36-cell matrix.",
+  "approval_boundary": "Static illustrated concept only. No native mesh, motion, collision, routing/processing execution or inventory/cash conservation approval.",
+  "runtime_scores": {
+    "motion": null,
+    "collision": null,
+    "routing_and_processing": null,
+    "inventory_conservation": null,
+    "full_functionality": null
+  },
+  "candidate": {
+    "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/16-dual-input-assembly-r2.png",
+    "sha256": "6aca94552a231d55a4642f1b3343614b69db3f27110fb5839212804d55dfec26",
+    "bytes": 2175339,
+    "dimensions": [
+      1536,
+      1024
+    ]
+  },
+  "status": "PASS_STATIC_A01_RESERVED",
+  "score": 10,
+  "scope": "Reserved dual-input assembly four-view/state concept; no active recipe or product.",
+  "coverage": {
+    "full_panels_inspected": 4,
+    "panels_required": 4
+  },
+  "scores": {
+    "source_machine_identity": 10,
+    "selected_conveyor_style": 10,
+    "input_label_handedness": 10,
+    "separate_input_and_output_interfaces": 10,
+    "missing_input_hold": 10,
+    "finite_output_full_hold": 10,
+    "reserved_scope_and_placeholder_props": 10,
+    "layout": 10
+  },
+  "resolved_defects": [
+    "ASSEMBLER-R1-01: output-facing views now show B at rear image-left and A at rear image-right; input-facing views are unchanged."
+  ],
+  "observations": [
+    "The actual R2 sheet retains joined approaches, one output, clear hood and separate magazines.",
+    "Waiting B and full-output states retain their physical stops and neutral trays.",
+    "RESERVED / RECIPE UNFROZEN remains explicit; no burger or new canonical product is introduced."
+  ],
+  "defects": [],
+  "matrix_statuses": {
+    "A01": "PASS mandatory static topology and missing-input/full-output views."
+  }
+}

@@ -1,0 +1,171 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/independent_critic",
+  "session": "Havenline conveyor continuation 2026-11-28",
+  "recorded_utc": "2026-11-28T06:05:48.067845+00:00",
+  "independent": true,
+  "independence": "Reviewer did not generate or modify candidate images; only inspection crops were created.",
+  "candidate_files_edited": false,
+  "scope_boundary": "Static illustrated reference sheets only; no native model, gameplay, motion, collision, throughput or inventory approval.",
+  "runtime_approved": false,
+  "policy": {
+    "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Production/REFERENCE_ACCEPTANCE_POLICY.json",
+    "sha256": "c34c0cbe5b6d473be40ee5f0f0e08aab8f6ff42f97cfe2e7c93b2694e4dbaf43",
+    "bytes": 12510
+  },
+  "numeric_gate": {
+    "reference_minimum": 9.9,
+    "existing_exact_10_retained": true,
+    "averaging_forbidden": true,
+    "all_mandatory_evidence_required": true
+  },
+  "owner_baselines": [
+    {
+      "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/01-reference-line-r1.png",
+      "sha256": "25d9b7f98f5d9407c240a8f0b242bbba6775d0e7fb60cbc720d526514d309249",
+      "bytes": 2060476,
+      "dimensions": [
+        1536,
+        1024
+      ]
+    },
+    {
+      "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/02-core-resource-scale-r4.png",
+      "sha256": "de3e99e6602e18ee5e2d4619e3761964d6ccab2af8a2ee55b17b0ab3fb316da7",
+      "bytes": 1696844,
+      "dimensions": [
+        1536,
+        1024
+      ]
+    }
+  ],
+  "candidate": {
+    "path": "/workspace/scratch/9a64cbeeb049/conveyor-continuation/fishing/attempts/06-conveyor-views-r10.png",
+    "sha256": "1e3494a4bc1f2029b8a0b8bfc974493e9ef36d8372e1ee6831ffa2fb2c0f4bbf",
+    "bytes": 1890961,
+    "dimensions": [
+      1536,
+      1024
+    ]
+  },
+  "matrix_cell": "F01",
+  "status": "HOLD_LEFT_SIDE_CYLINDER_COUNT",
+  "score": 9.0,
+  "all_mandatory_checks_pass": false,
+  "coverage": {
+    "full_sheet_inspected": true,
+    "native_bed_details_inspected": 4,
+    "nearest_neighbour_magnifications_inspected": 4
+  },
+  "scores": {
+    "hardware_identity_and_style": 10,
+    "selected_overall_line_scale": 10,
+    "front_count": 10,
+    "rear_count": 10,
+    "left_count": 9.0,
+    "right_count": 10,
+    "framing_and_character": 10
+  },
+  "authored_target": 13,
+  "source_video_exact_count": null,
+  "owner_baseline_exact_count": null,
+  "physical_body_counts": {
+    "front_three_quarter": 13,
+    "rear_three_quarter": 13,
+    "left_side": 12,
+    "right_side": 13
+  },
+  "defects": [
+    {
+      "id": "F01-R10-01",
+      "severity": "blocking",
+      "region": [
+        232,
+        710,
+        406,
+        803
+      ],
+      "finding": "The full-sheet reintegration did not retain the corrected isolated R9 roller row. Left side still depicts twelve cylinders; front/rear/right each depict thirteen.",
+      "repair": "Use the approved isolated R9 left side with explicitly bound approved other views in a fresh presentation, or correct the composite. Do not mark the entire R10 sheet approved."
+    }
+  ],
+  "evidence": [
+    {
+      "path": "/workspace/scratch/9a64cbeeb049/conveyor-continuation/reviews/fishing-r10-evidence/front-4x.png",
+      "sha256": "8b717b90531b727d59389177563f721631a16891b11e43e4d737ce0edede9dfb",
+      "bytes": 103287,
+      "dimensions": [
+        916,
+        696
+      ]
+    },
+    {
+      "path": "/workspace/scratch/9a64cbeeb049/conveyor-continuation/reviews/fishing-r10-evidence/front-native.png",
+      "sha256": "15c1366fbde5e8af4dbaa708baf7035d0e05a4e9b9576bbe6b2de592e2412b1d",
+      "bytes": 66386,
+      "dimensions": [
+        229,
+        174
+      ]
+    },
+    {
+      "path": "/workspace/scratch/9a64cbeeb049/conveyor-continuation/reviews/fishing-r10-evidence/left-4x.png",
+      "sha256": "fd5893186f63a4c68e2dd9177f8ddefe1f66c1e131e2ec0ae3f6679c131ecdd4",
+      "bytes": 40938,
+      "dimensions": [
+        696,
+        372
+      ]
+    },
+    {
+      "path": "/workspace/scratch/9a64cbeeb049/conveyor-continuation/reviews/fishing-r10-evidence/left-native.png",
+      "sha256": "2bc9b82c312fbd7de550b51cdb9599d764260571f9ca20eaedc7763be37f244a",
+      "bytes": 25119,
+      "dimensions": [
+        174,
+        93
+      ]
+    },
+    {
+      "path": "/workspace/scratch/9a64cbeeb049/conveyor-continuation/reviews/fishing-r10-evidence/rear-4x.png",
+      "sha256": "0d48d3f3693173cb3829cdd78df6f11ac5186030edf8ba67185cb6f8d3e38663",
+      "bytes": 103666,
+      "dimensions": [
+        928,
+        684
+      ]
+    },
+    {
+      "path": "/workspace/scratch/9a64cbeeb049/conveyor-continuation/reviews/fishing-r10-evidence/rear-native.png",
+      "sha256": "b7f45c3bd9b075e0a3fdeedeef8e8ea7d2bbfc61327354fc6a0912681a938c5b",
+      "bytes": 67187,
+      "dimensions": [
+        232,
+        171
+      ]
+    },
+    {
+      "path": "/workspace/scratch/9a64cbeeb049/conveyor-continuation/reviews/fishing-r10-evidence/right-4x.png",
+      "sha256": "59bb7584a4862a8c183a26d3db5c83e70c472c83d0d749aac559294970667dbf",
+      "bytes": 43588,
+      "dimensions": [
+        764,
+        380
+      ]
+    },
+    {
+      "path": "/workspace/scratch/9a64cbeeb049/conveyor-continuation/reviews/fishing-r10-evidence/right-native.png",
+      "sha256": "50942cee56712356ac2478ee34446784a4057e18821666a71d918c31ad64ba3d",
+      "bytes": 26559,
+      "dimensions": [
+        191,
+        95
+      ]
+    }
+  ],
+  "related_passed_panel": {
+    "path": "/workspace/scratch/9a64cbeeb049/conveyor-continuation/reviews/F01_R9_LEFT_PANEL_REVIEW.json",
+    "sha256": "8d357718241d56be8217476a9261e0c64c36ff150807aa7cdbb5ef6f53a51a54",
+    "bytes": 3510
+  }
+}

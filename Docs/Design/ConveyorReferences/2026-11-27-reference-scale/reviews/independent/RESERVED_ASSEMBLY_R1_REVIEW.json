@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/independent_critic",
+  "recorded_utc": "2026-11-28T05:27:10.654797+00:00",
+  "authority": "Exact owner-selected conveyor R1 and core R4; current required 36-cell matrix; register-free bulk self-service contract.",
+  "approval_boundary": "Static illustrated concepts only. No native mesh, motion cycle, collision, item/cash conservation, routing/processing implementation or runtime conformity approval.",
+  "runtime_scores": {
+    "motion": null,
+    "collision": null,
+    "inventory_and_cash_conservation": null,
+    "routing_and_processing": null,
+    "full_functionality": null
+  },
+  "no_global_resize_requested": true,
+  "candidate": {
+    "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/16-dual-input-assembly-r1.png",
+    "sha256": "a950ea294c6a5ffddac4df29df69cd5b2029efe945ebfc4f416811f701c8623d",
+    "bytes": 2260768,
+    "dimensions": [
+      1536,
+      1024
+    ]
+  },
+  "status": "HOLD_INPUT_IDENTITY_HANDEDNESS_IN_OPPOSING_VIEWS",
+  "score": 9.0,
+  "scope": "Reserved dual-input food assembly, four static joined/ready/missing-input/full-output concepts.",
+  "coverage": {
+    "panels_inspected": 4,
+    "historical_assembly_source_inspected": true
+  },
+  "passing_observations": [
+    "Two physically separated input approaches and one supported output are shown in the selected enclosed kit style.",
+    "Transparent hood, separate A/B magazines and source machine silhouette are retained.",
+    "Neutral empty trays and explicit RESERVED / RECIPE UNFROZEN labels avoid inventing an active burger or other canonical resource.",
+    "WAITING FOR B retains an A tray outside a closed gate while B is empty; OUTPUT FULL has a physical machine stop and bounded finite receiver."
+  ],
+  "defects": [
+    {
+      "id": "ASSEMBLER-R1-01",
+      "matrix_cell": "A01",
+      "severity": "blocking_multiview_identity_consistency",
+      "region_xyxy": [
+        [
+          1220,
+          85,
+          1445,
+          270
+        ],
+        [
+          1220,
+          530,
+          1445,
+          710
+        ]
+      ],
+      "finding": "The output-facing READY TRANSFER and OUTPUT FULL views retain A on image-left and B on image-right, the same arrangement as the input-facing views. Opposing end views need the input identities reversed in projection.",
+      "repair": "Swap only the A/B magazine labels in the two output-facing panels: rear image-left B, rear image-right A. Keep input-facing JOINED INPUTS and WAITING FOR B unchanged."
+    }
+  ],
+  "matrix_statuses": {
+    "A01": "HOLD until opposing-view input identities are corrected."
+  },
+  "historical_source": {
+    "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/source/previous-conveyors/conveyor-assembly.png",
+    "sha256": "df561c77574c54e2b6325e1e69bbff080637cf45ecacba1518f0be8793e64c34",
+    "bytes": 1969259,
+    "dimensions": [
+      1672,
+      941
+    ]
+  },
+  "next_action": "Retest the two-label repair with a full-sheet regression; no size or recipe change is requested."
+}

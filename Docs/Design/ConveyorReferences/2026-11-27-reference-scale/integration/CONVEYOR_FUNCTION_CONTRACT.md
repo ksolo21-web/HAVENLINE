@@ -1,0 +1,37 @@
+# Conveyor function contract
+
+## Authority and scope
+
+The exact owner-selected conveyor R1 and core R4 hashes are in `RESOURCE_VARIANT_CONTRACT.json`. Keep the selected conveyor size and Character1 unchanged. Use R4 for ordinary pickups and the explicitly allowed fish/animal-meat variation. Earlier large-unit targets and later uniform reduction proposals are superseded by those selected images.
+
+This is a handoff to the runtime owner, not implemented gameplay. The complete render catalogue is `../plan/REQUIRED_CONVEYOR_RENDER_MATRIX.json`: 36 mandatory module/interface cells in nine groups. Alternate fishing-line views alone cannot close it. Original source playback is limited to the actual samples recorded in `SOURCE_PLAYBACK_LEDGER.json`; no still or generated image proves cycles or inventory behavior.
+
+## Item identity, size and clearance
+
+Preserve all 27 canonical resource IDs. Variant, source species and size are presentation metadata attached to existing item/lot custody, never new wallets or recipe quantities. Common/small, Perch/small, Trout/medium and Salmon/large are authored fish studies, not claims about current spawns. Historical Stag-family and hostile-wolf meat remain shared `meat`; the other eight animal cuts are art reserves. Existing generic stock keeps generic provenance.
+
+A unit retains its variant and physical size during carry → belt → dock → storage → counter. No shrinking, scale reset or species reroll at a boundary. Intentional cooking transforms `fish` to `cooked_fish` or `meat` to `meal` under the existing recipe while retaining source species family in presentation. Cooked geometry may differ from raw geometry, but the created output keeps its own fixed bounds through later transfers.
+
+Before launch, test the largest accepted physical item against lane width, overhead clearance, corner swept bounds, rising/falling transitions, bridge plates, hoppers, storage sleeves, output trays and customer stock. Dynamic spacing uses actual projected item lengths: the center separation must at least cover half the leading length plus half the following length plus the authored clearance. No numeric clearance is frozen here. Corners also require swept-envelope checks. Reserve a compatible destination and a clear following gap; hold upstream if either is unavailable. A nonfitting item remains recoverable instead of being resized.
+
+## Routing and processing
+
+Each route declares its canonical accepted forms, source OUT, destination IN and direction. Keep utility and prepared-food lanes separate. A splitter selects one compatible destination; a merge arbitrates two sources into one reserved slot. Separate input magazines at an assembler are not a mixed merge.
+
+Reserve destination space and exclusive transfer ownership before dispatch. Reserve all required ingredients and output capacity before a processing commit. Consume inputs and create outputs once. Completed output dispatch must not re-demand already consumed ingredients. Full, blocked, wrong-item or damaged states preserve stock and visibly hold the next release. Resume after the condition clears without loss, duplication or overlapping item owners. Save/reload and interruption must preserve that accounting.
+
+Current selected processing routes remain unchanged: meat→meal; fish→cooked_fish; wheat→bread; wood→planks; stone→blocks; metal+coal→iron_bars; iron_bars→sheet_metal or mechanical_parts; iron_bars+coal→steel; steel+mechanical_parts+sheet_metal→drive_assembly; steel+mechanical_parts+planks→traction_kit; manual pump extracts crude_oil; crude_oil+coal→fuel. Existing authored recipe quantities remain in their source records; this contract does not rewrite them. The historical two-input food assembler is reserved until an explicit recipe/menu exists. It creates no burger resource or mandatory intermediate.
+
+## Storage, machine and counter interfaces
+
+Utility IN and OUT are separate low left-wall ports below the storage window, linked to indexed local timber/mineral trays. Prepared-food IN and OUT are separate rear shelf-height ports with a short horizontal shuttle above closed raw-food cabinets and below the vent. No automatic path returns storage OUT to its own IN. Keep the front doors/apron, center aisle, right fuel hatch and service approaches open. The cooker retains physical-left input, physical-right output and front control access. The center heater remains a warmth fixture, separate from the industrial smelter.
+
+Keep manual fuel/raw-food/hide/cash/cargo interfaces manual unless the gameplay owner explicitly implements an eligible route. The manual oil pump has a sealed collection coupling and container pickup, not open liquid on rollers or a new camp pipeline. Industrial recipe bays remain distinct and readable.
+
+The current counter is **register-free self-service**. An unlocked survivor or player can bulk-deliver all eligible held product and collect available cash during a valid visit. Customers autonomously receive their complete eligible order when ready. Stock, payment and cash pickup occupy separate physical places; stock-full waits and cash collection remain exactly once. Inspected current Market.PRODUCTS is `meal`, `planks` and `blocks`; use those for active service examples. Scenes that actually depict fish production or sales are future unlocked production studies, not current Level1 availability or automatic fish sales eligibility. The selected meat-to-meal camp is also a proposed conveyor connection study; its image does not establish that new automation is implemented. No random clerk, register dependency, or new sales eligibility follows from a render. Preserve the current native self-service counter and newer market behavior.
+
+## Runtime gate and smallest missing evidence
+
+The read-only feasibility audit identified Godot 4.7.2 and current trial-branch source `fad3af0a45e94262737077ae513827b5042adb41`. An earlier complete local project exists; exact-current materialization, graphical Godot access, revised native assets and updated motion have not been proved by this handoff. The separate native desktop played the reference file, which does not establish shell graphical Godot availability. Runtime work is being coordinated by the parent; the inspected ownership files alone did not resolve a current Level1 path owner. Do not overwrite that active work with the older Build14 audit snapshot.
+
+The next evidence is: (1) a complete pinned candidate and native-asset hash manifest from the runtime owner; (2) measured physical bounds and targeted variant/spacing/port checks; (3) actual tests of existing quantity/cash conservation, full/blocked/wrong-input behavior, save/reload and interruption; (4) continuous graphical playback tracking ordinary and largest fish plus selected meat through carry, corner, height transition, process, stock, customer service and separate cash; (5) independent review of meaningful views and complete cycles. Source and candidate timing must be recorded honestly. Apply the current reference acceptance policy: exact unrounded 10.0 for applicable reference-sensitive/style critics, at least 9.9 for additional reference-sensitive dimensions and at least 9.5 for other applicable dimensions. All mandatory evidence/checks must pass, with no averaging or unapproved deviations. Motion, physics, runtime integration and whole-task completion remain unapproved until that evidence exists.

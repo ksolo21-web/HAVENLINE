@@ -1,0 +1,505 @@
+{
+  "schema_version": 1,
+  "created_utc": "2026-11-28T04:57:47.050950+00:00",
+  "scope": "Read-only implementation feasibility audit for approved conveyor/resource visual revision; no gameplay, ownership, branch, publication or runtime approval changes.",
+  "status": "BOUNDED_FEASIBILITY_AUDIT_COMPLETE_RUNTIME_UNTESTED",
+  "conclusion": "A native Godot implementation/playback path is available. The engine and a hash-verified earlier complete project exist. A current isolated project can be assembled using 770 exact local files plus 102 changed/new files. Current gameplay owner and graphical access are not verified; new PNG renders are not native runtime replacements.",
+  "authority": {
+    "selector_evidence": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/plan/runtime-feasibility-sources/CURRENT_GAMEPLAY_SOURCE.json",
+    "selector_source_commit": "2fc474bbbb03d9a242b216d33e8588e028de4ce5",
+    "selected_branch": "trial/world-one-expansion-2026-11-26",
+    "live_head": "fad3af0a45e94262737077ae513827b5042adb41",
+    "live_head_observed_utc": "2026-11-28T04:56:06.336234+00:00",
+    "project": "HavenlineLevel1/project.godot",
+    "main_scene": "res://field_opening.tscn",
+    "root_tree": "16052fd125daa7162dc98153dacc378c1936f931",
+    "project_tree": "246fdecea3e0c18cfca3e822b6cb5585e35b9a66",
+    "current_commit_message": "Record Beta T01 forest, blade and guard verification",
+    "commit_author_display_name": "Havenline Studio",
+    "current_assigned_owner": null,
+    "owner_status": "UNRESOLVED: current PATH_OWNERSHIP active_owners is empty and the legacy WORKSTREAM_REGISTRY has no HavenlineLevel1/trial-branch assignment. Generic primary-integration-owner and commit author are not proof of an active assigned editor.",
+    "historical_alternative_not_default": "alfred/level-1-replacement"
+  },
+  "engine": {
+    "observed_utc": "2026-11-28T04:56:06.336234+00:00",
+    "engine_version": "4.7.2.stable.official.ed1daf0bf",
+    "executables": {
+      "godot": "/usr/local/bin/godot",
+      "godot4": "/usr/local/bin/godot4",
+      "Xorg": "/usr/bin/Xorg",
+      "Xvfb": null,
+      "adb": null,
+      "ffmpeg": "/usr/bin/ffmpeg",
+      "node": "/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node",
+      "python": "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+      "dotnet": null,
+      "Unity": null
+    },
+    "DISPLAY": null,
+    "WAYLAND_DISPLAY": null,
+    "x11_socket_exists": false,
+    "dri_exists": false,
+    "xorg_dummy_driver_exists": true,
+    "xorg_config_exists": true,
+    "godot_export_templates_exist": false,
+    "godot_graphical_launch_attempted": false,
+    "godot_import_or_run_attempted": false
+  },
+  "local_project": {
+    "observed_utc": "2026-11-28T04:56:02.520730+00:00",
+    "repo": "/workspace/scratch/e15437dc7c94/HAVENLINE-current-gameplay",
+    "head": "2f46e72e300a719f34ca9b0e9b718282a5a88ddd",
+    "files": 817,
+    "expected_bytes": 243933482,
+    "missing": 0,
+    "git_blob_mismatches": 0,
+    "lfs_pointer_files": 0
+  },
+  "current_project": {
+    "files": 872,
+    "bytes": 272712703,
+    "assets": 444,
+    "glbs": 69,
+    "glb_bytes": 170420512,
+    "tree_truncated": false,
+    "same_path_same_blob_reusable_files": 770,
+    "changed_existing_files": 45,
+    "new_files": 57,
+    "delta_files": 102,
+    "delta_bytes": 29269653,
+    "removed_since_local": [
+      "assets/field_world/tower_sightline.gdshader",
+      "assets/field_world/tower_sightline.gdshader.uid"
+    ],
+    "current_complete_checkout_located": false,
+    "full_delta_download_performed": false
+  },
+  "dependency_checks": {
+    "scope": "Ten retrieved current top-level scripts; literal res:// references checked against exact current project Git tree. This is not a complete import, dynamic dependency or runtime test.",
+    "scripts": 10,
+    "literal_references": 58,
+    "unresolved_literal_references": [],
+    "conveyor_counter_workshop_glbs": [
+      {
+        "path": "assets/conveyors/Meshy/corner.glb",
+        "sha": "36f8402cdc7305a8f0f078741770259897dbddaf",
+        "size": 1296436
+      },
+      {
+        "path": "assets/conveyors/Meshy/incline.glb",
+        "sha": "f071e76699abd8645030e21485d151a401a8e0b3",
+        "size": 772176
+      },
+      {
+        "path": "assets/conveyors/Meshy/straight.glb",
+        "sha": "41f60c6ca4225443f97dab8370873526498fc092",
+        "size": 594688
+      },
+      {
+        "path": "assets/conveyors/connected_transport_kit.glb",
+        "sha": "090660c15a702a9013d7c79bda62fe70eda5e537",
+        "size": 462152
+      },
+      {
+        "path": "assets/customer_counter/banded_notes.glb",
+        "sha": "0f9ac388ac9c7c3cebb0dd0ce1ca37731e3d6a84",
+        "size": 352768
+      },
+      {
+        "path": "assets/customer_counter/canonical_counter.glb",
+        "sha": "4a882ff3199d4209060ff930231ed9379f92bfae",
+        "size": 393524
+      },
+      {
+        "path": "assets/customer_counter/cooked_game_meat.glb",
+        "sha": "44335fcb08ccd01d21113a66b29d11314f4409bb",
+        "size": 389708
+      },
+      {
+        "path": "assets/customer_counter/north_counter.glb",
+        "sha": "8654977d664202724b7089984bf7fb876ffbd331",
+        "size": 553920
+      },
+      {
+        "path": "assets/customer_counter/self_service_counter.glb",
+        "sha": "15f893a016025846d3c6a0759ce07a0585adf05b",
+        "size": 413468
+      },
+      {
+        "path": "assets/paid_workshops/cooker_processor.glb",
+        "sha": "3efb89203066d8eaa83d64566cb84e30f54d4023",
+        "size": 239896
+      },
+      {
+        "path": "assets/paid_workshops/quarry_drill_station.glb",
+        "sha": "022239235439749c07d4fc19ae729638bf5cc1b4",
+        "size": 306752
+      },
+      {
+        "path": "assets/paid_workshops/quarry_spindle.glb",
+        "sha": "5cd24debb6a62ab8f07a7e2e4591445dff06724e",
+        "size": 78316
+      },
+      {
+        "path": "assets/paid_workshops/saw_station.glb",
+        "sha": "0d197128b4a2c458b78f26146ac889a6195b7ee0",
+        "size": 288824
+      },
+      {
+        "path": "assets/shore_workshops/camp_saw_bench.glb",
+        "sha": "4dfe399f8ae3533881b65145eacfb842e4beaa2c",
+        "size": 956812
+      },
+      {
+        "path": "assets/shore_workshops/dressed_block.glb",
+        "sha": "c7f292e882c9ea0c62e309134b424610ef86e37b",
+        "size": 69956
+      },
+      {
+        "path": "assets/shore_workshops/finished_planks.glb",
+        "sha": "5ae1471322743615895466cda1ba1eee43ae260c",
+        "size": 82252
+      },
+      {
+        "path": "assets/shore_workshops/shore_quarry_drill.glb",
+        "sha": "f09bf5742ad5bb45db44e70c338712c9f355f5f8",
+        "size": 989588
+      },
+      {
+        "path": "assets/shore_workshops/shore_saw_bench.glb",
+        "sha": "60ae86b20e5fbb4bfff37ab2f41a72ac0e248a24",
+        "size": 907608
+      }
+    ]
+  },
+  "implementation_facts": [
+    {
+      "claim": "Current counter is NorthSelfServiceCounter, preloading assets/customer_counter/self_service_counter.glb; do not restore an older staffed-counter version from Build14.",
+      "source": "current/HavenlineLevel1/field_counter.gd"
+    },
+    {
+      "claim": "Eight current typed conveyor routes are meal_to_store, stored_meal, meal, meat, wood, planks, stone, blocks. The early food route uses serial storage and request links.",
+      "source": "current/HavenlineLevel1/field_conveyors.gd"
+    },
+    {
+      "claim": "Current transport geometry references connected_transport_kit.glb and fitted Meshy straight/corner/incline resources. These native assets are distinct from the newly approved R1 PNG concept.",
+      "source": "current/HavenlineLevel1/field_conveyor_geometry.gd"
+    },
+    {
+      "claim": "field_art.gd normalizes width by the largest horizontal model extent. Explicit call-site widths override the central defaults; conveyor transit calls Art.make(lane, .45), and product display scaling also exists. Updating the PNG or WIDTHS alone cannot establish consistent carry, belt, shelf and sale scale.",
+      "sources": [
+        "current/HavenlineLevel1/field_art.gd",
+        "current/HavenlineLevel1/field_conveyors.gd"
+      ]
+    },
+    {
+      "claim": "Current Beta T01 documentation carries forward signed Build16 foundations and reports nine native suites for its parent source. It explicitly leaves full reference/device approval open. This audit did not rerun those suites.",
+      "sources": [
+        "current/Docs/QA/Beta-T01-2026-11-27/README.md",
+        "current/Docs/QA/Beta-T01-2026-11-27/Verification/Native-status.json"
+      ]
+    }
+  ],
+  "animal_fish_scope": {
+    "current_wildlife_id": "wildlife_tundra_stag",
+    "current_wildlife_name": "Tundra Stag",
+    "current_wildlife_asset": "assets/field/tundra_stag.glb",
+    "current_wildlife_drop_key": "meat",
+    "hostile_wolf_asset": "assets/field/hostile_wolf.glb",
+    "current_field_inventory_keys": [
+      "wood",
+      "stone",
+      "meat",
+      "coal",
+      "slate",
+      "metal"
+    ],
+    "fish_species_catalogue_in_current_field_inventory": false,
+    "animal_specific_meat_inventory_in_current_field_inventory": false,
+    "art_variant_policy": "The ten recovered meat identities and requested fish variants are authorized visual-art references/variants. They are not evidence of active animal spawn, individual meat inventory, drop tables, fish species, recipes or an implemented fish processing line."
+  },
+  "smallest_playback_path": [
+    {
+      "step": 1,
+      "action": "Pin fad3af0a45e94262737077ae513827b5042adb41 in an isolated disposable snapshot. Reuse the 770 hash-matching local files; download and hash-check the 102-file 29,269,653-byte delta against the current tree; omit the two removed shaders.",
+      "status": "PREPARED_BY_AUDIT_NOT_EXECUTED"
+    },
+    {
+      "step": 2,
+      "action": "Import that isolated project with installed Godot 4.7.2; inspect actual import errors before changing art or source.",
+      "status": "NOT_RUN"
+    },
+    {
+      "step": 3,
+      "action": "Establish a working Godot graphical display. Shell has no DISPLAY/Wayland/X socket/GPU device. Xorg plus dummy driver and config exist, so a private software-rendered display is a concrete candidate, not a proven solution. The separate native desktop reading videos does not prove shell Godot access.",
+      "status": "NOT_TESTED"
+    },
+    {
+      "step": 4,
+      "action": "Use the existing disposable profile contract and field_opening scene; exercise existing paid-conveyor QA initial/interrupt/finish/film phases as appropriate, preserving fresh profile setup and phase prerequisites.",
+      "status": "NOT_RUN"
+    },
+    {
+      "step": 5,
+      "action": "For visual implementation, adapt or rebuild native conveyor/resource assets and every relevant width/offset, collision, item spacing, carry, stocking and service call site. Preserve the current self-service counter and Build16/Beta changes.",
+      "status": "OUTSIDE_READ_ONLY_AUDIT"
+    },
+    {
+      "step": 6,
+      "action": "Independently inspect actual native playback at normal gameplay and pinch zoom, including intake, motion, processing, blocked/full outputs, restart/conservation, carry stacks, customer pickup and cash; compare against locked video windows and approved art.",
+      "status": "REQUIRED_FOR_RUNTIME_ACCEPTANCE"
+    }
+  ],
+  "disposable_profile_contract": {
+    "source_path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/plan/runtime-feasibility-sources/current/HavenlineLevel1/opening_save.gd",
+    "current_git_blob_sha1": "7ba67c0919048ee1c7396a6ef42cb8ec5de99d24",
+    "flag": "--l1-disposable-profile=",
+    "path_shape": "/tmp/havenline-l1-v3-<token of at least 6 characters; letters/digits/underscore/hyphen>",
+    "sentinel_filename": "L1-DISPOSABLE",
+    "sentinel_exact_text": "HAVENLINE-ALFRED-V3-DISPOSABLE\n",
+    "symlink_paths_rejected": true,
+    "test_helper": "res://tests/lifecycle_test_profile.gd",
+    "conveyor_test": "res://tests/qa_paid_conveyors.gd",
+    "capture_environment_variable": "HAVENLINE_CONVEYOR_VIEWS",
+    "commands_executed": false
+  },
+  "blockers_and_limits": [
+    {
+      "item": "Actual assigned owner for current gameplay paths",
+      "status": "UNRESOLVED",
+      "impact": "Must be reconciled before production edits; does not block read-only source or art work."
+    },
+    {
+      "item": "Complete current candidate checkout",
+      "status": "NOT_MATERIALIZED",
+      "impact": "Exact tree and 102-file delta are known; older 817-file project is fully hash-verified."
+    },
+    {
+      "item": "Godot graphical playback in this shell",
+      "status": "UNTESTED",
+      "impact": "Engine exists, dummy Xorg option exists, but no display is currently bound."
+    },
+    {
+      "item": "New approved raster art to native meshes/materials and scale integration",
+      "status": "NOT_IMPLEMENTED",
+      "impact": "PNG approval cannot prove look/size/functionality in current game."
+    },
+    {
+      "item": "Android device/export validation",
+      "status": "NOT_AVAILABLE_IN_THIS_AUDIT",
+      "impact": "adb and local Godot export templates absent. No new APK/install or device-performance claim."
+    }
+  ],
+  "acceptance": {
+    "source_selector_resolved": true,
+    "live_branch_head_verified": true,
+    "active_owner_resolved": false,
+    "installed_engine_verified": true,
+    "earlier_complete_project_all_blobs_verified": true,
+    "exact_current_delta_measured": true,
+    "bounded_current_dependencies_checked": true,
+    "smallest_execution_path_defined": true,
+    "gameplay_modified": false,
+    "branch_or_publication_modified": false,
+    "actual_godot_import_run_or_playback_verified": false,
+    "independent_audit_review": "PENDING",
+    "runtime_approval": false
+  },
+  "evidence": [
+    {
+      "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/plan/runtime-feasibility-sources/CURRENT_GAMEPLAY_SOURCE.json",
+      "bytes": 1988,
+      "sha256": "7ea51243c3a91855ab505812ad945e8b6654b9bfef48d6f107109e65b5136213"
+    },
+    {
+      "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/plan/runtime-feasibility-sources/ENGINE_ENVIRONMENT.json",
+      "bytes": 814,
+      "sha256": "cabccbf59ac7b7b25df98a9f11ca1a82445c13d95e47b1e59a82994a110d88ad"
+    },
+    {
+      "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/plan/runtime-feasibility-sources/LIVE_BRANCH_READBACK.json",
+      "bytes": 490,
+      "sha256": "a6202df653474ce9e726ced82c3f1b6e22863829b9dee6a34f0be72e2ee0a11e"
+    },
+    {
+      "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/plan/runtime-feasibility-sources/LOCAL_COMPLETE_CHECKOUT_HASH_AUDIT.json",
+      "bytes": 295378,
+      "sha256": "0923d7908437f98518a0e1e69afae8fd4e2ab584cd7ec460a67ab208eaf8097a"
+    },
+    {
+      "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/plan/runtime-feasibility-sources/STATIC_DEPENDENCY_CHECK.json",
+      "bytes": 23406,
+      "sha256": "2e13b718c3c6e2f4b6ee1b4c99fe711ae9383229bbe51e8555edb908ca9835d1"
+    },
+    {
+      "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/plan/runtime-feasibility-sources/current/Docs/Production/AGENT_EXECUTION_LOOP_GUARD.md",
+      "bytes": 5817,
+      "sha256": "629400dece9830eeb58a554149b248bd92a9f69b124d1c9908fc1bd3f63662c3"
+    },
+    {
+      "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/plan/runtime-feasibility-sources/current/Docs/Production/PATH_OWNERSHIP.json",
+      "bytes": 15269,
+      "sha256": "bc55662e329a6f871f66d98ec66dc392d65843aa7ed3cfaa468e747aff1fe4d3"
+    },
+    {
+      "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/plan/runtime-feasibility-sources/current/Docs/Production/WORKSTREAM_REGISTRY.json",
+      "bytes": 23193,
+      "sha256": "786f0a03a6a1b95cc0a5603d5fa7a8d1bc7979f18ee4a4a3ee6fe494af73633c"
+    },
+    {
+      "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/plan/runtime-feasibility-sources/current/Docs/QA/Beta-T01-2026-11-27/README.md",
+      "bytes": 3855,
+      "sha256": "263369e6d3bc33f07bdd6260f98565f8edd64546ea484dbff84454afc18649e7"
+    },
+    {
+      "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/plan/runtime-feasibility-sources/current/Docs/QA/Beta-T01-2026-11-27/Source/Reviewed-files.json",
+      "bytes": 84307,
+      "sha256": "c20c0592a0148f01e47857e2600cb067cda35d40b3d8bf3fd3265bfbfc758ac9"
+    },
+    {
+      "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/plan/runtime-feasibility-sources/current/Docs/QA/Beta-T01-2026-11-27/Verification/Native-status.json",
+      "bytes": 1235,
+      "sha256": "b269596e1de461827f55f44aade90f6d8fa99694bcbc14da7d130cbd6f640a3b"
+    },
+    {
+      "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/plan/runtime-feasibility-sources/current/HavenlineLevel1/README.md",
+      "bytes": 3314,
+      "sha256": "e0623163822323edeb231d616df9136fb93fc8dacfab9861de9c211459ef5599"
+    },
+    {
+      "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/plan/runtime-feasibility-sources/current/HavenlineLevel1/field_art.gd",
+      "bytes": 2545,
+      "sha256": "02c3deeb02e7f85761f79be1ed75a6eb4b4a9e8a4b55e540124aaf9693dfe80d"
+    },
+    {
+      "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/plan/runtime-feasibility-sources/current/HavenlineLevel1/field_conveyor_geometry.gd",
+      "bytes": 9833,
+      "sha256": "08134b4223973f5688135823cb277845755280ebeb3ff2881d4919c36db047ce"
+    },
+    {
+      "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/plan/runtime-feasibility-sources/current/HavenlineLevel1/field_conveyor_network.gd",
+      "bytes": 13952,
+      "sha256": "3782f9f6f4f75f3a4522f8a31a4fe3762cab497114b385b0ed1f7e51dc080e0b"
+    },
+    {
+      "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/plan/runtime-feasibility-sources/current/HavenlineLevel1/field_conveyors.gd",
+      "bytes": 9133,
+      "sha256": "801656326c637918f0048ce629cc637484048f4301c97522b7ccf482ba6a3266"
+    },
+    {
+      "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/plan/runtime-feasibility-sources/current/HavenlineLevel1/field_counter.gd",
+      "bytes": 14704,
+      "sha256": "ee650ac77ecc470fd8d88f92c54779c76fa37e63ff19f7a13e13eaf794d0e097"
+    },
+    {
+      "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/plan/runtime-feasibility-sources/current/HavenlineLevel1/field_enemy.gd",
+      "bytes": 15679,
+      "sha256": "d3669575239d0a6ed0245666af885c5f081c050bc83c060d941f8176e47c9c7d"
+    },
+    {
+      "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/plan/runtime-feasibility-sources/current/HavenlineLevel1/field_inventory.gd",
+      "bytes": 24669,
+      "sha256": "75262aecbc62ad6c75aa104a28cbbf5fd48e17339db5d6ad777955ba707c620a"
+    },
+    {
+      "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/plan/runtime-feasibility-sources/current/HavenlineLevel1/field_lakeshore.gd",
+      "bytes": 10579,
+      "sha256": "4db05f73a6840c66d28e3cd6a7061acb076a95380b7219ff3c541bad043fdcf5"
+    },
+    {
+      "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/plan/runtime-feasibility-sources/current/HavenlineLevel1/field_processors.gd",
+      "bytes": 9587,
+      "sha256": "5ac16a39800ba0dadfb9325b18b585e6a85f46c454876ae1c6d123f155b1dca1"
+    },
+    {
+      "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/plan/runtime-feasibility-sources/current/HavenlineLevel1/field_settlement.gd",
+      "bytes": 14562,
+      "sha256": "0b56266a95e175131e84ce1927a1caee13b9613b7348ba07bad6582c5ff8b992"
+    },
+    {
+      "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/plan/runtime-feasibility-sources/current/HavenlineLevel1/field_wildlife.gd",
+      "bytes": 5836,
+      "sha256": "d6165255b1b01eaa8b2227712f5b276096e02bb4fa77da910838522183d747a6"
+    },
+    {
+      "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/plan/runtime-feasibility-sources/current/HavenlineLevel1/field_worksites.gd",
+      "bytes": 7780,
+      "sha256": "ff1bd8504329317483e8d761a6c869afc999a34ed419f55344ffefc0789b7a24"
+    },
+    {
+      "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/plan/runtime-feasibility-sources/current/HavenlineLevel1/opening_save.gd",
+      "bytes": 3913,
+      "sha256": "e07e922708c473b291c46fac87ebdc5a2e26d89617f741c4a8ae91bec5aa5f55"
+    },
+    {
+      "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/plan/runtime-feasibility-sources/current/HavenlineLevel1/tests/lifecycle_test_profile.gd",
+      "bytes": 1897,
+      "sha256": "93283e82777b2a8002f0c43eb9025fdb76118cd7b73673d8ec15118261989639"
+    },
+    {
+      "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/plan/runtime-feasibility-sources/current/HavenlineLevel1/tests/qa_paid_conveyors.gd",
+      "bytes": 13361,
+      "sha256": "dcc7044ce688690755c71abdff081dcccecaf19fd1d207675f74f53c149efabb"
+    },
+    {
+      "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/plan/runtime-feasibility-sources/current/HavenlineLevel1/tests/qa_survivor_hunt.gd",
+      "bytes": 6114,
+      "sha256": "0d94150ee68823fa8fe00b634af041881df9db595502af2f3260eb9230abc076"
+    },
+    {
+      "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/plan/runtime-feasibility-sources/current-source-readbacks.json",
+      "bytes": 9367,
+      "sha256": "bd175bb24b581152802bf47ec1ad9794dc41a8aa73616b93d9208feae4bc26ea"
+    },
+    {
+      "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/plan/runtime-feasibility-sources/initial-readback.json",
+      "bytes": 1681,
+      "sha256": "2215d5c037a23b681fcc301ced45d8981f364c320e9d1d18470d0f0c8ef6d999"
+    },
+    {
+      "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/plan/runtime-feasibility-sources/live-Docs-tree.json",
+      "bytes": 1944671,
+      "sha256": "de761ba9c353fad68022237968ece541890d7471155f8e8622ed0a975aa3471e"
+    },
+    {
+      "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/plan/runtime-feasibility-sources/live-Level1-AGENTS.md",
+      "bytes": 2571,
+      "sha256": "f1732ba9b9d9d789fcefc57c5120a784299d05a1da11d0efda05fa339ceea830"
+    },
+    {
+      "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/plan/runtime-feasibility-sources/live-Level1-tree.json",
+      "bytes": 222984,
+      "sha256": "f55a4c24852b2fefed5ea5a5a58caca4c76ef5adb9502f53a205e3a957a78676"
+    },
+    {
+      "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/plan/runtime-feasibility-sources/live-commit.json",
+      "bytes": 1174,
+      "sha256": "943525c9189bbfe99e6f5d807f082339abec8256a926a7df951ff57b7f2e9110"
+    },
+    {
+      "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/plan/runtime-feasibility-sources/live-project.godot",
+      "bytes": 1056,
+      "sha256": "c8a12b96cc7c2580b60d896965d77ac0c69dfeec1adcf8e2963710018b878137"
+    },
+    {
+      "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/plan/runtime-feasibility-sources/live-root-AGENTS.md",
+      "bytes": 25095,
+      "sha256": "1d49772756203cf57913c8e70687932f773011c92d9c32e2c8793941300d0151"
+    },
+    {
+      "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/plan/runtime-feasibility-sources/live-root-tree.json",
+      "bytes": 3664,
+      "sha256": "e1dd9da1ab25c6342817bd58d1e9ca61c06173e368b94e7886ec14fd3e96c00f"
+    },
+    {
+      "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/plan/runtime-feasibility-sources/live-vs-local-delta.json",
+      "bytes": 30788,
+      "sha256": "0faff4eb63e10ae05010f0d7faf8c5bcb3d16ff15173aca0ee02ae4890ddedfb"
+    },
+    {
+      "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/plan/runtime-feasibility-sources/supplementary-current-readbacks.json",
+      "bytes": 2048,
+      "sha256": "afd98d0a0f3240cc44e2e280e6192e653017b65dfd06b4d5d4cd072a5b1b1a60"
+    }
+  ]
+}

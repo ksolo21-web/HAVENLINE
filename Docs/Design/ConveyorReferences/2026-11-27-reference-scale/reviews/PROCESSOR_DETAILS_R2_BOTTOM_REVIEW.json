@@ -1,0 +1,82 @@
+{
+  "schema_version": 2,
+  "reviewer": "/root/independent_critic",
+  "recorded_utc": "2026-11-28T05:54:42.195521+00:00",
+  "independence": "Reviewer did not generate or edit the candidate art. Only inspection crops were created.",
+  "approval_boundary": "Static illustrated evidence only; no native model, moving-load clearance, gate cycle, processing logic, inventory or runtime approval.",
+  "runtime_approved": false,
+  "policy": {
+    "path": "Docs/Production/REFERENCE_ACCEPTANCE_POLICY.json",
+    "source_commit": "2fc474bbbb03d9a242b216d33e8588e028de4ce5",
+    "sha256": "c34c0cbe5b6d473be40ee5f0f0e08aab8f6ff42f97cfe2e7c93b2694e4dbaf43",
+    "applicable_reference_style_gates": "Exact unrounded 10",
+    "additional_reference_dimensions_minimum": 9.9,
+    "other_dimensions_minimum": 9.5,
+    "all_mandatory_evidence_required": true,
+    "averaging_forbidden": true
+  },
+  "score_is_not_an_average": true,
+  "candidate": {
+    "path": "/workspace/scratch/59f000bd1476/HAVENLINE-processors/Docs/Design/ConveyorReferences/2026-11-27-reference-scale/attempts/22-processor-connection-details-r2.png",
+    "sha256": "1b20047870b19196fec9964ed73bce128366e88ddf27c936f6f855b9e1262297",
+    "bytes": 2207191,
+    "dimensions": [
+      1536,
+      1024
+    ]
+  },
+  "status": "PASS_BOTTOM_TWO_PANELS_ONLY",
+  "score": 10,
+  "all_mandatory_checks_pass": true,
+  "scope": "Bottom-left proposed parked-dock outlet detail (U03) and bottom-right reverse cooker docks (F02). The top industrial panels retain their separate reviewer.",
+  "coverage": {
+    "approved_panels": 2,
+    "assigned_panels": 2,
+    "full_sheet_viewed": true,
+    "native_bottom_closeups_inspected": 2
+  },
+  "scores": {
+    "same_parked_cassette_identity": 10,
+    "block_physically_crossing_outlet": 10,
+    "supported_outlet_plate_and_rollers": 10,
+    "visible_authored_coupling": 10,
+    "reverse_cooker_handedness": 10,
+    "raw_cooked_form_separation": 10,
+    "selected_style": 10,
+    "regression_consistency": 10
+  },
+  "observations": [
+    "A rectangular block crosses the actual dark OUT mouth into a supported roller receiver. The label sits above the mouth, not over a blind wall.",
+    "The mechanical coupling and original parked vehicle/tower remain distinct. Cargo does not travel through tracks or cab.",
+    "Reverse cooker retains raw input on image-right and cooked output on image-left, preserving physical side identity and the pressure-vessel relationship.",
+    "The repaired upper-panel smelter gates have not introduced a visible regression in the two assigned lower panels."
+  ],
+  "defects_in_assigned_panels": [],
+  "matrix_statuses": {
+    "U03": "PASS mandatory static overview/input/outlet evidence when paired with utility 14 R3.",
+    "F02": "PASS additional true reverse connection evidence."
+  },
+  "not_approved_by_this_report": [
+    "Top-left smelter full-state panel",
+    "Top-right forge coal detail",
+    "Any native or runtime behavior"
+  ],
+  "separate_top_panel_report": {
+    "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/critic/resource-inventory-industrial-final/INDUSTRIAL_FINAL_REVIEW.json",
+    "sha256": "cdee219b658140f02b12fb1764ee40f18d63d9806235f65c0472f7f17ddc78e3",
+    "bytes": 17993
+  },
+  "evidence_manifest": {
+    "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/critic/processor-details-r2-bottom-evidence/CROP_MANIFEST.json",
+    "sha256": "3d8b14e42a55c87829415b2bef37cfd3eb503d62dd1bc236951284610e6d4d30",
+    "bytes": 1297
+  },
+  "history": [
+    {
+      "path": "/workspace/scratch/59f000bd1476/conveyor-reference-revision/critic/PROCESSOR_DETAILS_R1_BOTTOM_REVIEW.json",
+      "sha256": "9a83ae01018f9beaba821a695b25e9b5be790740995fa645a31c5ec574b922f1",
+      "bytes": 2377
+    }
+  ],
+  "candidate_files_edited": false
+}
