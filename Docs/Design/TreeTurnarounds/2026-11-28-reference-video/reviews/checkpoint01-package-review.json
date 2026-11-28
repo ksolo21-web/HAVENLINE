@@ -1,0 +1,646 @@
+{
+  "schema_version": 1,
+  "review_id": "havenline-tree-checkpoint01-package-custody-r1",
+  "reviewer": "/root/planning_package_critic",
+  "reviewed_at_utc": "2026-11-28T14:31:49.116893+00:00",
+  "independent_from_package_builder": true,
+  "scope": "Checkpoint 01 package integrity, source custody, review binding, preservation, navigation and truthful status only. Not a rerun of the tree visual critic or approval of unobserved original geometry.",
+  "verdict": "PASS_BOUNDED_CHECKPOINT_PACKAGE_CUSTODY_ONLY",
+  "score": 10.0,
+  "score_meaning": "All required checks within this package/custody scope passed. No art/native/full-task score is assigned by this reviewer.",
+  "threshold": {
+    "pass_strictly_above": 9.0,
+    "target": 10.0,
+    "all_mandatory_scope_checks_required": true,
+    "no_averaging_or_waiver": true
+  },
+  "checks_passed": 18,
+  "checks_required": 18,
+  "checks": [
+    {
+      "id": "CP01",
+      "check": "Complete staged manifest",
+      "mandatory": true,
+      "passed": true,
+      "score": 10.0,
+      "evidence": "All 191 listed files match SHA256, Git blob ID and byte length. The sole unlisted file is the explicitly self-excluded MANIFEST.json; actual package count is 192."
+    },
+    {
+      "id": "CP02",
+      "check": "Exact candidate identities",
+      "mandatory": true,
+      "passed": true,
+      "score": 10.0,
+      "evidence": "All 12 generated originals match the candidate index for SHA256, Git blob ID, bytes and actual native pixel dimensions; all 12 prompt files exist."
+    },
+    {
+      "id": "CP03",
+      "check": "Exact review bindings",
+      "mandatory": true,
+      "passed": true,
+      "score": 10.0,
+      "evidence": "All 12 review files match their bound hashes, each review binds the exact indexed candidate, and all index statuses/scores agree with those receipts."
+    },
+    {
+      "id": "CP04",
+      "check": "Rejected history preserved",
+      "mandatory": true,
+      "passed": true,
+      "score": 10.0,
+      "evidence": "All 12 workspace originals and all staged source/prompt/review files match their preserved workspace bytes. No earlier candidate or rejection is replaced by the current result."
+    },
+    {
+      "id": "CP05",
+      "check": "B static pass accurately bounded",
+      "mandatory": true,
+      "passed": true,
+      "score": 10.0,
+      "evidence": "B-r5 is 9.9 visible fidelity and 9.9 static coherence with 13/13 scoped checks, matching the raw review. README and acceptance context explicitly deny formal task closure, native integration, exact azimuth/mesh proof and literal original 360 certification."
+    },
+    {
+      "id": "CP06",
+      "check": "A retained as unapproved",
+      "mandatory": true,
+      "passed": true,
+      "score": 10.0,
+      "evidence": "A-r3 remains an eight-view draft with 12/13 checks and the middle-hem defect open. A source-facing r1 remains the best retained single-view draft at 9.6; later rejected offset edits and their failures remain recorded."
+    },
+    {
+      "id": "CP07",
+      "check": "Appearance versus mesh count",
+      "mandatory": true,
+      "passed": true,
+      "score": 10.0,
+      "evidence": "The census preserves two source appearance targets, with no third observed in sampled coverage. It does not assert two original meshes or two species, or infer source count from the existing three pine filenames."
+    },
+    {
+      "id": "CP08",
+      "check": "Sampled-coverage arithmetic",
+      "mandatory": true,
+      "passed": true,
+      "score": 10.0,
+      "evidence": "63 A one-second samples plus 27 B two-second samples plus six B ending samples equals 96 distinct source/time samples. Documents explicitly avoid claiming every decoded frame or continuous exhaustive analysis."
+    },
+    {
+      "id": "CP09",
+      "check": "Original-video and frame custody",
+      "mandatory": true,
+      "passed": true,
+      "score": 10.0,
+      "evidence": "Both actual MP4 SHA256 values and byte lengths match the pinned source lock. All 96 retained sample files match their audit hashes. This reviewer checked custody, not a new visual census of the 96 frames."
+    },
+    {
+      "id": "CP10",
+      "check": "Exact source crop pixels",
+      "mandatory": true,
+      "passed": true,
+      "score": 10.0,
+      "evidence": "Eight published crop hashes, source-frame hashes, native sizes and original-pixel rectangle comparisons pass; all eight staged copies are unchanged."
+    },
+    {
+      "id": "CP11",
+      "check": "Clean source crop inspection",
+      "mandatory": true,
+      "passed": true,
+      "score": 10.0,
+      "evidence": "The reviewer directly viewed all eight published source crops. No phone bars, YouTube controls or creator UI were present. This inspection is source-asset custody, not generated-art approval."
+    },
+    {
+      "id": "CP12",
+      "check": "Raw and native files excluded",
+      "mandatory": true,
+      "passed": true,
+      "score": 10.0,
+      "evidence": "No raw source-frame/contact-sheet paths, MP4s, native Blender assets or bytecode occur in the package. None of its 129 PNGs is an exact copy of the 124 retained raw-analysis images checked."
+    },
+    {
+      "id": "CP13",
+      "check": "Evidence references resolvable",
+      "mandatory": true,
+      "passed": true,
+      "score": 10.0,
+      "evidence": "All mandatory package-local references resolve. Two repository-root policy/lock paths were verified at pinned main; four filename aliases and two evidence-crop basenames resolve through their explicit paired paths/manifests. Raw analysis references remain intentionally external as documented."
+    },
+    {
+      "id": "CP14",
+      "check": "Acceptance authority intact",
+      "mandatory": true,
+      "passed": true,
+      "score": 10.0,
+      "evidence": "ACCEPTANCE_CONTEXT binds the exact policy and source-lock bytes at a4e643a. It preserves stronger exact-10 requirements and labels the 9.9 static reviews informal, without promoting them into current formal task records."
+    },
+    {
+      "id": "CP15",
+      "check": "Requirements and resumable checkpoint",
+      "mandatory": true,
+      "passed": true,
+      "score": 10.0,
+      "evidence": "Original requests are retained; checkpoint milestones distinguish verified source work, raster drafts, open A work and prepared custody. A source-facing calibration, later all-angle review and hidden-source evidence remain named next requirements."
+    },
+    {
+      "id": "CP16",
+      "check": "No completed-native or full-task claim",
+      "mandatory": true,
+      "passed": true,
+      "score": 10.0,
+      "evidence": "Checkpoint 01 is explicitly in progress. Controlled A Blender work is outside this frozen checkpoint; it has no included native result or approval. No production integration, source-lock change, shipping or whole-task completion is claimed."
+    },
+    {
+      "id": "CP17",
+      "check": "Frozen remote core tree matches",
+      "mandatory": true,
+      "passed": true,
+      "score": 10.0,
+      "evidence": "Direct read-only verification of core tree e78e345e715742cc798784b03d7cdda7830817f1 found exactly the same 192 package entries, with zero missing/unexpected path, mode, type, blob or size mismatch."
+    },
+    {
+      "id": "CP18",
+      "check": "Review did not mutate staged outputs",
+      "mandatory": true,
+      "passed": true,
+      "score": 10.0,
+      "evidence": "Final hash retest confirms the same 191 manifest-bound files and manifest identity after review. Reviewer wrote only separate evidence and review files outside the staged package."
+    }
+  ],
+  "applicable_dimensions": [
+    {
+      "dimension": "snapshot_integrity",
+      "score": 10.0,
+      "passed": true
+    },
+    {
+      "dimension": "source_custody",
+      "score": 10.0,
+      "passed": true
+    },
+    {
+      "dimension": "exact_review_bindings",
+      "score": 10.0,
+      "passed": true
+    },
+    {
+      "dimension": "rejection_and_original_preservation",
+      "score": 10.0,
+      "passed": true
+    },
+    {
+      "dimension": "claim_scope_and_acceptance_honesty",
+      "score": 10.0,
+      "passed": true
+    },
+    {
+      "dimension": "resumable_documentation",
+      "score": 10.0,
+      "passed": true
+    }
+  ],
+  "candidate_binding": {
+    "repository": "ksolo21-web/HAVENLINE",
+    "intended_branch": "art/reference-tree-360-2026-11-28",
+    "base_commit": "a4e643aeb563b6f9cfda8b840c0651d13326eec8",
+    "frozen_core_tree": "e78e345e715742cc798784b03d7cdda7830817f1",
+    "tree_is_not_a_branch_publication_receipt": true,
+    "manifest_sha256": "672f7dcbf734b1788f5dcd004507d8a459f5499ee8b424a65d0b3da0a4428932",
+    "package_files": 192,
+    "manifest_listed_files": 191,
+    "png_files": 129,
+    "text_files": 63,
+    "bytes": 38008567,
+    "critical_file_bindings": [
+      {
+        "path": "README.md",
+        "sha256": "8762f4df68dd1d79d4aee1e662505035004d667d03e25cd0dfbf203ca1f8c286",
+        "bytes": 5920
+      },
+      {
+        "path": "CHECKPOINT_01.json",
+        "sha256": "e9af902b73eaa603b564bdaa19c594f1e0a7acc152fa4f2a9777f9a8c2bb2c80",
+        "bytes": 2933
+      },
+      {
+        "path": "CANDIDATE_INDEX.json",
+        "sha256": "7387fc1befa785e981790eef7d0fa91905cb6293a6b827902ea6ef088d844f8a",
+        "bytes": 11848
+      },
+      {
+        "path": "ACCEPTANCE_CONTEXT.json",
+        "sha256": "eb0bbecc32e127467e995b79c1206967ed27ae1f9321d10638af95561ece71b7",
+        "bytes": 867
+      },
+      {
+        "path": "TREE_APPEARANCE_CENSUS.json",
+        "sha256": "915582a2cb4e6e436034854a72d4343bd1fadc401f398e7391d51944da6e2262",
+        "bytes": 3365
+      },
+      {
+        "path": "REQUIREMENTS.json",
+        "sha256": "0ea0d0222f7409f75dcbe8f554726cd6a5be907985f72f78366f31062bbdba21",
+        "bytes": 3721
+      },
+      {
+        "path": "MANIFEST.json",
+        "sha256": "672f7dcbf734b1788f5dcd004507d8a459f5499ee8b424a65d0b3da0a4428932",
+        "bytes": 46043
+      },
+      {
+        "path": "reviews/source-package-review.json",
+        "sha256": "cf5e95360d768d4be3fb0fd116a7d7518dd20adae802ed861aed93c8f2f47f60",
+        "bytes": 10931
+      },
+      {
+        "path": "reviews/tree-A-r3-review.json",
+        "sha256": "82da475296fd9d1146a88462a21ee290f2754636967192ad9990e075a68056c5",
+        "bytes": 11360
+      },
+      {
+        "path": "reviews/tree-A-source-facing-r3-review.json",
+        "sha256": "8754da2e09c4f3590a0707d43bd8fccf17736fb00324911e2131e2ba94a58fb2",
+        "bytes": 10499
+      },
+      {
+        "path": "reviews/tree-B-360-r5-review.json",
+        "sha256": "a2f063864d58b66f9dba5a28616cfd641e3ffe0a1d41994fd0b6bd0be4e05523",
+        "bytes": 9990
+      }
+    ],
+    "remote_package_check": {
+      "tree": "e78e345e715742cc798784b03d7cdda7830817f1",
+      "url": "https://api.github.com/repos/ksolo21-web/HAVENLINE/git/trees/e78e345e715742cc798784b03d7cdda7830817f1?recursive=1",
+      "truncated": false,
+      "expected_package_files": 192,
+      "actual_package_files": 192,
+      "missing": [],
+      "unexpected": [],
+      "mismatches": [],
+      "pass": true
+    }
+  },
+  "candidate_review_bindings": [
+    {
+      "id": "tree-360-r1",
+      "image_sha256": "4dbaba4c3e5a1bb4e5dff897bc43c3fe9d1e540a0263e7abdeb3c8ffd6c6b07c",
+      "review_sha256": "060b76e66e5871a5843e73a04fbec5b69ad39e6408726b67839643f5ecb9f3a0",
+      "status": "REPAIR_REQUIRED",
+      "native_dimensions": [
+        1672,
+        941
+      ],
+      "scores_match": true,
+      "candidate_review_binding_match": true
+    },
+    {
+      "id": "tree-A-360-r1",
+      "image_sha256": "4b5f0959702dd7fe41367925157b25df4780756fda9085ffe2c51754eb1d55af",
+      "review_sha256": "b11d7e93f6dc0d06530089784fc8d26f14777f26a9ed06d6d70a2259ef323630",
+      "status": "REVISE",
+      "native_dimensions": [
+        1536,
+        1024
+      ],
+      "scores_match": true,
+      "candidate_review_binding_match": true
+    },
+    {
+      "id": "tree-A-360-r2",
+      "image_sha256": "f6764a85ee6e82e6c7339ed6efbb8966b62f02fe37a8b587784ec26b972dd506",
+      "review_sha256": "26fb21bc300ab26d113ebd0bffd4bf95a15bf13bcb5b58cd50b4d8381e910b5e",
+      "status": "REVISE",
+      "native_dimensions": [
+        1536,
+        1024
+      ],
+      "scores_match": true,
+      "candidate_review_binding_match": true
+    },
+    {
+      "id": "tree-A-360-r3",
+      "image_sha256": "f2145a70c13e4660729d8a35c93561e591f7d9f9e765f6e5675dcef29ed23e8f",
+      "review_sha256": "82da475296fd9d1146a88462a21ee290f2754636967192ad9990e075a68056c5",
+      "status": "REVISE_SOURCE_FIRST_REBUILD_RECOMMENDED",
+      "native_dimensions": [
+        1536,
+        1024
+      ],
+      "scores_match": true,
+      "candidate_review_binding_match": true
+    },
+    {
+      "id": "tree-A-source-facing-r1",
+      "image_sha256": "ef1e827596e4df677f4346d87341b6dd659cd0096e543de7377374a5672cc32d",
+      "review_sha256": "ffd406dc1497fc160a6801aeaefc0b6caa68f55ed3413e2ccf0643dc32b24577",
+      "status": "REVISE_PROJECTED_UPPER_CROWN_POSITION",
+      "native_dimensions": [
+        1254,
+        1254
+      ],
+      "scores_match": true,
+      "candidate_review_binding_match": true
+    },
+    {
+      "id": "tree-A-source-facing-r2",
+      "image_sha256": "ddf172823fc748815563aaab804f04b2d58331a5dfc7f2018add1f80e863c660",
+      "review_sha256": "bfaaa80e1beeef533fac2976bccb995c061007e5903658ba3744200b18bd7a33",
+      "status": "REVISE_ALIGNMENT_OVERSHOOT",
+      "native_dimensions": [
+        1254,
+        1254
+      ],
+      "scores_match": true,
+      "candidate_review_binding_match": true
+    },
+    {
+      "id": "tree-A-source-facing-r3",
+      "image_sha256": "b0ee9f0feb92b8a794a08718346fe3e24233f059c03a091e6d9036a3fd98a2f5",
+      "review_sha256": "8754da2e09c4f3590a0707d43bd8fccf17736fb00324911e2131e2ba94a58fb2",
+      "status": "FAIL_VISIBLE_GATE_STOP_OFFSET_RETRIES",
+      "native_dimensions": [
+        1254,
+        1254
+      ],
+      "scores_match": true,
+      "candidate_review_binding_match": true
+    },
+    {
+      "id": "tree-B-360-r2",
+      "image_sha256": "19033db145cabdfa8ec34222fe2bccc5ef742214d1b4f5841f7340ae1dd1cc4e",
+      "review_sha256": "24363b0f8f0a72905eb360962c3e2aae38b40a5599f3f5a3181ca629f97b708b",
+      "status": "REPAIR_REQUIRED",
+      "native_dimensions": [
+        1672,
+        941
+      ],
+      "scores_match": true,
+      "candidate_review_binding_match": true
+    },
+    {
+      "id": "tree-B-360-r3",
+      "image_sha256": "b81ed7d4f98d441bd5162735a7f431ab5a5bac952e09a1a66a3f3fce0a027e27",
+      "review_sha256": "f02a6de314736932e66dbdad168fd02af9b2b6159be6f815fe3eb206b9a74145",
+      "status": "REPAIR_REQUIRED",
+      "native_dimensions": [
+        1672,
+        941
+      ],
+      "scores_match": true,
+      "candidate_review_binding_match": true
+    },
+    {
+      "id": "tree-B-360-r4",
+      "image_sha256": "409b0ded06e8d4a1a672d181d61cecd4c4dd7831ee1388b9a7a77f71bf1edac3",
+      "review_sha256": "d73e370d99ffc732a27d83eb11343c58716dc69facceccea260442842e4ac94b",
+      "status": "REPAIR_REQUIRED_BOUNDED_VIEW_AND_LABEL_FIX",
+      "native_dimensions": [
+        1536,
+        1024
+      ],
+      "scores_match": true,
+      "candidate_review_binding_match": true
+    },
+    {
+      "id": "tree-B-360-r5",
+      "image_sha256": "a0b39cb55350818e4e4e82c5069955bd19eadeda37fcbb50b70e10b50bf023a6",
+      "review_sha256": "a2f063864d58b66f9dba5a28616cfd641e3ffe0a1d41994fd0b6bd0be4e05523",
+      "status": "PASS_SCOPED_VISIBLE_AND_STATIC_RECONSTRUCTION",
+      "native_dimensions": [
+        1536,
+        1024
+      ],
+      "scores_match": true,
+      "candidate_review_binding_match": true
+    },
+    {
+      "id": "tree-B-source-facing-r1",
+      "image_sha256": "b25f070e1ff29771541913f77ca30b1e32c0f3599e5cdc3cd805d9979776154b",
+      "review_sha256": "3270611d5e01446437afa7601023d4dd86ded2f6122bf4cc5f73bd7a0efa765c",
+      "status": "PASS_SCOPED_SOURCE_VISIBLE_ANCHOR",
+      "native_dimensions": [
+        1254,
+        1254
+      ],
+      "scores_match": true,
+      "candidate_review_binding_match": true
+    }
+  ],
+  "source_evidence_summary": {
+    "actual_original_videos": [
+      {
+        "source": "A",
+        "present": true,
+        "sha256_match": true,
+        "bytes_match": true
+      },
+      {
+        "source": "B",
+        "present": true,
+        "sha256_match": true,
+        "bytes_match": true
+      }
+    ],
+    "retained_sample_hashes": {
+      "required": 96,
+      "passed": 96,
+      "mismatches": []
+    },
+    "exact_crop_checks": [
+      {
+        "path": "source-a-audit/crops/A52-background-pointed-three-tier.png",
+        "sha256_match": true,
+        "source_frame_sha256_match": true,
+        "exact_pixel_slice": true,
+        "original_copy_identical": true,
+        "dimensions": [
+          185,
+          275
+        ]
+      },
+      {
+        "path": "source-a-audit/crops/A24-foreground-round-perspective.png",
+        "sha256_match": true,
+        "source_frame_sha256_match": true,
+        "exact_pixel_slice": true,
+        "original_copy_identical": true,
+        "dimensions": [
+          242,
+          257
+        ]
+      },
+      {
+        "path": "source-a-audit/crops/A24-smaller-three-tier.png",
+        "sha256_match": true,
+        "source_frame_sha256_match": true,
+        "exact_pixel_slice": true,
+        "original_copy_identical": true,
+        "dimensions": [
+          173,
+          204
+        ]
+      },
+      {
+        "path": "source-a-audit/crops/A61-shoreline-three-tier.png",
+        "sha256_match": true,
+        "source_frame_sha256_match": true,
+        "exact_pixel_slice": true,
+        "original_copy_identical": true,
+        "dimensions": [
+          240,
+          360
+        ]
+      },
+      {
+        "path": "source-crops/01-b40-individual-tree.png",
+        "sha256_match": true,
+        "source_frame_sha256_match": true,
+        "exact_pixel_slice": true,
+        "original_copy_identical": true,
+        "dimensions": [
+          185,
+          250
+        ]
+      },
+      {
+        "path": "source-crops/02-b20-individual-tree.png",
+        "sha256_match": true,
+        "source_frame_sha256_match": true,
+        "exact_pixel_slice": true,
+        "original_copy_identical": true,
+        "dimensions": [
+          160,
+          205
+        ]
+      },
+      {
+        "path": "source-crops/03-b40-forest-group.png",
+        "sha256_match": true,
+        "source_frame_sha256_match": true,
+        "exact_pixel_slice": true,
+        "original_copy_identical": true,
+        "dimensions": [
+          480,
+          380
+        ]
+      },
+      {
+        "path": "source-crops/04-b30-forest-edge.png",
+        "sha256_match": true,
+        "source_frame_sha256_match": true,
+        "exact_pixel_slice": true,
+        "original_copy_identical": true,
+        "dimensions": [
+          595,
+          320
+        ]
+      }
+    ],
+    "eight_source_crops_viewed_for_ui_exclusion": true,
+    "source_review_bindings": [
+      {
+        "path": "TREE_APPEARANCE_CENSUS.json",
+        "match": true
+      },
+      {
+        "path": "SOURCE_OBSERVATIONS.json",
+        "match": true
+      },
+      {
+        "path": "SOURCE_OBSERVATIONS-A-AUDIT.json",
+        "match": true
+      },
+      {
+        "path": "SOURCE_OBSERVATIONS-B-END.json",
+        "match": true
+      },
+      {
+        "path": "species-audit-b/TREE_DESIGN_AUDIT_B.json",
+        "match": true
+      },
+      {
+        "path": "species-audit-b/FRAME_MANIFEST.json",
+        "match": true
+      }
+    ],
+    "raw_input_exclusion": {
+      "raw_analysis_images_compared": 124,
+      "packaged_pngs_compared": 129,
+      "exact_content_hits": [],
+      "no_video_or_native_files_in_staged_package": true
+    },
+    "reference_classification": {
+      "initial_path_scanner_resolved": 557,
+      "intentionally_external_or_raw_records": 185,
+      "remaining_records_resolved_with_context": [
+        {
+          "path": "Docs/Production/REFERENCE_ACCEPTANCE_POLICY.json",
+          "resolution": "Repository-root path; git show at pinned a4e643a verified its exact bound SHA256."
+        },
+        {
+          "path": "Docs/Design/ReferenceVideoLock/reference-video-sources.json",
+          "resolution": "Repository-root path; git show at pinned a4e643a verified its exact bound SHA256."
+        },
+        {
+          "path": "01-b40-individual-tree.png",
+          "resolution": "Filename alias paired with explicit source-crops path and matching hash in the same record."
+        },
+        {
+          "path": "02-b20-individual-tree.png",
+          "resolution": "Filename alias paired with explicit source-crops path and matching hash in the same record."
+        },
+        {
+          "path": "03-b40-forest-group.png",
+          "resolution": "Filename alias paired with explicit source-crops path and matching hash in the same record."
+        },
+        {
+          "path": "04-b30-forest-edge.png",
+          "resolution": "Filename alias paired with explicit source-crops path and matching hash in the same record."
+        },
+        {
+          "path": "upper-rim.png",
+          "resolution": "Basename within the explicitly bound tree-A-source-facing-r1-evidence directory; file exists and is included in MANIFEST."
+        },
+        {
+          "path": "middle-rim.png",
+          "resolution": "Basename within the explicitly bound tree-A-source-facing-r1-evidence directory; file exists and is included in MANIFEST."
+        }
+      ],
+      "unresolved_mandatory_references": []
+    }
+  },
+  "policy_binding": {
+    "policy_id": "havenline-reference-acceptance-2026-11-27",
+    "policy_sha256": "c34c0cbe5b6d473be40ee5f0f0e08aab8f6ff42f97cfe2e7c93b2694e4dbaf43",
+    "source_lock_sha256": "e271986bcbf319b7dd3c94bee0813e8cbd7caa4699781096c3f68e701f295d01",
+    "verification": "Actual git show bytes from pinned base repository commit; both hashes match ACCEPTANCE_CONTEXT."
+  },
+  "findings": [],
+  "repairs_required_for_this_frozen_checkpoint": [],
+  "raw_execution_evidence": [
+    {
+      "path": "reviews/checkpoint01-package-structural-evidence.json",
+      "sha256": "015b79aa0f7caa8ea424836cfdfaaa4728ed5a28f4c916e9f776a17674472140"
+    },
+    {
+      "path": "reviews/checkpoint01-package-remote-evidence.json",
+      "sha256": "a46b078685c8e3ba8e3b82ffc14170c8a5a31d494cbe31640a32aa9e5b19e6cb"
+    }
+  ],
+  "open_work_not_approved": [
+    "A visible upper/middle source registration and eight-view middle-hem correction.",
+    "Controlled A geometry, camera calibration and actual rendered-pixel review, followed by all-angle review.",
+    "Original hidden surfaces, exact original mesh count and literal 100-percent original 360 identity.",
+    "Formal reference/task closure, native game integration, motion or device evidence, and shipping."
+  ],
+  "approval_boundary": {
+    "package_custody_pass": true,
+    "new_generated_art_approval": false,
+    "original_hidden_geometry_approved": false,
+    "original_mesh_count_proved": false,
+    "literal_100_percent_original_360_certified": false,
+    "A_art_approved": false,
+    "B_static_score_changed": false,
+    "B_static_pass_promoted_to_formal_task_approval": false,
+    "native_blender_candidate_reviewed": false,
+    "game_integration_approved": false,
+    "whole_task_complete": false,
+    "branch_publication_verified": false
+  },
+  "next_action": "Root may preserve this exact checkpoint through its authorized additive publication workflow. Add the independent report separately without rewriting these frozen core bytes. Continue controlled A work and its fresh visual review outside this checkpoint; keep all original-match and native gates open."
+}
