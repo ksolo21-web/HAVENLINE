@@ -1,0 +1,125 @@
+{
+  "source": "/tmp/havenline-orbit10/native-final/measurements.json",
+  "warning": "Overlapping oriented full model bounds are broad-phase evidence. This is a geometry stress diagnostic and does not claim all actual surfaces intersect.",
+  "cases": {
+    "axe-1x": {
+      "frames": 7,
+      "overlap_frames": 0,
+      "largest_minimum_overlap_m": 0,
+      "worst_examples": []
+    },
+    "axe-2x": {
+      "frames": 7,
+      "overlap_frames": 0,
+      "largest_minimum_overlap_m": 0,
+      "worst_examples": []
+    },
+    "pick-2x": {
+      "frames": 7,
+      "overlap_frames": 7,
+      "largest_minimum_overlap_m": 0.153952,
+      "worst_examples": [
+        {
+          "tick": 0,
+          "slots": [
+            5,
+            6
+          ],
+          "minimum_axis_overlap_m": 0.130051,
+          "simultaneous_pairs": 10
+        },
+        {
+          "tick": 6,
+          "slots": [
+            3,
+            4
+          ],
+          "minimum_axis_overlap_m": 0.153952,
+          "simultaneous_pairs": 10
+        },
+        {
+          "tick": 12,
+          "slots": [
+            1,
+            2
+          ],
+          "minimum_axis_overlap_m": 0.153651,
+          "simultaneous_pairs": 10
+        },
+        {
+          "tick": 18,
+          "slots": [
+            0,
+            1
+          ],
+          "minimum_axis_overlap_m": 0.130051,
+          "simultaneous_pairs": 10
+        },
+        {
+          "tick": 24,
+          "slots": [
+            3,
+            4
+          ],
+          "minimum_axis_overlap_m": 0.153952,
+          "simultaneous_pairs": 10
+        },
+        {
+          "tick": 30,
+          "slots": [
+            1,
+            2
+          ],
+          "minimum_axis_overlap_m": 0.153651,
+          "simultaneous_pairs": 10
+        },
+        {
+          "tick": 36,
+          "slots": [
+            5,
+            6
+          ],
+          "minimum_axis_overlap_m": 0.130051,
+          "simultaneous_pairs": 10
+        }
+      ]
+    },
+    "closed-gate-2x": {
+      "frames": 7,
+      "overlap_frames": 0,
+      "largest_minimum_overlap_m": 0,
+      "worst_examples": []
+    },
+    "wall-2x": {
+      "frames": 7,
+      "overlap_frames": 0,
+      "largest_minimum_overlap_m": 0,
+      "worst_examples": []
+    },
+    "open-gate-2x": {
+      "frames": 7,
+      "overlap_frames": 2,
+      "largest_minimum_overlap_m": 0.074321,
+      "worst_examples": [
+        {
+          "tick": 18,
+          "slots": [
+            1,
+            2
+          ],
+          "minimum_axis_overlap_m": 0.074058,
+          "simultaneous_pairs": 1
+        },
+        {
+          "tick": 30,
+          "slots": [
+            1,
+            2
+          ],
+          "minimum_axis_overlap_m": 0.074321,
+          "simultaneous_pairs": 1
+        }
+      ]
+    }
+  }
+}

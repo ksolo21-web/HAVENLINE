@@ -1,0 +1,125 @@
+{
+  "candidate": "56ae6faac38152eccbb9856356a425c48a4a0218",
+  "independent_reviewer": "/root/independent",
+  "scope": "second orbit skill state on the actual delivered gameplay camera",
+  "owner_approved_changes": {
+    "starter_tools": 1,
+    "starter_period_s": 0.89,
+    "max_tools": 10,
+    "max_period_s": 0.6,
+    "existing_paid_upgrade_keeps_payment": true
+  },
+  "result": "Independent scoped runtime and sampled gameplay visual checks PASS.",
+  "source_bound_artifacts": {
+    "orbit_candidate": {
+      "path": "/tmp/havenline-orbit10/Candidate.json",
+      "sha256": "1ab48d1926d0af69f430587888b3daaa3168ea11cdfc49e2a3ba32bda7b57bd1"
+    },
+    "render_source_receipt": {
+      "path": "/tmp/havenline-orbit10/native-final/source.sha256",
+      "sha256": "a1ba7b92f279d30f08977f0f94b6f6ab21c4e1fbf852a17d49d086cce9434c8f"
+    },
+    "rendered_pose_trace": {
+      "path": "/tmp/havenline-orbit10/native-final/measurements.json",
+      "sha256": "652d37efb3635f057dd148772faefd1b3a941ea7dc94dacd0daad5c91ce4e239"
+    },
+    "blade_surface_intersections": {
+      "path": "/tmp/havenline-orbit10-independent/Final-ten-tool-triangle-contact.json",
+      "sha256": "52f429c06b54558b0374c1622b9c4443620e38f2ccccb4841ed37e4d47ec58d2"
+    },
+    "initial_intersections": {
+      "path": "/tmp/havenline-orbit10-independent/Initial-ten-tool-triangle-contact.json",
+      "sha256": "e081347e263b79807c52355e26e4ae7b361acbb4d72b18b85f82fb05b01bdb79"
+    },
+    "gameplay_views": {
+      "path": "/tmp/havenline-orbit10-independent/Final-gameplay-board.jpg",
+      "sha256": "1cd38f9260b7297f5d1a50e9f33a470dd402af02dff326531227adc58fdb811c"
+    },
+    "world_boundary": {
+      "path": "/tmp/havenline-orbit10/exact-boundary/test.log",
+      "sha256": "ba69baa364a32c7601c34ef60fb2b173f447f7c0903de0a2dc14cd02bcb63c2b"
+    },
+    "fence_witness": {
+      "path": "/tmp/havenline-orbit10/exact-fence/test.log",
+      "sha256": "26790d917284028d0703bcd59b7cd6d0a6312e709c239bdca1f66c873e66f585"
+    },
+    "spoke_witness": {
+      "path": "/tmp/havenline-orbit10/exact-sweep/test.log",
+      "sha256": "18c0e505b0df51a01cc3a4acf5435e9eebdaa5a8b6626695f48fea79d0ceb69e"
+    },
+    "movement_timing": {
+      "path": "/tmp/havenline-orbit10/exact-travel-fast/travel.json",
+      "sha256": "6be4a77d4635ccb878e2d1f2812fe438f4aadbaa7ba841896e4fbfc6fb1cf332"
+    },
+    "real_purchase": {
+      "path": "/tmp/havenline-orbit10/exact-purchase/test.log",
+      "sha256": "91338505e86ac1eaed134c68669823c0d6e47abd2f12c938aa5e8a3f84771844"
+    },
+    "save_reopen": {
+      "path": "/tmp/havenline-orbit10/final-saves/test.log",
+      "sha256": "52a2a6d96336f655bc8c744854eb07630364e630370249ab7fe170401ed1c1dd"
+    },
+    "references": {
+      "path": "/tmp/havenline-orbit10-independent/Source-provenance.json",
+      "sha256": "03c505d5f2cd42e44bf8285176c9fa894310ba08a85ee789cf2946921d9a0893"
+    },
+    "full_consecutive_native_renders": {
+      "path": "/tmp/havenline-orbit10/native-motion/Full-orbit-60fps.mp4",
+      "sha256": "2946c676857d599794c6467e5423ca177080db568840569a276e5194f4d950a6"
+    },
+    "full_lap_measurement": {
+      "path": "/tmp/havenline-orbit10/native-motion/measurement.json",
+      "sha256": "5589e4e8d3fc9a801a8c4b5b896efc1423f3525e7daef353705c0d708a76c621"
+    },
+    "full_lap_runtime_hashes": {
+      "path": "/tmp/havenline-orbit10/native-motion/source.sha256",
+      "sha256": "a1ba7b92f279d30f08977f0f94b6f6ab21c4e1fbf852a17d49d086cce9434c8f"
+    }
+  },
+  "clearance": {
+    "axe-1x": {
+      "max_visible": 10,
+      "min_visible": 10,
+      "minimum_head_spacing_canvas_px": 66.7863159179688,
+      "minimum_head_spacing_m": 1.66480052471161
+    },
+    "axe-2x": {
+      "max_visible": 10,
+      "min_visible": 10,
+      "minimum_head_spacing_canvas_px": 133.572631835938,
+      "minimum_head_spacing_m": 1.66480052471161
+    },
+    "closed-gate-2x": {
+      "max_visible": 3,
+      "min_visible": 1,
+      "minimum_head_spacing_canvas_px": 94.3410415649414,
+      "minimum_head_spacing_m": 0.934304416179657
+    },
+    "open-gate-2x": {
+      "max_visible": 3,
+      "min_visible": 1,
+      "minimum_head_spacing_canvas_px": 138.093505859375,
+      "minimum_head_spacing_m": 1.68647086620331
+    },
+    "pick-2x": {
+      "max_visible": 10,
+      "min_visible": 10,
+      "minimum_head_spacing_canvas_px": 133.572723388672,
+      "minimum_head_spacing_m": 1.66480052471161
+    },
+    "wall-2x": {
+      "max_visible": 4,
+      "min_visible": 2,
+      "minimum_head_spacing_canvas_px": 133.283935546875,
+      "minimum_head_spacing_m": 1.25500226020813
+    }
+  },
+  "held_touch_travel_m": 2.65075421333313,
+  "sampled_mesh_intersections": 0,
+  "sampled_mesh_pairs": 5,
+  "hardware": "Waived for this playtest by owner.",
+  "T01": "Unresolved existing forest C1 visual criterion.",
+  "T02": "Gated on T01 completion.",
+  "full_lap_decoded_frames": 36,
+  "full_lap_capture_rate_hz": 60
+}
