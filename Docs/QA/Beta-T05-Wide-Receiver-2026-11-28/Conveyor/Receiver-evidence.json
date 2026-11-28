@@ -1,0 +1,343 @@
+{
+  "candidate": "ee15256302784e8202bb28af910d076051043a21",
+  "reference": {
+    "A16_file": "33c1855d249c8bf18f6ad49d2130b0b0c353e3dd:Docs/Production/T05/ReferenceFrames/A-016.00.png",
+    "A16_sha256": "3afe3c0fe64702894b7cac3a0d1b271cac0b2d60e87490063a1def7ee111d5ba",
+    "owned_D01_D03_D06": "e501bea5ed9e6f8737abb5b39799cade78b22af1/Docs/Design/ConveyorReferences/2026-11-26/connected-logistics-01/selected/"
+  },
+  "geometry_m": {
+    "intake_high_m": 1.33,
+    "intake_span_m": 1.18000030517578,
+    "length_m": 4.93,
+    "outer_m": 2.48,
+    "portion_m": 0.89,
+    "slots": 8,
+    "stock_y_m": 0.66
+  },
+  "independent_screen_measurements_worker_heights": {
+    "A16": {
+      "dark_tread": [
+        0.87,
+        0.96
+      ],
+      "external_guard": [
+        1.15,
+        1.26
+      ],
+      "food": [
+        0.48,
+        0.58
+      ]
+    },
+    "native": {
+      "dark_tread": [
+        0.9,
+        0.96
+      ],
+      "guard": [
+        1.14,
+        1.2
+      ],
+      "unit": 0.5
+    }
+  },
+  "files": {
+    "assets/conveyors/fitted_transport.gdshader": "6a9569be76f4c23d82a5def9a1812d2c7ea96b38430ae3e155032d5aadc394d9",
+    "field_conveyor_aisles.gd": "c5d890b6f7138cc8638f9e521730a2cf3fa9d1f2d9ea2a0f08d9f508384ed55b",
+    "field_conveyor_fittings.gd": "80de51f18657370741e973c19ffc7046d150d06a51751d953039028af20b97b9",
+    "field_conveyor_gauge.gd": "f4cbf1a24aae8fce51b94aa1133023ffc9c7830ae1398abe8d149b018729f1f8",
+    "field_conveyor_network.gd": "5bf5c9fdbf85ca0308ec7a80be4b230376a999d7507c1459ba0bc0596c8e8ee4",
+    "field_conveyor_receiver.gd": "023456558b79f57a7defeef4d9b0d9904c113cca2415bf08f23c691b95ab644d",
+    "field_conveyor_receiver.gd.uid": "a8fcc2ee2547595a531f30947e1b64335e20a340d2480806ed0c9a68933121c6",
+    "field_conveyor_receiver_art.gd": "e22ab5202193b6a1b2ca79a9e382f322886fccc128dcb668be8423aa5678d0fa",
+    "field_conveyor_receiver_art.gd.uid": "e9e4d90b80cdf8248c42b2d3938dc6f69fc8b4e9f596d4e0ae14c9a644ab1356",
+    "field_conveyors.gd": "cd9b09bbefae27309a9a92634923b4373ea0e161b53779edaaade461782545d5",
+    "field_counter.gd": "faf21ca07e87339dc710c6e83a4add730da5cde6a698194e57de580ca12ed7f2",
+    "field_settlement_loop.gd": "619a8c798b011b4ffd12e164180cef5f1cba5e152b852101b45a37efd3bda920",
+    "tests/qa_receiving_table.gd": "d6d361a620a2a8d2eb4d3fed62a2e7746b193f962f75599cd2a08986f40c001f",
+    "tests/qa_receiving_table.gd.uid": "61e33faee8da4bd9efeb2d5b39587550e5949a68fd985957b05aed85a4f5a1bd",
+    "tests/qa_surface_conveyor_layout.gd": "68059b29bc7de60293c4c46bb13514486b0f6d06c6539f6e5b9d269ebb6aeffc",
+    "tests/qa_unattended_lines.gd": "bba4fe22e4ff86ebf7d6a774f20d6a6adddb1ee811b1d6754c42fffd6a60058c"
+  },
+  "qa": {
+    "DeckFinal.log": {
+      "passed": 43,
+      "of": 43,
+      "sha256": "b8696a2845317e827d444bdba0f3c81ac3d69cb91339ce6fd3e93d2ee0589d52"
+    },
+    "Eight-warm.log": {
+      "passed": 7,
+      "of": 7,
+      "sha256": "6afb0264c748e67c27ae8eb7fbe92b9db6d57bde7717cb42f92c9a31322d7d9c"
+    },
+    "Eight-cold.log": {
+      "passed": 9,
+      "of": 9,
+      "sha256": "e129c9fbdb1bc656aef9a5a795cbbbf905c2d33e822d09bb3464c3067f60899a"
+    },
+    "Unattended-stock.log": {
+      "passed": 10,
+      "of": 10,
+      "sha256": "0b321d0983c7eac7b30565f22bb0f7aa587aa46076a1fc4133f5de1bd1b05d20"
+    },
+    "Unattended-cold.log": {
+      "passed": 9,
+      "of": 9,
+      "sha256": "46f7537c5e877f913f4f535d4c11e0912809e715db5c3003a4c0cee286cd3ada"
+    },
+    "Counter-lock.log": {
+      "passed": 3,
+      "of": 3,
+      "sha256": "fbe96b37d9aedb4b5d5044c82d12c084bc55b316a21006421a9a715091b9c7b6"
+    },
+    "Counter-retry.log": {
+      "passed": 2,
+      "of": 2,
+      "sha256": "96f475b00b4f5f2f6dc91b358e9bb3ee2bce1b83dfe4c8d974c98aaea1553051"
+    },
+    "wide-final-default-physics.log": {
+      "passed": 11,
+      "of": 11,
+      "sha256": "ea1987870edf62b567202ee287725dc2a35f12012e38336d66c33452f34225af"
+    },
+    "wide-final-custom-physics.log": {
+      "passed": 11,
+      "of": 11,
+      "sha256": "b01b6a22265114f369911aa83b252bf393d9a8ae65dc80c0e2f9cc86cae3d397"
+    },
+    "wide-connected.log": {
+      "passed": 9,
+      "of": 9,
+      "sha256": "8b17f82d97bdf035e1d44e0b5097459975476cd8145d146b31c12ef158f8368a"
+    },
+    "wide-delivery-compat.log": {
+      "passed": 5,
+      "of": 5,
+      "sha256": "6af980bf55610eff1bd8a4251d753f0ee22fcc8b28b5ac358bd8f4f4d4b2ac91"
+    }
+  },
+  "socket_freight_m": {
+    "meat cargo": {
+      "port_m": 0.484,
+      "width_across_deck_m": 0.255059418967005
+    },
+    "stone cargo": {
+      "port_m": 0.484,
+      "width_across_deck_m": 0.351858132611662
+    },
+    "wood cargo": {
+      "port_m": 0.484,
+      "width_across_deck_m": 0.354233956689759
+    }
+  },
+  "sales": {
+    "starting_units": 10,
+    "served_units": 10,
+    "order_ids": [
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9",
+      "10"
+    ],
+    "totals_by_order": {
+      "2": 1,
+      "3": 1,
+      "4": 1,
+      "5": 1,
+      "6": 1,
+      "7": 1,
+      "8": 1,
+      "9": 2,
+      "10": 1
+    },
+    "balance_delta": 10,
+    "remaining_on_machine": 0,
+    "remaining_on_store_shelf": 0
+  },
+  "charged_stock": {
+    "starting_accepted_units": 8,
+    "overflow_to_store": 2,
+    "missed_typed_drop_positions": [],
+    "closest_pre_receipt_distance_m": {
+      "0": 0.0347070693969727,
+      "1": 0.0347070693969727,
+      "2": 0.0315151214599609,
+      "3": 0.0315151214599609,
+      "4": 0.0283246040344238,
+      "5": 0.0283246040344238,
+      "6": 0.0251340866088867,
+      "7": 0.0251340866088867
+    }
+  },
+  "saved_north_counter_positions": {
+    "tested": [
+      -4.5,
+      -4.0,
+      -3.5,
+      -3.0,
+      -2.5,
+      -2.0,
+      -1.5,
+      -1.0,
+      -0.5,
+      0.0,
+      0.5,
+      1.0,
+      1.5,
+      2.0,
+      2.5,
+      3.0,
+      3.5,
+      4.0,
+      4.5,
+      5.0,
+      5.5,
+      6.0,
+      6.5,
+      7.0,
+      7.5
+    ],
+    "large_receiver_at": [
+      1.5,
+      2.0,
+      2.5,
+      3.0,
+      3.5,
+      4.0,
+      4.5,
+      5.0,
+      5.5,
+      6.0,
+      6.5,
+      7.0,
+      7.5
+    ],
+    "narrow_paid_receiver_at": [
+      -4.5,
+      -4.0,
+      -3.5,
+      -3.0,
+      -2.5,
+      -2.0,
+      -1.5,
+      -1.0,
+      -0.5,
+      0.0,
+      0.5,
+      1.0
+    ],
+    "routes_at_every_site": 8,
+    "service_regions_at_every_site": 6,
+    "cold_saved_center": 4.0
+  },
+  "captures": {
+    "Release": {
+      "source_fixture": "Build9-raw-in-flight",
+      "native_adapter": "llvmpipe (LLVM 19.1.7, 256 bits)",
+      "contact_footing_valid_in_every_still": true,
+      "earned_plus_existing_field_meat_deposited": 4,
+      "actual_sold": 1,
+      "paid_collection_hand_gap_m": 0.0416987203061581,
+      "images": {
+        "meal-High-intake-1x": {
+          "sha256": "e6692147a5b7010de5abce408491c5690af25a7fff3c025cee8cf797b3ff7255",
+          "visible_stock": 0
+        },
+        "meal-High-intake-2x": {
+          "sha256": "ac7f0a6d3e4f19198644c7192cc4fa203beaaef45e304e9805fbfd2a63bfceb2",
+          "visible_stock": 0
+        },
+        "meal-Down-slope-1x": {
+          "sha256": "966f7ff534bc1499a2ae365d8b1517e7b05d096c07d3ad695ec1a049fd71c6df",
+          "visible_stock": 0
+        },
+        "meal-Down-slope-2x": {
+          "sha256": "d059c37cd4a90d1928a0ce0be0f79e26f1d2ef9345249e49e3be4865f937c546",
+          "visible_stock": 0
+        },
+        "Paired-2x": {
+          "sha256": "47c9049ee1c1fac7bf958366e5bfd11a390732d948a89dad189474902e159bf4",
+          "visible_stock": 2
+        },
+        "Stocked-1x": {
+          "sha256": "a2be57cf00e4243e2258e70b85f93638d770332679303a75038dfce4c9e9cb3c",
+          "visible_stock": 8
+        },
+        "Stocked-2x": {
+          "sha256": "c84ce6305d5e4460a9156b6df7db2d618a0e3bbe1c8c1e1c97505fac2e04e236",
+          "visible_stock": 8
+        },
+        "Counter-presentation-1x": {
+          "sha256": "ea7b47b060c53ea90a786beec9dbd4942d5c54ca255a14cf87bca7b94a5cdec3",
+          "visible_stock": 7
+        },
+        "Paid-collection-2x": {
+          "sha256": "b09d9e6e0c23ffaf4e6ebc2448efa1030c8296b5f7b47b850c42a5b082808171",
+          "visible_stock": 7
+        }
+      },
+      "movie_sha256s": {
+        "Cooker-intake.mp4": "ec57b25ddad775b81175a96d149f3a0ad4e4d26edf50cc07b756ebbd7b5ffc45",
+        "Counter-sale.mp4": "05e5d5bf881917e0e83c18e19bb348560cbca5133ee5b5dcbdd1f31214f9c1a6"
+      },
+      "frames_sha256": "f4566e1a41c01400efdf0b4117f4c0c3026b35834542e4929e13fa52a377345d"
+    },
+    "Release-stored": {
+      "source_fixture": "Build9-serial-upgrade-in-flight",
+      "native_adapter": "llvmpipe (LLVM 19.1.7, 256 bits)",
+      "contact_footing_valid_in_every_still": true,
+      "earned_plus_existing_field_meat_deposited": 0,
+      "actual_sold": 1,
+      "paid_collection_hand_gap_m": 0.0416987203061581,
+      "images": {
+        "stored_meal-High-intake-1x": {
+          "sha256": "d8074c2cb7c4d88284c4745ca3ebad8c819ebe5b87ddb1f845932cb0501c8dd5",
+          "visible_stock": 0
+        },
+        "stored_meal-High-intake-2x": {
+          "sha256": "9c816121d2047a95d5303b7be5f939ca2518e45de1bdfba7ef5d57b921cc72aa",
+          "visible_stock": 0
+        },
+        "stored_meal-Down-slope-1x": {
+          "sha256": "705f57946cc159018bb06c9affde95348540d73b3d5e646e80ab42f97b510689",
+          "visible_stock": 0
+        },
+        "stored_meal-Down-slope-2x": {
+          "sha256": "5e78e5360a87316c30fc08a1b506ef36993656084d246b3ffe396d525fb0dc41",
+          "visible_stock": 0
+        },
+        "Stocked-1x": {
+          "sha256": "56060868665ff833a4054033036bf174006d80d22c0db2bf63b3b730d3600a25",
+          "visible_stock": 1
+        },
+        "Stocked-2x": {
+          "sha256": "0b627d42a0054d3d95a911d3068ae5965f46a1ed3d3e9dc4eb2fc9253659acbe",
+          "visible_stock": 1
+        },
+        "Counter-presentation-1x": {
+          "sha256": "e05473276c5a40c9195c2e13b9d2bdf6ed282705ca2e8078988f7feee123a497",
+          "visible_stock": 0
+        },
+        "Paid-collection-2x": {
+          "sha256": "cefe4c91ec0815038ecd71355bcb4457f07388b70a17c996e3067bd58dc4c25d",
+          "visible_stock": 0
+        }
+      },
+      "movie_sha256s": {
+        "Warehouse-intake.mp4": "550a3e263563eeeff7d7f5dc17bca6d3e1fba4e368cb045506767c0580a3c19d",
+        "Warehouse-portion-sale.mp4": "65eb7415172436752a95e59d141ee9177b825382b7bf9c40a29d311f01c6a715"
+      },
+      "frames_sha256": "6412aa1027a304470955abf02ba877cfe17f6512fcf654474ac2aaf69df18991"
+    }
+  },
+  "critic_grades": {
+    "proportions_and_food": 9.9,
+    "material_and_structure": 9.9,
+    "transport_stock_and_access": 9.9
+  }
+}
