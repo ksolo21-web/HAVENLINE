@@ -1,0 +1,147 @@
+{
+  "runtime": "f149d89b8f7fdb0d94c1ac73f5b37ec9bb87deaa",
+  "video": {
+    "codec_name": "h264",
+    "width": 3840,
+    "height": 2160,
+    "r_frame_rate": "60/1",
+    "duration": "3.333333",
+    "nb_frames": "200"
+  },
+  "sha256": "b4053d43f2958d53a2ba6e988826c455137ce7f63b83ad4469bd4f3de8e9192a",
+  "gameplay": {
+    "checks": {
+      "moving approach never funded the plot": true,
+      "moving away never added a payment beyond launched parcels": true,
+      "re-entry finishes payment and camp reveal exactly once": true,
+      "stopping launched parcels and paid first receipt": true,
+      "turns green before the first flight or receipt": true
+    },
+    "events": [
+      {
+        "context": "active",
+        "frame": 0,
+        "physics_frame": 61,
+        "player_position": [
+          0.0,
+          0.00800000037997961,
+          4.57999992370605
+        ],
+        "plot_due": 20,
+        "shutter": 0.0,
+        "state": "01-approach",
+        "truck_position": [
+          5.84999990463257,
+          0.0,
+          2.6800000667572
+        ]
+      },
+      {
+        "context": "blocked_movement",
+        "frame": 2,
+        "physics_frame": 63,
+        "player_position": [
+          -2.85605605832018e-09,
+          0.00800000037997961,
+          4.56083345413208
+        ],
+        "plot_due": 20,
+        "shutter": 0.0,
+        "state": "02-moving-plot-focus",
+        "truck_position": [
+          5.84999990463257,
+          0.0,
+          2.6800000667572
+        ]
+      },
+      {
+        "context": "acquiring",
+        "frame": 37,
+        "physics_frame": 98,
+        "player_position": [
+          -3.59608719691096e-07,
+          0.00800000037997961,
+          2.17194390296936
+        ],
+        "plot_due": 20,
+        "shutter": 0.0,
+        "state": "02b-ready-before-payment",
+        "truck_position": [
+          5.84999990463257,
+          0.0,
+          2.6800000667572
+        ]
+      },
+      {
+        "context": "active",
+        "frame": 44,
+        "physics_frame": 105,
+        "player_position": [
+          -3.59608719691096e-07,
+          0.00800000037997961,
+          2.17194390296936
+        ],
+        "plot_due": 20,
+        "shutter": 0.0,
+        "state": "03-packets-launched",
+        "truck_position": [
+          5.84999990463257,
+          0.0,
+          2.6800000667572
+        ]
+      },
+      {
+        "context": "blocked_movement",
+        "frame": 60,
+        "physics_frame": 121,
+        "player_position": [
+          -3.59608719691096e-07,
+          0.00800000037997961,
+          2.17194390296936
+        ],
+        "plot_due": 19,
+        "shutter": 0.0,
+        "state": "04-release-and-move",
+        "truck_position": [
+          5.84999990463257,
+          0.0,
+          2.6800000667572
+        ]
+      },
+      {
+        "context": "idle",
+        "frame": 137,
+        "physics_frame": 198,
+        "player_position": [
+          0.198129326105118,
+          0.00800000037997961,
+          2.20121622085571
+        ],
+        "plot_due": 0,
+        "shutter": 0.0,
+        "state": "05-camp-reveal",
+        "truck_position": [
+          5.84999990463257,
+          0.0,
+          2.6800000667572
+        ]
+      }
+    ],
+    "first_physics_frame": 61,
+    "frames": 200,
+    "last_physics_frame": 260,
+    "mode": "context",
+    "nonconsecutive_physics_samples": 0,
+    "rendered_video_frames": 200,
+    "renderer": "llvmpipe (LLVM 19.1.7, 256 bits)",
+    "source": {
+      "context": "b7855c39ff2807c1d50f2cfa20bc5316543a8bf7027c64be6f4072a3028d6a79",
+      "truck": "31650144e9df1823d689b13526b751a06f7cbacb6171e483631b0c2ef3986d23"
+    },
+    "video_sample_stride": 1,
+    "viewport": [
+      3840,
+      2160
+    ]
+  }
+}
