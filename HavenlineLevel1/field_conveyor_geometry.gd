@@ -11,6 +11,7 @@ const PROFILE := [Vector2(-.034,.014),Vector2(-.024,.025),Vector2(.018,.025),
 	Vector2(-.020,-.166),Vector2(-.034,-.150)]
 var kit:Dictionary={}
 var fitted=Fittings.new()
+var gauge
 var instances:Dictionary={}
 var used:Dictionary={}
 var runs:Dictionary={}
@@ -52,13 +53,14 @@ func component(id:String,at:Vector3,forward:Vector3,scale_by:=Vector3.ONE) -> vo
 	if not instances.has(id):instances[id]=[]
 	instances[id].append(Transform3D(direction(forward).scaled_local(scale_by),at))
 
-func movable(id:String,at:Vector3,forward:Vector3) -> Node3D:
+func movable(id:String,at:Vector3,forward:Vector3,width_scale:=1.) -> Node3D:
 	# Independent hinge carrier keeps local rotations valid after relocating.
 	var mount:=Node3D.new()
 	add_child(mount)
 	mount.transform=Transform3D(direction(forward),at)
 	var part:=MeshInstance3D.new()
 	part.mesh=kit[id]
+	part.scale.x=width_scale
 	mount.add_child(part)
 	return part
 
@@ -78,7 +80,10 @@ static func _quad(st:SurfaceTool,a:Vector3,b:Vector3,c:Vector3,d:Vector3,n:Vecto
 	_tri(st,a,b,c,n)
 	_tri(st,a,c,d,n)
 
-func _section(a:Vector3,b:Vector3,ra:Vector3,rb:Vector3) -> void:
+func _section(a:Vector3,b:Vector3,ra:Vector3,rb:Vector3,external:=true) -> void:
+	if external:
+		ra*=gauge.fitted_width(a)/Fittings.WIDTH
+		rb*=gauge.fitted_width(b)/Fittings.WIDTH
 	if a.distance_squared_to(b)<.000001:return
 	sections+=1
 	for side:float in [-1.,1.]:
@@ -131,9 +136,11 @@ func _pier_width(at:Vector3,tangent:Vector3) -> float:
 				if p.y>at.y-.30:continue
 				var delta:=p-at
 				delta.y=0
-				if delta.length()>.45:continue
+				var upper:float=gauge.fitted_width(at)
+				var lower:float=gauge.fitted_width(p)
+				if delta.length()>maxf(.45,(upper+lower)*.5+.025):continue
 				if absf(tangent.dot(record[1]))>.93 and delta.length()<.16:
-					wide=2.12
+					wide=maxf(wide,maxf(2.12,(lower*.5+.055)/(.35*upper)))
 				else:return 0.
 	return wide
 
@@ -146,23 +153,26 @@ func _hardware(a:Vector3,b:Vector3,long_run:bool) -> void:
 	var pitch:=.09 if inclined else .094
 	var pieces:=maxi(1,roundi(length/pitch))
 	for j in pieces:
-		component("InclineTread" if inclined else "Roller",a.lerp(b,(j+.5)/pieces),tangent)
+		var at:=a.lerp(b,(j+.5)/pieces)
+		component("InclineTread" if inclined else "Roller",at,tangent,Vector3(gauge.fitted_width(at)/Fittings.WIDTH,1.,1.))
 	if not long_run:return
 	var modules:=maxi(1,ceili(length/1.49))
 	for i in modules:
 		var p:=a.lerp(b,(i+.50)/modules)
+		var width_scale:float=gauge.fitted_width(p)/Fittings.WIDTH
 		var leg_scale:=maxf(.14,p.y-.095)/.267
 		for shift:float in [0.,-.26,.26]:
 			var place:=p+tangent*shift*minf(1.,length)
 			var wide:=_pier_width(place,tangent)
 			if wide>0.:
-				component("Trestle",Vector3(place.x,.006,place.z),tangent,Vector3(wide,leg_scale,1.36))
+				component("Trestle",Vector3(place.x,.006,place.z),tangent,Vector3(wide*width_scale,leg_scale,1.36))
 				break
-		component("Coupler",p,tangent)
+		component("Coupler",p,tangent,Vector3(width_scale,1.,1.))
 		if length>.84:
-			component("Arrows",a.lerp(b,(i+.69)/modules),tangent)
+			var marker:=a.lerp(b,(i+.69)/modules)
+			component("Arrows",marker,tangent,Vector3(gauge.fitted_width(marker)/Fittings.WIDTH,1.,1.))
 		if (i==0 or i%3==2) and length>.91:
-			component("VentedDrive",a.lerp(b,(i+.28)/modules)+direction(tangent).x*.122-Vector3.UP*.055,tangent,Vector3(1.11,1.2,1.1))
+			component("VentedDrive",a.lerp(b,(i+.28)/modules)+direction(tangent).x*.122*width_scale-Vector3.UP*.055,tangent,Vector3(1.11,1.2,1.1))
 
 func local_guide(a:Vector3,b:Vector3) -> void:
 	var motion:=b-a
@@ -171,7 +181,7 @@ func local_guide(a:Vector3,b:Vector3) -> void:
 		return
 	if Vector2(motion.x,motion.z).length()<.03:return
 	var side:=direction(motion).x*.57
-	_section(a,b,side,side)
+	_section(a,b,side,side,false)
 	var count:=maxi(1,roundi(motion.length()/.10))
 	for i in count:
 		component("Roller",a.lerp(b,(i+.5)/count),motion,Vector3(.58,.70,1.))
@@ -247,7 +257,7 @@ func finish() -> void:
 			var at:=a.lerp(b,t)
 			var wide:=_pier_width(at,tangent)
 			if wide==0.:continue
-			component("Trestle",Vector3(at.x,.006,at.z),tangent,Vector3(wide,maxf(.17,at.y-.13)/.267,1.36))
+			component("Trestle",Vector3(at.x,.006,at.z),tangent,Vector3(wide*gauge.fitted_width(at)/Fittings.WIDTH,maxf(.17,at.y-.13)/.267,1.36))
 	fitted.finish()
 	if sections:
 		for pair in [[orange,guard_mat,"AmberSideguards"],[under,frame_mat,"RollerCradles"]]:

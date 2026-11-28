@@ -113,6 +113,11 @@ func _sample(lane:String,progress:float)->Vector3:
 	return route[-1]
 
 func _place_cargo(lane:String,unit:Node3D,t:float)->void:
+	if lane in ["meal","stored_meal"] and world.inventory.settlement.counter_stock>0:
+		# Stop the next portion behind the occupied slot. Leave the rest of
+		# the route on the same centerline used for its reservation clock.
+		var reserved:float=network.counter_buffer_position(0).distance_to(network.counter_buffer_position(1))
+		t=minf(t,1.-reserved/lengths[lane])
 	unit.global_position=_sample(lane,t)
 	var radius:float=.055/lengths[lane]
 	var tangent:=_sample(lane,minf(1.,t+radius))-_sample(lane,maxf(0.,t-radius))

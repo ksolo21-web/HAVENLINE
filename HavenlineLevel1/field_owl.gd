@@ -8,9 +8,12 @@ const PlumageShader := preload("res://assets/settlement_people/expedition_plumag
 const SENSE := 14.0
 const GATE_GUARD := 1.85
 const POST_SWITCH_MARGIN := 1.25
-const RELOAD := 2.7
-const WINDUP := .24
-const RAKE := .18
+const MODEL_SCALE := 1.30
+const FLIGHT_CLEARANCE := .12
+const BANK_LIMIT := 1.70
+const RELOAD := 2.30
+const WINDUP := .30
+const RAKE := .22
 const CHEST := Vector3(0,.34,-.03)
 var world: Node3D
 var art: Node3D
@@ -56,6 +59,7 @@ func setup(host: Node3D) -> void:
 	world = host
 	name = "ExpeditionOwlCompanion"
 	art = OwlArt.instantiate()
+	art.scale = Vector3.ONE*MODEL_SCALE
 	add_child(art)
 	plumage = art.find_child("SkyboundSentinel",true,false)
 	folded = art.find_child("FrostwingPathfinder",true,false)
@@ -132,7 +136,8 @@ func _nearest(reach: float = SENSE) -> Node3D:
 		var player_range: float = world.actor.global_position.distance_to(wolf.global_position)
 		if player_range > reach: continue
 		# Weight the threat to the owner first, then actual flight distance.
-		var score := player_range + .30 * global_position.distance_to(wolf.global_position)
+		var closing := 2.1 if wolf.state in ["windup","lunge"] else 0.
+		var score := player_range + .30 * global_position.distance_to(wolf.global_position) - closing
 		if score < best:
 			best = score
 			chosen = wolf
@@ -177,11 +182,11 @@ func _outside_waypoint(goal: Vector3) -> Vector3:
 			if landing: return goal
 			if here.dot(out)<float(gate.LEAF_LENGTH)+.43: return entry
 		if landing: goal = entry
-	if env.travel_clear(global_position,goal,.12): return goal
+	if env.travel_clear(global_position,goal,FLIGHT_CLEARANCE): return goal
 	# A growing camp may enclose a bird already in flight. It can request the
 	# same auto gate while approaching its centre line; closed leaves still block it.
 	if env.is_inside_camp(global_position):
-		if env.is_inside_camp(goal): return env.clip_travel(global_position,goal,.12)
+		if env.is_inside_camp(goal): return env.clip_travel(global_position,goal,FLIGHT_CLEARANCE)
 		var closest: Node3D = world.gates[0]
 		for gate: Node3D in world.gates:
 			if gate.global_position.distance_to(global_position)+gate.global_position.distance_to(goal) < closest.global_position.distance_to(global_position)+closest.global_position.distance_to(goal):
@@ -191,16 +196,23 @@ func _outside_waypoint(goal: Vector3) -> Vector3:
 		line.y = maxf(global_position.y,1.85)
 		var entry := line-_outward(closest)*.82
 		var exit := line+_outward(closest)*.86
-		if (global_position-line).slide(Vector3.UP).length()<.88 and env.travel_clear(global_position,exit,.12): return exit
-		return entry if env.travel_clear(global_position,entry,.12) else env.clip_travel(global_position,entry,.12)
+		if (global_position-line).slide(Vector3.UP).length()<.88 and env.travel_clear(global_position,exit,FLIGHT_CLEARANCE): return exit
+		return entry if env.travel_clear(global_position,entry,FLIGHT_CLEARANCE) else env.clip_travel(global_position,entry,FLIGHT_CLEARANCE)
 	# Exterior flight rounds the nearest real fence corner instead of cutting
 	# through the camp to the next post or through a wall during a hunting bank.
-	perimeter_route.configure(world,.32)
+	var route_margin := float(env.FENCE_DEPTH)*.5+FLIGHT_CLEARANCE+.02
+	perimeter_route.configure(world,route_margin)
 	var navigation := perimeter_route.route(Vector2(global_position.x,global_position.z),Vector2(goal.x,goal.z))
 	if not navigation.is_empty():
 		var next := Vector3(navigation[0].x,goal.y,navigation[0].y)
-		return env.clip_travel(global_position,next,.12)
-	return env.clip_travel(global_position,goal,.12)
+		goal = next
+	var stop: Vector3 = env.clip_travel(global_position,goal,FLIGHT_CLEARANCE)
+	if (stop-global_position).slide(Vector3.UP).length_squared() >= .000025: return stop
+	# Near a fence corner the old heading can be blocked even when the owl
+	# is just clear. Step away from the actual wall before requesting a route.
+	var clear_at: Vector3 = env.safe_drop_origin(global_position,FLIGHT_CLEARANCE+.04)
+	if env.travel_clear(global_position,clear_at,FLIGHT_CLEARANCE): return Vector3(clear_at.x,goal.y,clear_at.z)
+	return stop
 
 func _fly(goal: Vector3, speed: float, dt: float) -> void:
 	if world.field_env.has_method("travel_clear") and world.field_env.perimeter_stage>0:
@@ -211,11 +223,11 @@ func _fly(goal: Vector3, speed: float, dt: float) -> void:
 func _lane() -> Vector3:
 	var player: Vector3 = world.actor.global_position
 	var theta := elapsed*.64
-	return player + Vector3(-1.42+.48*sin(theta),1.95+.16*sin(2.*theta),-.66+.55*cos(theta))
+	return player + Vector3(-1.70+.50*sin(theta),1.99+.16*sin(2.*theta),-.80+.55*cos(theta))
 
 func _recover() -> void:
 	var forward := global_basis.z
-	recovery = global_position+Vector3(forward.x*1.60,1.72,forward.z*1.60)
+	recovery = global_position+Vector3(forward.x*1.72,1.86,forward.z*1.72)
 	cooldown = RELOAD
 	target = null
 	_switch("recover")
@@ -225,8 +237,12 @@ func _start_intercept(wolf: Node3D) -> void:
 	approach_axis = (target.global_position-global_position).slide(Vector3.UP).normalized()
 	if approach_axis.length_squared()<.1: approach_axis=Vector3.FORWARD
 	bank_side = 1.0 if global_basis.x.dot(approach_axis)>=0 else -1.0
-	var flank := approach_axis.cross(Vector3.UP) * bank_side
-	approach = -approach_axis*1.68 + flank*.62 + Vector3.UP*(2.35*target.size_factor())
+	var flank := approach_axis.cross(Vector3.UP)*bank_side
+	# Stage from the actual shoulder line. Large enemies still stay in the
+	# same readable attack lane instead of pulling the whole pass above frame.
+	var shoulder := _back(wolf)
+	var high := clampf(shoulder.y-wolf.global_position.y+1.50,2.20,3.22) if shoulder.is_finite() else 2.35
+	approach = -approach_axis*1.90 + flank*.71 + Vector3.UP*high
 	_switch("bank")
 
 func can_be_targeted() -> bool:
@@ -341,8 +357,9 @@ func advance(delta: float) -> void:
 					_recover()
 				elif state == "bank":
 					var staging: Vector3 = target.global_position+approach
-					_fly(staging,clampf(8.2 + global_position.distance_to(staging)*.8,8.4,16.0),dt)
-					if global_position.distance_to(staging)<.12 and age>.20: _switch("windup")
+					_fly(staging,clampf(8.5 + global_position.distance_to(staging)*.8,8.6,16.0),dt)
+					if global_position.distance_to(staging)<.16 and age>.18: _switch("windup")
+					elif age>=BANK_LIMIT: _recover()
 				elif state == "windup":
 					var crest: Vector3 = target.global_position+approach+Vector3.UP*.24*sin(.5*PI*age/WINDUP)
 					_fly(crest,4.,dt)
@@ -379,13 +396,14 @@ func _dive(dt: float) -> void:
 	# Aim the center claw just through the back, so contact requires the actual
 	# curved vertex trajectory to intersect the target, including its lateral movement.
 	var goal := global_position + back - claw_tip(1) - Vector3.UP*.10
-	_fly(goal,lerpf(5.8,8.8,smoothstep(0,.55,travel)),dt)
+	_fly(goal,lerpf(6.25,10.15,smoothstep(0,.55,travel)),dt)
 	var first := 2.0
 	var hit_at := Vector3.INF
 	for i in before.size():
 		var now := claw_tip(i)
 		var at := _intersection(target,before[i],now)
 		if not at.is_finite(): continue
+		if world.field_env.has_method("travel_clear") and not world.field_env.travel_clear(before[i],at,.025): continue
 		var fraction := before[i].distance_to(at)/maxf(.0001,before[i].distance_to(now))
 		if fraction < first:
 			first = fraction
@@ -428,28 +446,28 @@ func _pose(dt: float, travel: float = 0.) -> void:
 			asymmetric = .16*bank_side
 		"windup":
 			var t := smoothstep(0.,WINDUP,age)
-			pitch = lerpf(.47,.16,t)
+			pitch = lerpf(.49,.11,t)
 			roll = bank_side*(1.-t)*.36
-			beat = lerpf(.36,1.04,t)
+			beat = lerpf(.32,1.14,t)
 			elbow = .18
 			wrist = -.31*t
 			fold = -.11
 		"dive":
-			var fan := smoothstep(.45,.90,travel)
+			var fan := smoothstep(.32,.82,travel)
 			extended = lerpf(.62,1.,fan)
-			pitch = lerpf(1.05,.30,fan)
+			pitch = lerpf(1.10,.27,fan)
 			roll = bank_side*.21*(1.-fan)
 			fold = lerpf(.87,-.15,fan)
 			beat = lerpf(-.35,.86,fan)
 			elbow = lerpf(-.47,.32,fan)
 			wrist = lerpf(-.62,-.19,fan)
-			var reach := smoothstep(.04,.68,travel)
+			var reach := smoothstep(.04,.58,travel)
 			feet = Vector3(1.-reach,reach,0.)
 		"strike":
 			var t := smoothstep(0.,RAKE,age)
-			pitch = lerpf(.30,-.43,t)
+			pitch = lerpf(.27,-.48,t)
 			roll = bank_side*lerpf(.05,-.20,t)
-			beat = lerpf(.87,-.88,t)
+			beat = lerpf(1.03,-.96,t)
 			elbow = lerpf(.35,-.51,t)
 			wrist = lerpf(-.18,.36,t)
 			fold = -.13
@@ -467,7 +485,9 @@ func _pose(dt: float, travel: float = 0.) -> void:
 	var blend := 1.-exp((-24. if state=="strike" else -15.)*dt)
 	art.rotation.x = lerp_angle(art.rotation.x,pitch,blend)
 	art.rotation.z = lerp_angle(art.rotation.z,roll,blend)
-	art.position = CHEST-art.basis*CHEST
+	# Scale about the feet so the larger folded bird still seats on its post,
+	# then pitch/roll about the same anatomical center during flight.
+	art.position = CHEST*MODEL_SCALE-art.basis*CHEST
 	for i in 2:
 		var side := -1. if i==0 else 1.
 		_wing_joint(shoulders[i],side*lerpf(1.27,fold,spread),side*lerpf(-.54,beat+side*asymmetric,spread),dt)

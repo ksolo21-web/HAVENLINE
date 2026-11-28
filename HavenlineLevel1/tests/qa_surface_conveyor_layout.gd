@@ -47,6 +47,7 @@ func lengths(routes:Dictionary) -> Dictionary:
 		var height:=INF
 		var direction:=Vector2.ZERO
 		var worst_turn:=1.
+		var turns:=0.
 		for i in path.size():
 			height=minf(height,path[i].y)
 			if i>0:
@@ -55,9 +56,11 @@ func lengths(routes:Dictionary) -> Dictionary:
 				var plan:=Vector2(step.x,step.z)
 				if plan.length()>.002:
 					var heading:=plan.normalized()
-					if not direction.is_zero_approx():worst_turn=minf(worst_turn,direction.dot(heading))
+					if not direction.is_zero_approx():
+						worst_turn=minf(worst_turn,direction.dot(heading))
+						turns+=absf(direction.angle_to(heading))
 					direction=heading
-		result[lane]={"minimum_roller_height":height,"length":length,"minimum_heading_dot":worst_turn}
+		result[lane]={"minimum_roller_height":height,"length":length,"minimum_heading_dot":worst_turn,"bend_degrees":rad_to_deg(turns)}
 	return result
 
 func check_decks(routes:Dictionary, label:String) -> void:
@@ -73,6 +76,47 @@ func check_decks(routes:Dictionary, label:String) -> void:
 	check(label+" exterior cargo decks are all above the working floor",supported and not spans.is_empty())
 	readings[label]=spans
 
+func check_fitted_width(network) -> void:
+	var kit=network.art.fitted
+	var broadest:=0.
+	var widened:=0
+	for family:String in kit.values:
+		for data:Color in kit.values[family]:
+			var widths:=roundi(data.a*255.)%128
+			var start:=floori(widths/8.)
+			var finish:=widths%8
+			var width:float=kit.WIDTH+maxi(start,finish)*kit.Gauge.WIDTH_STEP
+			broadest=maxf(broadest,width)
+			if width>=.78:widened+=1
+	check("open runs fit broad visible Meshy rollers",broadest>=1. and widened>=8)
+	var throat:Vector3=network.storage_port("meat",false)
+	check("cold room keeps its matching narrow socket",is_equal_approx(network.gauge.fitted_width(throat),kit.WIDTH))
+	# Probe the newly occupied floor on the outside of an actual straight.
+	# Exclude every location that the original 0.484 m belt already blocked.
+	var paid_edge:=false
+	for family:String in ["straight","incline"]:
+		for i in kit.values[family].size():
+			var data:Color=kit.values[family][i]
+			var flags:=roundi(data.a*255.)%128
+			if mini(floori(flags/8.),flags%8)<3:continue
+			var node:Transform3D=kit.transforms[family][i]
+			var mid:Vector3=node.origin+node.basis.z*data.b*2.
+			for sign_x:float in [-1.,1.]:
+				var edge:=mid+node.basis.x*.43*sign_x
+				var p:=Vector2(edge.x,edge.z)
+				var old_clear:=true
+				for segment:Array in network.aisles.rail_cells.get(network.aisles._bucket(p),[]):
+					if p.distance_to(network.aisles._closest(p,segment[0],segment[1]))<=kit.WIDTH*.5+.085:
+						old_clear=false
+						break
+				if old_clear and not network.aisles.disc_clear(p,.085):
+					paid_edge=true
+					break
+			if paid_edge:break
+		if paid_edge:break
+	check("new outer rail blocks pedestrian movement beyond the old footprint",paid_edge)
+	readings["rendered gauge"]={"max_width_m":broadest,"sections_at_least_0_78_m":widened}
+
 func run() -> void:
 	world=load("res://field_opening.tscn").instantiate()
 	root.add_child(world)
@@ -83,6 +127,7 @@ func run() -> void:
 	var network=belts.network
 	check("both bought networks expose all eight compatible routes",network.routes.size()==8)
 	check_decks(network.routes,"default")
+	check_fitted_width(network)
 	for station in ["store","wood","stone","meat","cooker_output","counter"]:
 		check("reachable public floor at "+station,network.accessible_service(station).is_finite())
 	var kitchen:Vector3=world.lakeshore.cooker.global_position
@@ -96,6 +141,11 @@ func run() -> void:
 	var player_approach:Vector3=world.counter.service_point.global_position
 	var pickup:Vector3=network.counter_buffer_position(0)
 	check("both food lines end at the separate self-service pickup",network.routes.meal[-1].is_equal_approx(pickup) and network.routes.stored_meal[-1].is_equal_approx(pickup) and pickup.distance_to(player_approach)>.6)
+	var rear_dispatch:PackedVector3Array=network.routes.stored_meal
+	var arrival:=rear_dispatch[-2].direction_to(pickup)
+	var upstream:Vector3=network.counter_buffer_position(1)-pickup
+	check("finished stock takes one quarter-turn into the broad eastbound receiver",arrival.dot(Vector3.RIGHT)>.99 and readings.default.stored_meal.bend_degrees<92. and network.gauge.fitted_width(pickup)>=1.)
+	check("two distinct counter portions sit on the same rollers as arriving goods",world.counter.stock_position("meal",0).is_equal_approx(pickup) and world.counter.stock_position("meal",1).is_equal_approx(pickup+upstream) and upstream.dot(arrival)<-.44)
 	var mills=world.processors
 	check("saw and quarry share the storehouse utility wing",mills.machines.wood.global_position.distance_to(world.depot.house.global_position)<6.5 and mills.machines.stone.global_position.distance_to(world.depot.house.global_position)<6.5)
 	var layout=world.camp_layout
@@ -108,6 +158,12 @@ func run() -> void:
 	check("saw can return to its original footprint",layout.relocate("saw_bench",previous))
 	belts.refresh_paths()
 	check("all eight lines restored at original positions",network.routes.size()==8)
+	var counter_before:Vector2=layout.center("north_counter")
+	var counter_shift:=Vector2(4.,counter_before.y)
+	check("owned counter can move along its north fence",layout.relocate("north_counter",counter_shift))
+	belts.refresh_paths()
+	var unloaded:Vector3=world.counter.stock_position("meal",0)
+	check("actual saved bay carries its stock deck, both food paths and six usable stations",layout.snapshot().get("north_counter")==[counter_shift.x,counter_shift.y] and network.routes.size()==8 and network.aisles.services.size()==6 and network.routes.meal[-1].is_equal_approx(unloaded) and network.routes.stored_meal[-1].is_equal_approx(unloaded))
 	world.set_physics_process(false)
 	await Session.drain_field_audio(self,world)
 	world.queue_free()

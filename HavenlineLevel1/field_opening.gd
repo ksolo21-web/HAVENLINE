@@ -584,7 +584,7 @@ func _wolf_defeated(at: Vector3, wolf: FieldEnemy) -> void:
 	_make_drops("meat",at,5 if wolf.is_boss else 2)
 	_checkpoint_lifecycle()
 
-func _combat_number(at: Vector3, message: String, color: Color, target: Node3D = null) -> void:
+func _combat_number(at: Vector3, message: String, color: Color, target: Node3D = null, lane_side := 1.) -> void:
 	var number := Label3D.new()
 	number.name = "CombatFeedback"
 	number.text = message
@@ -610,7 +610,7 @@ func _combat_number(at: Vector3, message: String, color: Color, target: Node3D =
 			occupied.append((peer.global_position-at).dot(right))
 		while _feedback_lane_occupied(occupied,offset,width):
 			lane += 1
-			offset = ceilf(lane*.5)*width*(1.0 if lane%2 else -1.0)
+			offset = ceilf(lane*.5)*width*lane_side*(1.0 if lane%2 else -1.0)
 		at += right*offset
 		number.add_to_group(group)
 	number.position = at
@@ -627,7 +627,19 @@ func _feedback_lane_occupied(centers: Array[float], offset: float, width: float)
 	return false
 
 func _wolf_damage_feedback(amount: int, wolf: FieldEnemy) -> void:
-	_combat_number(wolf.global_position+Vector3.UP*(2.04*wolf.size_factor()),"−%d" % amount,Color("#ffebaf"),wolf)
+	var at := wolf.global_position+Vector3.UP*(2.04*wolf.size_factor())
+	var shift := 0.
+	if owl and owl.contact_target == wolf:
+		# Keep the feedback beside the actual talon contact. A full-size
+		# diving owl occupies the same screen space as the regular health bar.
+		var contact_side: float = (owl.global_position-wolf.global_position).dot(camera.global_basis.x)
+		shift = (.69 if contact_side<=0. else -.69)*wolf.size_factor()
+		wolf.clear_owl_strike_from_health_bar(shift)
+	elif wolf.health_bar:
+		# A simultaneous axe hit uses the same side while the owl releases.
+		shift = wolf.health_bar.offset.x*wolf.health_bar.pixel_size
+	at += camera.global_basis.x.normalized()*shift
+	_combat_number(at,"−%d" % amount,Color("#ffebaf"),wolf,-1. if shift<0. else 1.)
 
 func _player_hit(amount: int, attacker: Node3D = null) -> void:
 	if amount <= 0 or player_invulnerability > 0.0 or reset_time > 0 or persist_blocked: return
@@ -1114,7 +1126,7 @@ func owl_contact(wolf, at: Vector3) -> bool:
 	if not owl.permits_contact(wolf,at): return false
 	# A fatal hit synchronously persists the loot. Include the owl receipt in that same checkpoint.
 	inventory.settlement.owl_hits += 1
-	if not wolf.receive_hit(1,at):
+	if not wolf.receive_hit(1,at,true):
 		inventory.settlement.owl_hits -= 1
 		return false
 	return settlement_loop.commit_receipt("owl_hit",at)

@@ -2,7 +2,7 @@ extends RefCounted
 ## A storehouse queue and an appliance use the same reachable serving floor
 ## as the player. This local grid exists only after a paid conveyor arrives.
 const STEP:=.14
-const RAIL_HALF:=.244
+const Gauge=preload("res://field_conveyor_gauge.gd")
 const SOLE:=.31
 const Walk=preload("res://field_conveyor_crossings.gd")
 var world
@@ -23,22 +23,25 @@ static func _closest(p:Vector2,a:Vector2,b:Vector2) -> Vector2:
 	if a.distance_squared_to(b)<.000001:return a
 	return Geometry2D.get_closest_point_to_segment(p,a,b)
 
-func install(host,routes:Dictionary) -> void:
+func install(host,routes:Dictionary,gauge) -> void:
 	world=host
 	boundary=world.camp_layout.bounds()
 	buildings=world.camp_layout.obstacles()
 	hearth=world.camp_layout.footprint("center_hearth",world.camp_layout.center("center_hearth"))
 	buildings.erase(hearth)
 	for path:PackedVector3Array in routes.values():
+		path=Walk.resample(path)
 		for i in range(1,path.size()):
 			var a:=path[i-1]
 			var b:=path[i]
 			if maxf(a.y,b.y)<-.12 or minf(a.y,b.y)>1.96:continue
 			var first:=Walk.flat(a)
 			var second:=Walk.flat(b)
-			var low:=_bucket(first.min(second)-Vector2.ONE*.64)
-			var high:=_bucket(first.max(second)+Vector2.ONE*.64)
-			var record:=[first,second]
+			var half_width:=maxf(gauge.at(a),gauge.at(b))*.5+.002
+			var reach:=Vector2.ONE*(half_width+.66)
+			var low:=_bucket(first.min(second)-reach)
+			var high:=_bucket(first.max(second)+reach)
+			var record:=[first,second,half_width]
 			for x in range(low.x,high.x+1):
 				for z in range(low.y,high.y+1):
 					var key:=Vector2i(x,z)
@@ -138,8 +141,8 @@ func _escape(start:Vector2,aim:Vector2) -> Vector2:
 	return result
 
 func disc_clear(p:Vector2,radius:float) -> bool:
-	var radius2:=(radius+RAIL_HALF)*(radius+RAIL_HALF)
 	for seg:Array in rail_cells.get(_bucket(p),[]):
+		var radius2:=pow(radius+float(seg[2]),2)
 		if p.distance_squared_to(_closest(p,seg[0],seg[1]))<radius2:return false
 	return true
 
@@ -162,7 +165,7 @@ func constrain(from:Vector3,to:Vector3,radius:float) -> Vector3:
 		for seg:Array in rail_cells.get(_bucket(result),[]):
 			var near:=_closest(result,seg[0],seg[1])
 			var delta:=result-near
-			var reach:=RAIL_HALF+radius+.002
+			var reach:=float(seg[2])+radius+.002
 			if delta.length_squared()>=reach*reach:continue
 			if delta.length_squared()<.000001:delta=previous-near
 			if delta.length_squared()<.000001:delta=Vector2.RIGHT

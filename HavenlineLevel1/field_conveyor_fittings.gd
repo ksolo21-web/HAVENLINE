@@ -4,7 +4,9 @@ extends Node3D
 ## supplies measured deck and port dimensions instead of stretching the feet.
 const BASE := "res://assets/conveyors/Meshy/"
 const SHADER := preload("res://assets/conveyors/fitted_transport.gdshader")
-const WIDTH := .484
+const Gauge = preload("res://field_conveyor_gauge.gd")
+const WIDTH := Gauge.SOCKET
+var gauge
 var specs:Dictionary={}
 var meshes:Dictionary={}
 var transforms:Dictionary={}
@@ -63,6 +65,8 @@ static func _bake(node:Node,outer:Transform3D,combined:ArrayMesh,entry:Dictionar
 				mat.set_shader_parameter("tint",original.albedo_color)
 				mat.set_shader_parameter("metalness",original.metallic)
 				mat.set_shader_parameter("roughness",original.roughness)
+			mat.set_shader_parameter("socket_width",Gauge.SOCKET)
+			mat.set_shader_parameter("width_step",Gauge.WIDTH_STEP)
 			mat.set_shader_parameter("foot_piece",support)
 			mat.set_shader_parameter("end_supports",support and family=="straight")
 			mat.set_shader_parameter("rail_shell",name.contains("guard") or name.begins_with("deck"))
@@ -114,7 +118,22 @@ func _place(family:String,a:Vector3,b:Vector3,forward:Vector3,run:float,mirror:b
 	var side:=Vector3.UP.cross(forward)
 	var basis:=Basis(side,Vector3.UP,forward)
 	transforms[family].append(Transform3D(basis,Vector3(a.x,0,a.z)))
-	values[family].append(Color(a.y/4.,b.y/4.,run/4.,1. if cut else 0.))
+	# Pack two width steps and the suppressed-foot flag in one portable byte.
+	var wa:float=gauge.at(a)
+	var wb:float=gauge.at(b)
+	if family.ends_with("corner"):
+		var max_width:=maxf(WIDTH,2.*run-.045)
+		wa=minf(wa,max_width)
+		wb=minf(wb,max_width)
+	else:
+		for fraction in [.25,.5,.75]:
+			var limit:float=gauge.at(a.lerp(b,fraction))
+			wa=minf(wa,limit+.72*run*fraction)
+			wb=minf(wb,limit+.72*run*(1.-fraction))
+	var start_step:=Gauge.width_step(wa)
+	var end_step:=Gauge.width_step(wb)
+	var packed:=start_step*8+end_step+(128 if cut else 0)
+	values[family].append(Color(a.y/4.,b.y/4.,run/4.,packed/255.))
 	counts[family]+=1
 
 func place_span(a:Vector3,b:Vector3,clear_pier:Callable) -> bool:
@@ -124,7 +143,7 @@ func place_span(a:Vector3,b:Vector3,clear_pier:Callable) -> bool:
 	if not meshes.has(family):return false
 	var nominal:float=float(specs[family].end[2])*WIDTH/float(specs[family].width)
 	# Freight coming out of the paid cooker changes height over a shortened
-	# adapter. The original guard/roller width stays fixed during this fit.
+	# adapter. The socket width and its roller contact height stay fixed.
 	var minimum_run:=maxf(.46,nominal*.28) if family=="incline" else maxf(.37,nominal*.43)
 	if length<minimum_run:return false
 	var modules:=maxi(1,roundi(length/nominal))
@@ -132,9 +151,25 @@ func place_span(a:Vector3,b:Vector3,clear_pier:Callable) -> bool:
 	for i in modules:
 		var start:=a.lerp(b,float(i)/modules)
 		var stop:=a.lerp(b,(i+1.)/modules)
-		var cut:bool=clear_pier.call(start.lerp(stop,.5),forward)!=1. or clear_pier.call(start.lerp(stop,.15),forward)!=1. or clear_pier.call(start.lerp(stop,.85),forward)!=1.
-		_place(family,start,stop,forward,length/modules,false,cut)
+		var mid:=start.lerp(stop,.5)
+		var segment:=length/modules
+		# A returning line often widens between two close mouths. Fit its middle
+		# as well as the ends, using a second real D01 section for that flare.
+		var interpolated:float=(gauge.at(start)+gauge.at(stop))*.5
+		if segment>=.84 and absf(gauge.at(mid)-interpolated)>.14:
+			_fit_span(family,start,mid,forward,segment*.5,clear_pier)
+			_fit_span(family,mid,stop,forward,segment*.5,clear_pier)
+		else:
+			_fit_span(family,start,stop,forward,segment,clear_pier)
 	return true
+
+func _fit_span(family:String,a:Vector3,b:Vector3,forward:Vector3,length:float,clear_pier:Callable) -> void:
+	var cut:=false
+	for t:float in [.15,.5,.85]:
+		if clear_pier.call(a.lerp(b,t),forward)!=1.:
+			cut=true
+			break
+	_place(family,a,b,forward,length,false,cut)
 
 # Find a complete 90° arc from the actual path. The crossing planner may
 # introduce height samples, so detect the shape in XZ independently of Y.

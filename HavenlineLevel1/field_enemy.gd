@@ -51,6 +51,7 @@ var timer := 0.0
 var hurt_timer := 0.0
 var body: AnimatableBody3D
 var health_bar: Sprite3D
+var health_bar_return: Tween
 var hit_surface: TriangleMesh
 var target: Node3D
 var visual: Node3D
@@ -147,6 +148,13 @@ func _refresh_health() -> void:
 	health_bar.texture = ImageTexture.create_from_image(pixels)
 	health_bar.visible = hp > 0
 
+func clear_owl_strike_from_health_bar(lateral: float) -> void:
+	if not health_bar or hp <= 0: return
+	if health_bar_return: health_bar_return.kill()
+	health_bar.offset.x = lateral/health_bar.pixel_size
+	health_bar_return = create_tween()
+	health_bar_return.tween_property(health_bar,"offset:x",0.,.23).set_delay(.28).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN_OUT)
+
 func contact_segment(a: Vector3, b: Vector3, _radius: float = 0.0) -> bool:
 	if not can_receive_swirl() or not hit_surface: return false
 	return not hit_surface.intersect_segment(surface.to_local(a), surface.to_local(b)).is_empty()
@@ -196,7 +204,7 @@ func take_swirl_hit(turn: int) -> bool:
 	last_turn = turn
 	return receive_hit()
 
-func receive_hit(amount: int = 1, impact: Vector3 = Vector3.ZERO) -> bool:
+func receive_hit(amount: int = 1, impact: Vector3 = Vector3.ZERO, interrupt_windup := false) -> bool:
 	if amount <= 0 or not can_receive_swirl(): return false
 	var loss := mini(hp,amount)
 	hp -= loss
@@ -210,7 +218,7 @@ func receive_hit(amount: int = 1, impact: Vector3 = Vector3.ZERO) -> bool:
 		timer = .72
 		_play("Fall")
 		defeated.emit(global_position)
-	elif state not in ["windup","lunge"]:
+	elif state not in ["windup","lunge"] or (interrupt_windup and state=="windup"):
 		state = "stagger"
 		timer = .18
 		if impact != Vector3.ZERO:

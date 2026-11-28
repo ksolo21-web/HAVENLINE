@@ -272,7 +272,18 @@ func _walk_queue(dt: float) -> void:
 func delivery_position(slot: int = 0) -> Vector3:
 	return stock_position("meal", slot)
 
+func _has_serving_belt() -> bool:
+	if not world.settlement_loop: return false
+	var conveyors=world.settlement_loop.conveyors
+	return conveyors and conveyors.network and ("meal" in conveyors.network.routes or "stored_meal" in conveyors.network.routes)
+
 func stock_position(kind: String, slot: int = 0) -> Vector3:
+	if kind == "meal" and _has_serving_belt():
+		var slot_at:Vector3=world.settlement_loop.conveyors.network.counter_buffer_position(slot%2)
+		return slot_at + Vector3.UP*.24*floori(slot/2.)
+	return _board_stock(kind,slot)
+
+func _board_stock(kind: String, slot: int) -> Vector3:
 	var x := -1.16
 	if kind == "planks": x = -.52
 	elif kind == "blocks": x = .14
@@ -313,11 +324,18 @@ func _prepare_sale(order: Dictionary) -> void:
 	paid_amount = int(order.price)
 	for kind: String in Market.PRODUCTS:
 		for slot in int(order.goods.get(kind, 0)):
-			var item := Art.make(kind, .33)
+			var from_belt:=kind=="meal" and _has_serving_belt()
+			var source_slot:=slot
+			if from_belt:
+				# Take from the tail first so an unsold leading portion stays
+				# on its rollers throughout a mixed or partial basket sale.
+				var available:=clampi(Market.available(world.inventory.settlement,kind),1,4)
+				source_slot=maxi(0,available-1-slot)
+			var item := Art.make(kind, .44 if from_belt else .33)
 			item.hide()
 			add_child(item)
-			item.global_position = stock_position(kind,slot)
-			sale_goods.append({"kind":kind,"slot":slot,"item":item})
+			item.global_position = stock_position(kind,source_slot)
+			sale_goods.append({"kind":kind,"slot":source_slot,"item":item})
 			if kind == "meal" and meal == null: meal = item
 
 func _serve(dt: float) -> void:
@@ -342,7 +360,15 @@ func _serve(dt: float) -> void:
 		var piece: Node3D = visual.item
 		piece.show()
 		var destination := _guest_palm(buyer,"right") + body.global_basis * Vector3(-.15,.01+.075*i,.04)
-		piece.global_position = _arc(stock_position(visual.kind,visual.slot),destination,(t-.12-i*.065)/.49,.23)
+		var stock := stock_position(visual.kind,visual.slot)
+		var reach := (t-.12-i*.065)/.49
+		if visual.kind == "meal" and to_local(stock).z>HALF_DEPTH:
+			# The automatic counter presents the queued portion at the customer
+			# edge before the buyer takes it, keeping the goods above the board.
+			var board:Vector3=food_rest.global_position+Vector3(0,.02,-.58)
+			piece.global_position=_arc(stock,board,reach/.54,.41) if reach<.54 else _arc(board,destination,(reach-.54)/.46,.17)
+		else:
+			piece.global_position=_arc(stock,destination,reach,.23)
 		piece.global_rotation.y = lerp_angle(piece.global_rotation.y,body.global_rotation.y,clampf(10.*dt,0,1))
 	cash.global_position = _arc(_guest_palm(buyer,"left"),payment_rest.global_position,t/.48,.27)
 	cash.visible = t < .48
@@ -391,7 +417,11 @@ func show_goods(journal: Dictionary) -> void:
 		for index in pile.size():
 			var piece: Node3D = pile[index]
 			piece.visible = index < visible_count
-			if piece.visible: piece.global_position = stock_position(kind,index)
+			if piece.visible:
+				piece.global_position = stock_position(kind,index)
+				# The purchased line parks the same full-size roast that arrived
+				# on its rollers. Personal deposits use the smaller counter stacks.
+				piece.scale=Vector3.ONE*(.44/.29 if kind=="meal" and _has_serving_belt() else 1.)
 
 func advance(dt: float) -> void:
 	if not active:

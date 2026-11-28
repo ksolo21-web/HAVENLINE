@@ -20,6 +20,7 @@ class Host extends Node3D:
 	var strikes := []
 	var launches := 0
 	var max_claw_error := 0.0
+	var interrupted_windup := false
 	var max_surface_error := 0.0
 	func _event(id: String, _at: Vector3) -> void:
 		if id=="owl_dive": launches+=1
@@ -50,7 +51,9 @@ class Host extends Node3D:
 			if bary.x>=-.00001 and bary.y>=-.00001 and bary.z>=-.00001:
 				distance=minf(distance,at.distance_to(skin.to_global(on_plane)))
 		max_surface_error=maxf(max_surface_error,distance)
-		if not wolf.receive_hit(1,at): return false
+		var bracing: bool = wolf.state=="windup"
+		if not wolf.receive_hit(1,at,true): return false
+		if bracing and wolf.state=="stagger": interrupted_windup = true
 		strikes.append([tick,at.x,at.y,at.z,wolf.hp])
 		return true
 	func install() -> void:
@@ -114,6 +117,8 @@ func step(count: int) -> void:
 			moving_target.position.z=2.5+.42*sin(float(host.tick)/44.)
 		var rotations: Array[Quaternion] = []
 		for joint in host.owl.shoulders+host.owl.elbows+host.owl.wrists: rotations.append(host.owl.skeleton.get_bone_pose_rotation(joint))
+		if is_instance_valid(moving_target) and host.strikes.is_empty() and host.owl.state=="dive":
+			moving_target.state = "windup"
 		host.owl.advance(1./60.)
 		var index := 0
 		for joint in host.owl.shoulders+host.owl.elbows+host.owl.wrists:
@@ -156,6 +161,8 @@ func run() -> void:
 	checks["both owned Meshy poses are present and only the folded Pathfinder is drawn on the post"]=host.owl.folded.name=="FrostwingPathfinder" and host.owl.plumage.name=="SkyboundSentinel" and host.owl.folded.visible and not host.owl.plumage.visible
 	checks["six wing bones deform original Sentinel feather vertices"]=has_wing_influences()
 
+	checks["both original owl forms scale by 30 percent"] = host.owl.art.scale.is_equal_approx(Vector3.ONE*1.30)
+	checks["the enlarged folded feet stay on the post"] = absf(host.owl.art.global_position.y-host.owl.global_position.y)<.005
 	checks["remote callback blocked outside contact"]=not host.owl_contact(wolf,wolf.position)
 	host.actor.position=Vector3(7.2,0,2.5)
 	moving_target=wolf
@@ -168,6 +175,7 @@ func run() -> void:
 	checks["first rendered claw touches wolf triangle at hit and stays planted"]=host.max_claw_error<.0005 and host.max_surface_error<.0005 and planting_error<.0005
 	checks["six feather joints fold and flare without a one-frame angular snap"]=max_joint_step<=.226
 	checks["each of three attack telegraphs fired once"]=states.has("windup") and host.launches==3
+	checks["only a planted owl strike interrupts an enemy windup"] = host.interrupted_windup
 	checks["one defeat and exactly three physical contacts on moving wolf"]=host.strikes.size()==3 and host.deaths==1 and wolf.hp==0
 	var spacing:=true
 	for i in range(1,host.strikes.size()):
@@ -194,6 +202,10 @@ func run() -> void:
 	host.actor.position=Vector3.ZERO
 	step(160)
 	checks["returns to the same physical post"]=host.owl.global_position.distance_to(Vector3(-1.35,1.718,4))<.005
+	boss.state = "windup"
+	checks["ordinary damage still leaves a windup committed"] = boss.receive_hit() and boss.state=="windup"
+	boss.state = "lunge"
+	checks["owl interrupt does not retroactively cancel a committed lunge"] = boss.receive_hit(1,Vector3.ZERO,true) and boss.state=="lunge"
 	print("OWL_QA "+JSON.stringify({"checks":checks,"strikes":host.strikes,"states":states.keys(),"wing_range_rad":[wing_min,wing_max],"max_hit_error_m":host.max_claw_error,"max_mesh_error_m":host.max_surface_error,"max_plant_error_m":planting_error,"max_joint_step_rad_at_60hz":max_joint_step,"grasp":grasp,"reach":reach,"braking_pitch":brake_pitch}))
 	host.free()
 	quit(int(false in checks.values()))

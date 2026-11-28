@@ -17,7 +17,11 @@ var routes:Dictionary={}
 var route_signature:String=""
 var crossings
 var aisles
+var gauge
 var lifts:Dictionary={}
+# Serve from the right-hand end of the sales bay when it fits. A previously
+# placed workshop may require the other end of its existing counter.
+var receive_from_east := false
 var stop_arm:Node3D
 var red_lamp:Node3D
 var green_lamp:Node3D
@@ -27,7 +31,9 @@ func install(host) -> void:
 	name="ConnectedCampTransport"
 
 func counter_buffer_position(index:int=0) -> Vector3:
-	return world.counter.global_position+Vector3(-.64+.36*clampi(index,0,2),.85,1.45)
+	var end := Vector3(-.64,.85,1.45) if receive_from_east else Vector3(1.12,.85,1.75)
+	var upstream := Vector3.RIGHT if receive_from_east else Vector3.LEFT
+	return world.counter.global_position+end+upstream*.51*clampi(index,0,2)
 
 func storage_port(kind:String,inbound:bool) -> Vector3:
 	var local:=Vector3(-1.646,.45,UTILITY_IN_Z if inbound else UTILITY_OUT_Z)
@@ -103,7 +109,8 @@ func _machine(kind:String,inbound:bool,deck:float) -> PackedVector3Array:
 
 func _counter() -> PackedVector3Array:
 	var end:=counter_buffer_position(0)
-	return PackedVector3Array([end,end+Vector3.RIGHT*1.17])
+	var apron := end+Vector3.RIGHT*1.17 if receive_from_east else end+Vector3.LEFT*.95
+	return PackedVector3Array([end,apron])
 
 func _terminals(lane:String,deck:float) -> Array[PackedVector3Array]:
 	match lane:
@@ -213,16 +220,27 @@ func rebuild(live_lanes:Array) -> Dictionary:
 		var rect:Rect2=world.camp_layout.footprint(id,world.camp_layout.center(id))
 		work_area=rect if not work_area.has_area() else work_area.merge(rect)
 	work_area=work_area.grow(.83).intersection(court)
-	for allowed:Rect2 in [work_area,court]:
-		for order:Array in priorities:
-			var candidate:=_plan(live_lanes,order,boxes,allowed)
-			if not crossings or candidate[0].size()>routes.size():
-				routes=candidate[0]
-				crossings=candidate[1]
+	var best_from_east := false
+	var needs_pickup := "meal" in live_lanes or "stored_meal" in live_lanes
+	for east in [false,true]:
+		receive_from_east=east
+		for allowed:Rect2 in [work_area,court]:
+			for order:Array in priorities:
+				var candidate:=_plan(live_lanes,order,boxes,allowed)
+				if not crossings or candidate[0].size()>routes.size():
+					routes=candidate[0]
+					crossings=candidate[1]
+					best_from_east=east
+				if routes.size()==live_lanes.size():break
 			if routes.size()==live_lanes.size():break
-		if routes.size()==live_lanes.size():break
+		if routes.size()==live_lanes.size() or not needs_pickup:break
+	receive_from_east=best_from_east
+	gauge=preload("res://field_conveyor_gauge.gd").new()
+	gauge.setup(world,routes,counter_buffer_position(0))
+	art.gauge=gauge
+	art.fitted.gauge=gauge
 	aisles=Aisles.new()
-	aisles.install(world,routes)
+	aisles.install(world,routes,gauge)
 	art.survey(routes)
 	var modeled_ports:Dictionary={}
 	for lane:String in routes:
@@ -276,12 +294,16 @@ func rebuild(live_lanes:Array) -> Dictionary:
 
 	if "stored_meal" in routes or "meal" in routes:
 		var pickup:=counter_buffer_position(0)
-		art.component("Pickup",pickup,Vector3.LEFT)
-		var gate:=pickup+Vector3.RIGHT*1.01
-		art.component("StopPost",gate,Vector3.LEFT)
-		green_lamp=art.movable("ClearLamp",gate,Vector3.LEFT)
-		red_lamp=art.movable("HoldLamp",gate,Vector3.LEFT)
-		stop_arm=art.movable("GateArm",gate+Vector3.FORWARD*.198+Vector3.UP*.13,Vector3.LEFT)
+		var flow:=Vector3.LEFT if receive_from_east else Vector3.RIGHT
+		art.component("Pickup",pickup,flow,Vector3(gauge.fitted_width(pickup)/Geometry.Fittings.WIDTH,1.,1.))
+		var distance_to_gate:=1.01 if receive_from_east else .82
+		var gate:=pickup-flow*distance_to_gate
+		var width_scale:float=gauge.fitted_width(gate)/Geometry.Fittings.WIDTH
+		art.component("StopPost",gate,flow,Vector3(width_scale,1.,1.))
+		green_lamp=art.movable("ClearLamp",gate,flow,width_scale)
+		red_lamp=art.movable("HoldLamp",gate,flow,width_scale)
+		var hinge:=gate-Geometry.direction(flow).x*.198*width_scale+Vector3.UP*.13
+		stop_arm=art.movable("GateArm",hinge,flow,width_scale)
 		set_buffer_full(false)
 	art.finish()
 	return routes
