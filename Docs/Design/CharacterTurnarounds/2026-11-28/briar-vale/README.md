@@ -16,6 +16,12 @@ Every cast auto-locks onto eligible enemies; no manual aiming or melee attack is
 | Vine Lash | A vine snaps across the snow to strike the locked target; it can disrupt, push or sweep depending on the combo. |
 | Root Rupture | Cracking snow telegraphs roots erupting beneath the target to damage and briefly pin nearby enemies. |
 
+## Poison Kiss concept
+
+![Poison Kiss eight-angle projectile turnaround](poison-kiss-360.jpg)
+
+[Full cast storyboard: windup, release, flight and impact](poison-kiss-storyboard.jpg). The violet lip print and leaf motes mark the homing cast; a violet blossom and lingering green ring distinguish impact from damage over time. These are concept references, not an implemented effect.
+
 ## Combo designs
 
 | Combo | Sequence | Use |

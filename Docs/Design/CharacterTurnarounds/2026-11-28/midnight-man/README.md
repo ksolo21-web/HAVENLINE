@@ -4,6 +4,12 @@
 
 ![Midnight Man eight-view turnaround](midnight-man-360.jpg)
 
+## Shadow Batarang concept
+
+![Shadow Batarang eight-angle turnaround](shadow-batarang-360.jpg)
+
+[In-character throw concept](shadow-batarang-throw.jpg). The approved look uses condensed charcoal shadow with a copper edge, mountain crest and short smoke trail. The turnaround shows both faces and both edge profiles. These references do not change the automatic target selection or establish implemented animation or hit behavior.
+
 ## Play
 
 - **Auto-targeted batarangs.** Midnight Man throws batarangs rather than orbiting tools. They automatically select eligible enemies, trees or mineable rocks and can damage, chop or mine those targets respectively. The precise throw trigger, target priority and cadence are not approved yet.
